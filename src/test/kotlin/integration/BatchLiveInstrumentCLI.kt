@@ -23,8 +23,6 @@ class BatchLiveInstrumentCLI : CLIIntegrationTest() {
             Main.main(
                 arrayOf(
                     "-v",
-                    "-c", "../../config/spp-platform.crt",
-                    "-k", "../../config/spp-platform.key",
                     "developer",
                     "add-live-breakpoint",
                     "integration.BatchLiveInstrumentCLI", i.toString(),
@@ -40,8 +38,6 @@ class BatchLiveInstrumentCLI : CLIIntegrationTest() {
         Main.main(
             arrayOf(
                 "-v",
-                "-c", "../../config/spp-platform.crt",
-                "-k", "../../config/spp-platform.key",
                 "developer",
                 "get-live-instruments"
             )
@@ -57,8 +53,6 @@ class BatchLiveInstrumentCLI : CLIIntegrationTest() {
             Main.main(
                 arrayOf(
                     "-v",
-                    "-c", "../../config/spp-platform.crt",
-                    "-k", "../../config/spp-platform.key",
                     "developer",
                     "remove-live-instrument",
                     it.id!!

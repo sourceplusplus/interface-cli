@@ -177,8 +177,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v${{ needs.debian-build.outputs.version }}
-          release_name: v${{ needs.debian-build.outputs.version }}
+          tag_name: v${{ needs.buildOnLinux.outputs.version }}
+          release_name: v${{ needs.buildOnLinux.outputs.version }}
           body: ${{ needs.build.outputs.changelog }}
           draft: true
 

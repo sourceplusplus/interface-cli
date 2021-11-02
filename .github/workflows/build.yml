@@ -7,6 +7,30 @@ on:
     branches: [ master ]
 
 jobs:
+  buildOnMac:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ayltai/setup-graalvm@v1
+        with:
+          java-version: 11
+          graalvm-version: 20.3.0
+          native-image: true
+      - name: Build with Gradle
+        run: gradle assemble nativeImage
+#       - name: Run UPX
+#         uses: svenstaro/upx-action@v2
+#         with:
+#           file: target/demo-cli
+#           args: '-7'
+#       - name: Upload artifacts
+#         run: mkdir staging && cp target/demo-cli staging/demo-cli-mac-amd64
+#       - uses: actions/upload-artifact@v2
+#         with:
+#           name: package
+#           path: staging
+
   buildOnWindows:
     runs-on: windows-latest
 

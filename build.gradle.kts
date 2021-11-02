@@ -7,10 +7,9 @@ plugins {
     kotlin("jvm")
 }
 
-val platformGroup: String by project
-val platformVersion: String by project
+val cliGroup: String by project
+val cliVersion: String by project
 val jacksonVersion: String by project
-val sourceMarkerVersion: String by project
 val apolloVersion: String by project
 val commonsLang3Version: String by project
 val cliktVersion: String by project
@@ -21,8 +20,8 @@ val auth0JwtVersion: String by project
 val protocolVersion: String by project
 val vertxVersion: String by project
 
-group = platformGroup
-version = platformVersion
+group = cliGroup
+version = cliVersion
 
 repositories {
     mavenCentral()

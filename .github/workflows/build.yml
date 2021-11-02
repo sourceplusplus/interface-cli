@@ -11,6 +11,8 @@ jobs:
     runs-on: macos-latest
 
     steps:
+      - run: cd e2e && docker-compose up -d
+
       - uses: actions/checkout@v2
       - uses: ayltai/setup-graalvm@v1
         with:
@@ -19,13 +21,73 @@ jobs:
           native-image: true
       - name: Build native spp-cli
         run: gradle assemble nativeImage
-#       - name: Run UPX
-#         uses: svenstaro/upx-action@v2
-#         with:
-#           file: target/demo-cli
-#           args: '-7'
-#       - name: Upload artifacts
-#         run: mkdir staging && cp target/demo-cli staging/demo-cli-mac-amd64
+      - name: Run UPX
+        uses: svenstaro/upx-action@v2
+        with:
+          file: build/graal/spp-cli
+          args: '-7'
+
+      - name: Docker IPs
+        run: docker inspect --format='{{.Name}} - {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps -aq)
+      - name: Set SPP_PLATFORM_HOST
+        run: SPP_PLATFORM_HOST=$(docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps -aqf "name=spp-platform")) && echo "SPP_PLATFORM_HOST=$SPP_PLATFORM_HOST" >> $GITHUB_ENV
+      - run: sleep 30s
+
+      - name: "[CLI] Get developers"
+        run: ./build/graal/spp-cli -v admin get-developers
+      - name: "[CLI] Add developer"
+        run: ./build/graal/spp-cli -v admin add-developer test
+      - name: "[CLI] Refresh developer token"
+        run: ./build/graal/spp-cli -v admin refresh-developer-token test
+      - name: "[CLI] Get roles"
+        run: ./build/graal/spp-cli -v admin get-roles
+      - name: "[CLI] Get role permissions"
+        run: ./build/graal/spp-cli -v admin get-role-permissions role_manager
+      - name: "[CLI] Add role"
+        run: ./build/graal/spp-cli -v admin add-role tester
+      - name: "[CLI] Add role permission"
+        run: ./build/graal/spp-cli -v admin add-role-permission tester ADD_DEVELOPER
+      - name: "[CLI] Add developer role"
+        run: ./build/graal/spp-cli -v admin add-developer-role test tester
+      - name: "[CLI] Get developer roles"
+        run: ./build/graal/spp-cli -v admin get-developer-roles test
+      - name: "[CLI] Get developer permissions"
+        run: ./build/graal/spp-cli -v admin get-developer-permissions test
+      - name: "[CLI] Add access permission"
+        run: ACCESS_PERMISSION_ID=$(./build/graal/spp-cli -v admin add-access-permission -l spp.example.webapp.model.User WHITE_LIST | grep -oP '(?<="id"\s:\s")[^"]*') && echo "ACCESS_PERMISSION_ID=$ACCESS_PERMISSION_ID" >> $GITHUB_ENV
+      - name: "[CLI] Add role access permission"
+        run: ./build/graal/spp-cli -v admin add-role-access-permission tester ${{ env.ACCESS_PERMISSION_ID }}
+      - name: "[CLI] Get access permissions"
+        run: ./build/graal/spp-cli -v admin get-access-permissions
+      - name: "[CLI] Get developer access permissions"
+        run: ./build/graal/spp-cli -v admin get-developer-access-permissions test
+      - name: "[CLI] Get role access permissions"
+        run: ./build/graal/spp-cli -v admin get-role-access-permissions tester
+      - name: "[CLI] Remove role access permission"
+        run: ./build/graal/spp-cli -v admin remove-role-access-permission tester ${{ env.ACCESS_PERMISSION_ID }}
+      - name: "[CLI] Remove access permission"
+        run: ./build/graal/spp-cli -v admin remove-access-permission ${{ env.ACCESS_PERMISSION_ID }}
+      - name: "[CLI] Remove developer role"
+        run: ./build/graal/spp-cli -v admin remove-developer-role test tester
+      - name: "[CLI] Remove role permission"
+        run: ./build/graal/spp-cli -v admin remove-role-permission tester ADD_DEVELOPER
+      - name: "[CLI] Remove role"
+        run: ./build/graal/spp-cli -v admin remove-role tester
+      - name: "[CLI] Remove developer"
+        run: ./build/graal/spp-cli -v admin remove-developer test
+      - name: "[CLI] Add live breakpoint"
+        run: ./build/graal/spp-cli -v developer add-live-breakpoint -h 100 spp.example.webapp.model.User 48
+      - name: "[CLI] Add live log"
+        run: ./build/graal/spp-cli -v developer add-live-log -h 100 spp.example.webapp.model.User 48 test-message
+      - name: "[CLI] Get live instruments"
+        run: ./build/graal/spp-cli -v developer get-live-instruments
+      - name: "[CLI] Get live breakpoints"
+        run: ./build/graal/spp-cli -v developer get-live-breakpoints
+      - name: "[CLI] Get live logs"
+        run: ./build/graal/spp-cli -v developer get-live-logs
+      - name: "[CLI] Remove live instruments"
+        run: ./build/graal/spp-cli -v developer remove-live-instruments spp.example.webapp.model.User 48
+
       - uses: actions/upload-artifact@v2
         with:
           name: mac-build
@@ -150,34 +212,7 @@ jobs:
       - name: "[CLI] Remove live instruments"
         run: ./build/graal/spp-cli -v developer remove-live-instruments spp.example.webapp.model.User 48
 
-      - name: Remove Old Release Drafts
-        if: github.ref == 'refs/heads/master'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          curl -H "Authorization: Bearer $GITHUB_TOKEN" https://api.github.com/repos/$GITHUB_REPOSITORY/releases \
-            | tr '\r\n' ' ' \
-            | jq '.[] | select(.draft == true) | .id' \
-            | xargs -I '{}' \
-          curl -X DELETE -H "Authorization: Bearer $GITHUB_TOKEN" https://api.github.com/repos/$GITHUB_REPOSITORY/releases/{}
-
-      - name: Create release draft
-        if: github.ref == 'refs/heads/master'
-        id: createDraft
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/upload-artifact@v2
         with:
-          tag_name: ${{ env.SPP_CLI_VERSION }}
-          release_name: v${{ env.SPP_CLI_VERSION }}
-          draft: true
-
-      - name: Upload spp-cli asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.createDraft.outputs.upload_url }}
-          asset_path: ./build/graal/spp-cli
-          asset_name: spp-cli
-          asset_content_type: application/x-sharedlib
+          name: linux-build
+          path: build/graal/spp-cli

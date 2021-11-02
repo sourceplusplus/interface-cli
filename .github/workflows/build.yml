@@ -44,59 +44,59 @@ jobs:
         run: curl -O -J -L https://github.com/upx/upx/releases/download/v3.96/upx-3.96-amd64_linux.tar.xz && tar -xJf upx-3.96-amd64_linux.tar.xz && ./upx-3.96-amd64_linux/upx build/graal/spp-cli
 
       - name: "[CLI] Get developers"
-        run: ./build/graal/spp-cli --no-verify -v admin get-developers
+        run: ./build/graal/spp-cli -v admin get-developers
       - name: "[CLI] Add developer"
-        run: ./build/graal/spp-cli --no-verify -v admin add-developer test
+        run: ./build/graal/spp-cli -v admin add-developer test
       - name: "[CLI] Refresh developer token"
-        run: ./build/graal/spp-cli --no-verify -v admin refresh-developer-token test
+        run: ./build/graal/spp-cli -v admin refresh-developer-token test
       - name: "[CLI] Get roles"
-        run: ./build/graal/spp-cli --no-verify -v admin get-roles
+        run: ./build/graal/spp-cli -v admin get-roles
       - name: "[CLI] Get role permissions"
-        run: ./build/graal/spp-cli --no-verify -v admin get-role-permissions role_manager
+        run: ./build/graal/spp-cli -v admin get-role-permissions role_manager
       - name: "[CLI] Add role"
-        run: ./build/graal/spp-cli --no-verify -v admin add-role tester
+        run: ./build/graal/spp-cli -v admin add-role tester
       - name: "[CLI] Add role permission"
-        run: ./build/graal/spp-cli --no-verify -v admin add-role-permission tester ADD_DEVELOPER
+        run: ./build/graal/spp-cli -v admin add-role-permission tester ADD_DEVELOPER
       - name: "[CLI] Add developer role"
-        run: ./build/graal/spp-cli --no-verify -v admin add-developer-role test tester
+        run: ./build/graal/spp-cli -v admin add-developer-role test tester
       - name: "[CLI] Get developer roles"
-        run: ./build/graal/spp-cli --no-verify -v admin get-developer-roles test
+        run: ./build/graal/spp-cli -v admin get-developer-roles test
       - name: "[CLI] Get developer permissions"
-        run: ./build/graal/spp-cli --no-verify -v admin get-developer-permissions test
+        run: ./build/graal/spp-cli -v admin get-developer-permissions test
       - name: "[CLI] Add access permission"
-        run: ACCESS_PERMISSION_ID=$(./build/graal/spp-cli --no-verify -v admin add-access-permission -l spp.example.webapp.model.User WHITE_LIST | grep -oP '(?<="id"\s:\s")[^"]*') && echo "ACCESS_PERMISSION_ID=$ACCESS_PERMISSION_ID" >> $GITHUB_ENV
+        run: ACCESS_PERMISSION_ID=$(./build/graal/spp-cli -v admin add-access-permission -l spp.example.webapp.model.User WHITE_LIST | grep -oP '(?<="id"\s:\s")[^"]*') && echo "ACCESS_PERMISSION_ID=$ACCESS_PERMISSION_ID" >> $GITHUB_ENV
       - name: "[CLI] Add role access permission"
-        run: ./build/graal/spp-cli --no-verify -v admin add-role-access-permission tester ${{ env.ACCESS_PERMISSION_ID }}
+        run: ./build/graal/spp-cli -v admin add-role-access-permission tester ${{ env.ACCESS_PERMISSION_ID }}
       - name: "[CLI] Get access permissions"
-        run: ./build/graal/spp-cli --no-verify -v admin get-access-permissions
+        run: ./build/graal/spp-cli -v admin get-access-permissions
       - name: "[CLI] Get developer access permissions"
-        run: ./build/graal/spp-cli --no-verify -v admin get-developer-access-permissions test
+        run: ./build/graal/spp-cli -v admin get-developer-access-permissions test
       - name: "[CLI] Get role access permissions"
-        run: ./build/graal/spp-cli --no-verify -v admin get-role-access-permissions tester
+        run: ./build/graal/spp-cli -v admin get-role-access-permissions tester
       - name: "[CLI] Remove role access permission"
-        run: ./build/graal/spp-cli --no-verify -v admin remove-role-access-permission tester ${{ env.ACCESS_PERMISSION_ID }}
+        run: ./build/graal/spp-cli -v admin remove-role-access-permission tester ${{ env.ACCESS_PERMISSION_ID }}
       - name: "[CLI] Remove access permission"
-        run: ./build/graal/spp-cli --no-verify -v admin remove-access-permission ${{ env.ACCESS_PERMISSION_ID }}
+        run: ./build/graal/spp-cli -v admin remove-access-permission ${{ env.ACCESS_PERMISSION_ID }}
       - name: "[CLI] Remove developer role"
-        run: ./build/graal/spp-cli --no-verify -v admin remove-developer-role test tester
+        run: ./build/graal/spp-cli -v admin remove-developer-role test tester
       - name: "[CLI] Remove role permission"
-        run: ./build/graal/spp-cli --no-verify -v admin remove-role-permission tester ADD_DEVELOPER
+        run: ./build/graal/spp-cli -v admin remove-role-permission tester ADD_DEVELOPER
       - name: "[CLI] Remove role"
-        run: ./build/graal/spp-cli --no-verify -v admin remove-role tester
+        run: ./build/graal/spp-cli -v admin remove-role tester
       - name: "[CLI] Remove developer"
-        run: ./build/graal/spp-cli --no-verify -v admin remove-developer test
+        run: ./build/graal/spp-cli -v admin remove-developer test
       - name: "[CLI] Add live breakpoint"
-        run: ./build/graal/spp-cli --no-verify -v developer add-live-breakpoint -h 100 spp.example.webapp.model.User 48
+        run: ./build/graal/spp-cli -v developer add-live-breakpoint -h 100 spp.example.webapp.model.User 48
       - name: "[CLI] Add live log"
-        run: ./build/graal/spp-cli --no-verify -v developer add-live-log -h 100 spp.example.webapp.model.User 48 test-message
+        run: ./build/graal/spp-cli -v developer add-live-log -h 100 spp.example.webapp.model.User 48 test-message
       - name: "[CLI] Get live instruments"
-        run: ./build/graal/spp-cli --no-verify -v developer get-live-instruments
+        run: ./build/graal/spp-cli -v developer get-live-instruments
       - name: "[CLI] Get live breakpoints"
-        run: ./build/graal/spp-cli --no-verify -v developer get-live-breakpoints
+        run: ./build/graal/spp-cli -v developer get-live-breakpoints
       - name: "[CLI] Get live logs"
-        run: ./build/graal/spp-cli --no-verify -v developer get-live-logs
+        run: ./build/graal/spp-cli -v developer get-live-logs
       - name: "[CLI] Remove live instruments"
-        run: ./build/graal/spp-cli --no-verify -v developer remove-live-instruments spp.example.webapp.model.User 48
+        run: ./build/graal/spp-cli -v developer remove-live-instruments spp.example.webapp.model.User 48
 
       - name: Remove Old Release Drafts
         if: github.ref == 'refs/heads/master'

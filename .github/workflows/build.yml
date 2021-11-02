@@ -30,7 +30,7 @@ jobs:
 
       - run: cd e2e && docker-compose up -d
 
-      - run: ./gradlew assemble nativeImage
+      - run: ./gradlew assemble nativeImage -Dbuild.profile=release
 
       - name: Docker IPs
         run: docker inspect --format='{{.Name}} - {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps -aq)
@@ -40,7 +40,7 @@ jobs:
         run: until $(curl --insecure --output /dev/null --silent --fail https://${{ env.SPP_PLATFORM_HOST }}:5445/api/new-token?access_token=change-me); do printf '.'; sleep 5; done && SPP_JWT_TOKEN=$(curl --insecure https://${{ env.SPP_PLATFORM_HOST }}:5445/api/new-token?access_token=change-me) && echo "SPP_JWT_TOKEN=$SPP_JWT_TOKEN" >> $GITHUB_ENV
       - run: sleep 30s
 
-      - run: ./gradlew test
+      - run: ./gradlew test -Dtest.profile=integration
 
       - name: Compress CLI
         run: curl -O -J -L https://github.com/upx/upx/releases/download/v3.96/upx-3.96-amd64_linux.tar.xz && tar -xJf upx-3.96-amd64_linux.tar.xz && ./upx-3.96-amd64_linux/upx build/graal/spp-cli
@@ -99,3 +99,35 @@ jobs:
         run: ./interfaces/cli/build/graal/spp-cli -v -c ./platform/config/spp-platform.crt -k ./platform/config/spp-platform.key developer get-live-logs
       - name: "[CLI] Remove live instruments"
         run: ./interfaces/cli/build/graal/spp-cli -v -c ./platform/config/spp-platform.crt -k ./platform/config/spp-platform.key developer remove-live-instruments spp.example.webapp.model.User 48
+
+      - name: Remove Old Release Drafts
+        if: github.ref == 'refs/heads/master'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          curl -H "Authorization: Bearer $GITHUB_TOKEN" https://api.github.com/repos/$GITHUB_REPOSITORY/releases \
+            | tr '\r\n' ' ' \
+            | jq '.[] | select(.draft == true) | .id' \
+            | xargs -I '{}' \
+          curl -X DELETE -H "Authorization: Bearer $GITHUB_TOKEN" https://api.github.com/repos/$GITHUB_REPOSITORY/releases/{}
+
+      - name: Create release draft
+        if: github.ref == 'refs/heads/master'
+        id: createDraft
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.SPP_CLI_VERSION }}
+          release_name: v${{ env.SPP_CLI_VERSION }}
+          draft: true
+
+      - name: Upload spp-cli asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.createDraft.outputs.upload_url }}
+          asset_path: ./build/graal/spp-cli
+          asset_name: spp-cli
+          asset_content_type: application/x-sharedlib

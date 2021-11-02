@@ -43,7 +43,6 @@ object PlatformCLI : CliktCommand(name = "spp-cli", allowMultipleSubcommands = t
     private val platformKey by option("-k", "--key", help = "Source++ platform key").file()
         .default(File("config/spp-platform.key"))
     private val accessToken by option("-a", "--access-token", help = "Developer access token")
-    private val disableHostnameVerifier by option("--no-verify", help = "Disable host name verifier").flag()
     val apolloClient: ApolloClient by lazy { connectToPlatform() }
 
     override fun run() = Unit
@@ -123,10 +122,6 @@ object PlatformCLI : CliktCommand(name = "spp-cli", allowMultipleSubcommands = t
                             .header("Authorization", "Bearer $jwtToken")
                             .build()
                     )
-                }.apply {
-                    if (disableHostnameVerifier) {
-                        hostnameVerifier { _, _ -> true }
-                    }
                 }.build()
             )
             .serverUrl("$serverUrl/graphql")

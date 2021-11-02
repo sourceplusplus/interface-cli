@@ -43,8 +43,6 @@ jobs:
 #           java-version: 11
 #           graalvm-version: 20.3.0
 #           native-image: true
-      - run: choco install windows-sdk-7.1 kb2519277
-        shell: powershell
       - name: Build native spp-cli.exe
         run: ./gradlew assemble nativeImage --debug --info --stacktrace
         shell: powershell

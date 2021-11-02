@@ -45,7 +45,7 @@ jobs:
           graalvm-version: 20.3.0
           native-image: true
       - name: Build native spp-cli.exe
-        run: ./gradlew assemble nativeImage
+        run: ./gradlew assemble nativeImage --info --stacktrace
         shell: powershell
       - run: ls build/graal
 #       - name: Run UPX

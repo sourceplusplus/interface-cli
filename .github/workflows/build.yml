@@ -15,11 +15,11 @@ jobs:
 
       - name: Build native spp-cli
         run: gradle assemble nativeImage
-      - name: Run UPX
+
+      - name: Compress CLI
         uses: svenstaro/upx-action@v2
         with:
           file: build/graal/spp-cli
-          args: '-7'
 
       - uses: actions/upload-artifact@v2
         with:
@@ -84,7 +84,9 @@ jobs:
       - run: ./gradlew test -Dtest.profile=integration
 
       - name: Compress CLI
-        run: curl -O -J -L https://github.com/upx/upx/releases/download/v3.96/upx-3.96-amd64_linux.tar.xz && tar -xJf upx-3.96-amd64_linux.tar.xz && ./upx-3.96-amd64_linux/upx build/graal/spp-cli
+        uses: svenstaro/upx-action@v2
+        with:
+          file: build/graal/spp-cli
 
       - name: "[CLI] Get developers"
         run: ./build/graal/spp-cli -v admin get-developers

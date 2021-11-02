@@ -32,7 +32,7 @@ jobs:
           path: build/graal/spp-cli
 
   buildOnWindows:
-    runs-on: windows-2019
+    runs-on: windows-2016
 
     steps:
       - uses: actions/checkout@v2

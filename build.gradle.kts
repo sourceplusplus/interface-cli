@@ -81,6 +81,7 @@ graal {
     option("-H:+ReportExceptionStackTraces")
     option("-H:IncludeResourceBundles=build")
     option("-H:+AddAllCharsets")
+    javaVersion("11")
 }
 
 tasks.getByName<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar") {

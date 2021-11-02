@@ -11,14 +11,15 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      - run: cd e2e && docker-compose up -d
-
       - uses: actions/checkout@v2
 #       - uses: ayltai/setup-graalvm@v1
 #         with:
 #           java-version: 11
 #           graalvm-version: 20.3.0
 #           native-image: true
+
+      - run: cd e2e && docker-compose up -d
+
       - name: Build native spp-cli
         run: gradle assemble nativeImage
       - name: Run UPX
@@ -105,6 +106,8 @@ jobs:
 #           java-version: 11
 #           graalvm-version: 20.3.0
 #           native-image: true
+      - run: choco install windows-sdk-7.1 kb2519277
+        shell: powershell
       - name: Build native spp-cli.exe
         run: ./gradlew assemble nativeImage --debug --info --stacktrace
         shell: powershell

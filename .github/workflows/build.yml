@@ -12,11 +12,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-#       - uses: ayltai/setup-graalvm@v1
-#         with:
-#           java-version: 11
-#           graalvm-version: 20.3.0
-#           native-image: true
 
       - name: Build native spp-cli
         run: gradle assemble nativeImage
@@ -31,34 +26,29 @@ jobs:
           name: mac-build
           path: build/graal/spp-cli
 
-  buildOnWindows:
-    runs-on: windows-2016
+#   buildOnWindows:
+#     runs-on: windows-2016
 
-    steps:
-      - uses: actions/checkout@v2
-      - uses: microsoft/setup-msbuild@v1.0.2
-      - uses: seanmiddleditch/gha-setup-vsdevenv@master
+#     steps:
+#       - uses: actions/checkout@v2
+#       - uses: microsoft/setup-msbuild@v1.0.2
+#       - uses: seanmiddleditch/gha-setup-vsdevenv@master
 
-#       - uses: ayltai/setup-graalvm@v1
+#       - name: Build native spp-cli.exe
+#         run: ./gradlew assemble nativeImage --debug --info --stacktrace
+#         shell: powershell
+#       - run: ls build/graal
+# #       - name: Run UPX
+# #         uses: crazy-max/ghaction-upx@v1.3.3
+# #         with:
+# #           version: latest
+# #           file: target/demo-cli.exe
+# #           args: '-7'
+#       - uses: actions/upload-artifact@v2
 #         with:
-#           java-version: 11
-#           graalvm-version: 20.3.0
-#           native-image: true
-      - name: Build native spp-cli.exe
-        run: ./gradlew assemble nativeImage --debug --info --stacktrace
-        shell: powershell
-      - run: ls build/graal
-#       - name: Run UPX
-#         uses: crazy-max/ghaction-upx@v1.3.3
-#         with:
-#           version: latest
-#           file: target/demo-cli.exe
-#           args: '-7'
-      - uses: actions/upload-artifact@v2
-        with:
-          if-no-files-found: warn
-          name: spp-cli.exe
-          path: build/graal/spp-cli.exe
+#           if-no-files-found: warn
+#           name: spp-cli.exe
+#           path: build/graal/spp-cli.exe
 
   buildOnLinux:
     runs-on: ubuntu-latest

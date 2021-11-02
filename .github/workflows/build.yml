@@ -19,7 +19,6 @@ jobs:
           native-image: true
       - name: Build native spp-cli
         run: gradle assemble nativeImage
-      - run: ls build/graal
 #       - name: Run UPX
 #         uses: svenstaro/upx-action@v2
 #         with:
@@ -29,7 +28,7 @@ jobs:
 #         run: mkdir staging && cp target/demo-cli staging/demo-cli-mac-amd64
       - uses: actions/upload-artifact@v2
         with:
-          name: spp-cli
+          name: mac-build
           path: build/graal/spp-cli
 
   buildOnWindows:
@@ -45,7 +44,7 @@ jobs:
           graalvm-version: 20.3.0
           native-image: true
       - name: Build native spp-cli.exe
-        run: ./gradlew assemble nativeImage --info --stacktrace
+        run: ./gradlew assemble nativeImage --debug --info --stacktrace
         shell: powershell
       - run: ls build/graal
 #       - name: Run UPX
@@ -58,9 +57,9 @@ jobs:
         with:
           if-no-files-found: warn
           name: spp-cli.exe
-          path: build/graal/spp-cli/*.exe
+          path: build/graal/spp-cli.exe
 
-  build:
+  buildOnLinux:
     runs-on: ubuntu-latest
 
     steps:

@@ -29,19 +29,8 @@ jobs:
           echo "SPP_CLI_VERSION=$VERSION" >> $GITHUB_ENV
 
       - run: cd e2e && docker-compose up -d
-      - name: Docker IPs
-        run: docker inspect --format='{{.Name}} - {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps -aq)
-      - name: Set SPP_PLATFORM_HOST
-        run: SPP_PLATFORM_HOST=$(docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps -aqf "name=spp-platform")) && echo "SPP_PLATFORM_HOST=$SPP_PLATFORM_HOST" >> $GITHUB_ENV
-      - name: Wait for platform
-        run: until $(curl --insecure --output /dev/null --silent --fail http://localhost:5445/api/new-token?access_token=change-me); do printf '.'; sleep 5; done && SPP_JWT_TOKEN=$(curl --insecure http://localhost:5445/api/new-token?access_token=change-me) && echo "SPP_JWT_TOKEN=$SPP_JWT_TOKEN" >> $GITHUB_ENV
-      - name: Wait for skywalking
-        run: |
-          until $(curl --header "Authorization: Bearer ${{ env.SPP_JWT_TOKEN }}" --insecure --output /dev/null --silent --fail http://localhost:5445/health); do printf '.'; sleep 5; done
 
       - run: ./gradlew assemble nativeImage
-      - name: Compress CLI
-        run: curl -O -J -L https://github.com/upx/upx/releases/download/v3.96/upx-3.96-amd64_linux.tar.xz && tar -xJf upx-3.96-amd64_linux.tar.xz && ./upx-3.96-amd64_linux/upx platform/build/graal/spp-cli
 
       - name: Docker IPs
         run: docker inspect --format='{{.Name}} - {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps -aq)
@@ -52,6 +41,11 @@ jobs:
       - name: Wait for skywalking
         run: |
           until $(curl --header "Authorization: Bearer ${{ env.SPP_JWT_TOKEN }}" --insecure --output /dev/null --silent --fail https://${{ env.SPP_PLATFORM_HOST }}:5445/health); do printf '.'; sleep 5; done
+
+      - run: ./gradlew test
+
+      - name: Compress CLI
+        run: curl -O -J -L https://github.com/upx/upx/releases/download/v3.96/upx-3.96-amd64_linux.tar.xz && tar -xJf upx-3.96-amd64_linux.tar.xz && ./upx-3.96-amd64_linux/upx build/graal/spp-cli
 
       - name: "[CLI] Get developers"
         run: ./interfaces/cli/build/graal/spp-cli -v -c ./platform/config/spp-platform.crt -k ./platform/config/spp-platform.key admin get-developers

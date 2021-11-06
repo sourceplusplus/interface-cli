@@ -27,4 +27,4 @@ This project provides a command-line interface client to the [Source++](https://
 ```
 
 ## Documentation
-- [Admin CLI](https://docs.sourceplusplus.com/implementation/tools/clients/cli/admin/) / [Developer CLI](https://docs.sourceplusplus.com/implementation/tools/clients/cli/developer/)
+- [Admin Commands](https://docs.sourceplusplus.com/implementation/tools/clients/cli/admin/) / [Developer Commands](https://docs.sourceplusplus.com/implementation/tools/clients/cli/developer/)

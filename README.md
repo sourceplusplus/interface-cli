@@ -8,7 +8,7 @@
 
 This project provides a command-line interface client to the [Source++](https://github.com/sourceplusplus/live-platform) open-source live coding platform.
 
-## Commands
+## Basic Usage
 
 ### Admin
 
@@ -25,3 +25,6 @@ This project provides a command-line interface client to the [Source++](https://
 ```sh
 ./spp-cli developer add-live-breakpoint com.company.Webapp 42
 ```
+
+## Documentation
+- [Admin CLI](https://docs.sourceplusplus.com/implementation/tools/clients/cli/admin/) / [Developer CLI](https://docs.sourceplusplus.com/implementation/tools/clients/cli/developer/)

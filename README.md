@@ -7,3 +7,21 @@
 ## What is this?
 
 This project provides a command-line interface client to the [Source++](https://github.com/sourceplusplus/live-platform) open-source live coding platform.
+
+## Commands
+
+### Admin
+
+#### Add Developer
+
+```sh
+./spp-cli admin add-developer bob@email.com
+```
+
+### Developer
+
+#### Add Live Instrument
+
+```sh
+./spp-cli developer add-live-breakpoint com.company.Webapp 42
+```

@@ -164,16 +164,16 @@
     "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
   },
   {
-    "name":"com.sourceplusplus.protocol.service.logging.LogCountIndicatorServiceVertxProxyHandler",
-    "methods":[{"name":"<init>","parameterTypes":["io.vertx.core.Vertx","com.sourceplusplus.protocol.service.logging.LogCountIndicatorService","boolean","long","boolean"] }]
+    "name":"spp.protocol.service.logging.LogCountIndicatorServiceVertxProxyHandler",
+    "methods":[{"name":"<init>","parameterTypes":["io.vertx.core.Vertx","spp.protocol.service.logging.LogCountIndicatorService","boolean","long","boolean"] }]
   },
   {
-    "name":"com.sourceplusplus.protocol.service.tracing.HindsightDebuggerServiceVertxProxyHandler",
-    "methods":[{"name":"<init>","parameterTypes":["io.vertx.core.Vertx","com.sourceplusplus.protocol.service.tracing.HindsightDebuggerService","boolean","long","boolean"] }]
+    "name":"spp.protocol.service.tracing.HindsightDebuggerServiceVertxProxyHandler",
+    "methods":[{"name":"<init>","parameterTypes":["io.vertx.core.Vertx","spp.protocol.service.tracing.HindsightDebuggerService","boolean","long","boolean"] }]
   },
   {
-    "name":"com.sourceplusplus.protocol.service.tracing.LocalTracingServiceVertxProxyHandler",
-    "methods":[{"name":"<init>","parameterTypes":["io.vertx.core.Vertx","com.sourceplusplus.protocol.service.tracing.LocalTracingService","boolean","long","boolean"] }]
+    "name":"spp.protocol.service.tracing.LocalTracingServiceVertxProxyHandler",
+    "methods":[{"name":"<init>","parameterTypes":["io.vertx.core.Vertx","spp.protocol.service.tracing.LocalTracingService","boolean","long","boolean"] }]
   },
   {
     "name": "org.bouncycastle.jcajce.provider.asymmetric.rsa.DigestSignatureSpi$SHA256",
@@ -270,16 +270,16 @@
     "methods":[{"name":"premain","parameterTypes":["java.lang.String","java.lang.instrument.Instrumentation"] }]
   },
   {
-    "name":"com.sourceplusplus.protocol.service.logging.LogCountIndicatorServiceVertxProxyHandler",
-    "methods":[{"name":"<init>","parameterTypes":["io.vertx.core.Vertx","com.sourceplusplus.protocol.service.logging.LogCountIndicatorService","boolean","long","boolean"] }]
+    "name":"spp.protocol.service.logging.LogCountIndicatorServiceVertxProxyHandler",
+    "methods":[{"name":"<init>","parameterTypes":["io.vertx.core.Vertx","spp.protocol.service.logging.LogCountIndicatorService","boolean","long","boolean"] }]
   },
   {
-    "name":"com.sourceplusplus.protocol.service.tracing.HindsightDebuggerServiceVertxProxyHandler",
-    "methods":[{"name":"<init>","parameterTypes":["io.vertx.core.Vertx","com.sourceplusplus.protocol.service.tracing.HindsightDebuggerService","boolean","long","boolean"] }]
+    "name":"spp.protocol.service.tracing.HindsightDebuggerServiceVertxProxyHandler",
+    "methods":[{"name":"<init>","parameterTypes":["io.vertx.core.Vertx","spp.protocol.service.tracing.HindsightDebuggerService","boolean","long","boolean"] }]
   },
   {
-    "name":"com.sourceplusplus.protocol.service.tracing.LocalTracingServiceVertxProxyHandler",
-    "methods":[{"name":"<init>","parameterTypes":["io.vertx.core.Vertx","com.sourceplusplus.protocol.service.tracing.LocalTracingService","boolean","long","boolean"] }]
+    "name":"spp.protocol.service.tracing.LocalTracingServiceVertxProxyHandler",
+    "methods":[{"name":"<init>","parameterTypes":["io.vertx.core.Vertx","spp.protocol.service.tracing.LocalTracingService","boolean","long","boolean"] }]
   },
   {
     "name":"com.sun.crypto.provider.PBEKeyFactory$PBEWithMD5AndDES",
@@ -759,7 +759,7 @@
     "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
   },
   {
-    "name": "com.sourceplusplus.protocol.status.MarkerConnection",
+    "name": "spp.protocol.status.MarkerConnection",
     "fields":[
       {"name":"markerId", "allowWrite":true},
       {"name":"connectionTime", "allowWrite":true},
@@ -811,7 +811,7 @@
     "name": "kotlin.KotlinVersion$Companion[]"
   },
   {
-    "name": "com.sourceplusplus.protocol.status.MarkerConnection[]",
+    "name": "spp.protocol.status.MarkerConnection[]",
     "allDeclaredConstructors" : true,
     "allPublicConstructors" : true,
     "allDeclaredMethods" : true,
@@ -907,7 +907,7 @@
     "allPublicClasses" : true
   },
   {
-    "name": "com.sourceplusplus.protocol.artifact.exception.LiveStackTrace[]",
+    "name": "spp.protocol.artifact.exception.LiveStackTrace[]",
     "allDeclaredConstructors" : true,
     "allPublicConstructors" : true,
     "allDeclaredMethods" : true,
@@ -916,7 +916,7 @@
     "allPublicClasses" : true
   },
   {
-    "name": "com.sourceplusplus.protocol.artifact.exception.LiveStackTrace",
+    "name": "spp.protocol.artifact.exception.LiveStackTrace",
     "fields":[
       {"name":"exceptionType", "allowWrite":true},
       {"name":"message", "allowWrite":true},
@@ -931,7 +931,7 @@
     "allPublicClasses" : true
   },
   {
-    "name": "com.sourceplusplus.protocol.artifact.exception.LiveStackTraceElement[]",
+    "name": "spp.protocol.artifact.exception.LiveStackTraceElement[]",
     "allDeclaredConstructors" : true,
     "allPublicConstructors" : true,
     "allDeclaredMethods" : true,
@@ -940,7 +940,7 @@
     "allPublicClasses" : true
   },
   {
-    "name": "com.sourceplusplus.protocol.artifact.exception.LiveStackTraceElement",
+    "name": "spp.protocol.artifact.exception.LiveStackTraceElement",
     "fields":[
       {"name":"method", "allowWrite":true},
       {"name":"source", "allowWrite":true},
@@ -963,7 +963,7 @@
     "allPublicClasses" : true
   },
   {
-    "name": "com.sourceplusplus.protocol.artifact.log.LogCountSummary",
+    "name": "spp.protocol.artifact.log.LogCountSummary",
     "fields":[
       {"name":"timestamp", "allowWrite":true},
       {"name":"logCounts", "allowWrite":true}
@@ -976,7 +976,7 @@
     "allPublicClasses" : true
   },
   {
-    "name": "com.sourceplusplus.protocol.service.tracing.HindsightDebuggerService",
+    "name": "spp.protocol.service.tracing.HindsightDebuggerService",
     "allDeclaredConstructors" : true,
     "allPublicConstructors" : true,
     "allDeclaredMethods" : true,
@@ -985,7 +985,7 @@
     "allPublicClasses" : true
   },
   {
-    "name": "com.sourceplusplus.protocol.service.tracing.LocalTracingService",
+    "name": "spp.protocol.service.tracing.LocalTracingService",
     "allDeclaredConstructors" : true,
     "allPublicConstructors" : true,
     "allDeclaredMethods" : true,
@@ -994,7 +994,7 @@
     "allPublicClasses" : true
   },
   {
-    "name": "com.sourceplusplus.protocol.service.logging.LogCountIndicatorService",
+    "name": "spp.protocol.service.logging.LogCountIndicatorService",
     "allDeclaredConstructors" : true,
     "allPublicConstructors" : true,
     "allDeclaredMethods" : true,
@@ -1003,7 +1003,7 @@
     "allPublicClasses" : true
   },
   {
-    "name": "com.sourceplusplus.protocol.service.logging.LogCountIndicatorServiceVertxEBProxy",
+    "name": "spp.protocol.service.logging.LogCountIndicatorServiceVertxEBProxy",
     "allDeclaredConstructors" : true,
     "allPublicConstructors" : true,
     "allDeclaredMethods" : true,
@@ -1012,7 +1012,7 @@
     "allPublicClasses" : true
   },
   {
-    "name": "com.sourceplusplus.protocol.service.tracing.LocalTracingServiceVertxEBProxy",
+    "name": "spp.protocol.service.tracing.LocalTracingServiceVertxEBProxy",
     "allDeclaredConstructors" : true,
     "allPublicConstructors" : true,
     "allDeclaredMethods" : true,
@@ -1021,7 +1021,7 @@
     "allPublicClasses" : true
   },
   {
-    "name": "com.sourceplusplus.protocol.service.tracing.HindsightDebuggerServiceVertxEBProxy",
+    "name": "spp.protocol.service.tracing.HindsightDebuggerServiceVertxEBProxy",
     "allDeclaredConstructors" : true,
     "allPublicConstructors" : true,
     "allDeclaredMethods" : true,
@@ -1048,7 +1048,7 @@
     "allPublicClasses" : true
   },
   {
-    "name": "com.sourceplusplus.protocol.artifact.log.LogCountSummary[]",
+    "name": "spp.protocol.artifact.log.LogCountSummary[]",
     "allDeclaredConstructors" : true,
     "allPublicConstructors" : true,
     "allDeclaredMethods" : true,
@@ -1057,7 +1057,7 @@
     "allPublicClasses" : true
   },
   {
-    "name": "com.sourceplusplus.protocol.artifact.ArtifactQualifiedName",
+    "name": "spp.protocol.artifact.ArtifactQualifiedName",
     "fields":[
       {"name":"identifier", "allowWrite":true},
       {"name":"commitId", "allowWrite":true},
@@ -1073,7 +1073,7 @@
     "allPublicClasses" : true
   },
   {
-    "name": "com.sourceplusplus.protocol.artifact.ArtifactQualifiedName[]",
+    "name": "spp.protocol.artifact.ArtifactQualifiedName[]",
     "allDeclaredConstructors" : true,
     "allPublicConstructors" : true,
     "allDeclaredMethods" : true,
@@ -1082,7 +1082,7 @@
     "allPublicClasses" : true
   },
   {
-    "name": "com.sourceplusplus.protocol.artifact.trace.TraceResult[]",
+    "name": "spp.protocol.artifact.trace.TraceResult[]",
     "allDeclaredConstructors" : true,
     "allPublicConstructors" : true,
     "allDeclaredMethods" : true,
@@ -1091,7 +1091,7 @@
     "allPublicClasses" : true
   },
   {
-    "name": "com.sourceplusplus.protocol.artifact.trace.TraceResult",
+    "name": "spp.protocol.artifact.trace.TraceResult",
     "fields":[
       {"name":"appUuid", "allowWrite":true},
       {"name":"artifactQualifiedName", "allowWrite":true},
@@ -1111,7 +1111,7 @@
     "allPublicClasses" : true
   },
   {
-    "name": "com.sourceplusplus.protocol.artifact.trace.Trace[]",
+    "name": "spp.protocol.artifact.trace.Trace[]",
     "allDeclaredConstructors" : true,
     "allPublicConstructors" : true,
     "allDeclaredMethods" : true,
@@ -1120,7 +1120,7 @@
     "allPublicClasses" : true
   },
   {
-    "name": "com.sourceplusplus.protocol.artifact.trace.Trace",
+    "name": "spp.protocol.artifact.trace.Trace",
     "fields":[
       {"name":"key", "allowWrite":true},
       {"name":"operationNames", "allowWrite":true},

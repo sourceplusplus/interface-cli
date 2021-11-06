@@ -4,27 +4,43 @@
 ![GitHub release](https://img.shields.io/github/v/release/sourceplusplus/interface-cli?include_prereleases)
 [![Build](https://github.com/sourceplusplus/interface-cli/actions/workflows/build.yml/badge.svg)](https://github.com/sourceplusplus/interface-cli/actions/workflows/build.yml)
 
-## What is this?
+# What is this?
 
 This project provides a command-line interface client to the [Source++](https://github.com/sourceplusplus/live-platform) open-source live coding platform.
 
-## Basic Usage
+# Basic Usage
 
-### Admin
+## Admin
 
-#### Add Developer
+- [ ] Create developers
+- [ ] Create roles
+- [ ] Configure role permissions
+- [ ] Add roles to developers
 
-```sh
-./spp-cli admin add-developer bob@email.com
-```
+### Add Developer
 
-### Developer
+<details>
+  <summary>Command</summary>
 
-#### Add Live Instrument
+  ```sh
+  ./spp-cli admin add-developer bob@email.com
+  ```
+</details>
 
-```sh
-./spp-cli developer add-live-breakpoint com.company.Webapp 42
-```
+## Developer
 
-## Documentation
+- [ ] Create live instruments
+- [ ] Listen for live instrument events
+
+### Add Live Instrument
+
+<details>
+  <summary>Command</summary>
+
+  ```sh
+  ./spp-cli developer add-live-breakpoint com.company.Webapp 42
+  ```
+</details>
+
+# Documentation
 - [Admin Commands](https://docs.sourceplusplus.com/implementation/tools/clients/cli/admin/) / [Developer Commands](https://docs.sourceplusplus.com/implementation/tools/clients/cli/developer/)

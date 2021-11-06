@@ -22,7 +22,7 @@ This project provides a command-line interface client to the [Source++](https://
 <details>
   <summary>Scenario</summary>
 
-  Two developers...
+  > Two developers...
 </details>
 
 <details>

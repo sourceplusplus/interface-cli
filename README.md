@@ -10,7 +10,7 @@ This project provides a command-line interface client to the [Source++](https://
 
 # Basic Usage
 
-## Admin
+## Admin Guide
 
 - [ ] Create developers
 - [ ] Create roles
@@ -27,7 +27,7 @@ This project provides a command-line interface client to the [Source++](https://
   ```
 </details>
 
-## Developer
+## Developer Guide
 
 - [ ] Create live instruments
 - [ ] Listen for live instrument events

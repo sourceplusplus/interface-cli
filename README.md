@@ -17,7 +17,7 @@ This project provides a command-line interface client to the [Source++](https://
 - [ ] Configure role permissions
 - [ ] Add roles to developers
 
-### Add Developer
+### Create developers
 
 <details>
   <summary>Command</summary>

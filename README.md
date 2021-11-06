@@ -20,6 +20,12 @@ This project provides a command-line interface client to the [Source++](https://
 ### Create developers
 
 <details>
+  <summary>Scenario</summary>
+
+  Two developers...
+</details>
+
+<details>
   <summary>Command</summary>
 
   ```sh

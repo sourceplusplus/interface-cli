@@ -1093,7 +1093,6 @@
   {
     "name": "spp.protocol.artifact.trace.TraceResult",
     "fields":[
-      {"name":"appUuid", "allowWrite":true},
       {"name":"artifactQualifiedName", "allowWrite":true},
       {"name":"artifactSimpleName", "allowWrite":true},
       {"name":"orderType", "allowWrite":true},

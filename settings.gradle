@@ -11,7 +11,7 @@ pluginManagement {
         id 'io.gitlab.arturbosch.detekt' version "1.18.1" apply false
         id 'com.github.johnrengelman.shadow' version "7.1.0"
         id 'com.palantir.graal' version "0.10.0"
-        id 'com.apollographql.apollo' version "2.5.9"
+        id 'com.apollographql.apollo' version "2.5.10"
     }
 }
 

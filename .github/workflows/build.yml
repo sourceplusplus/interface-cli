@@ -82,9 +82,7 @@ jobs:
           echo "::set-output name=version::$VERSION"
           echo "SPP_CLI_VERSION=$VERSION" >> $GITHUB_ENV
 
-      - run: cd e2e && docker-compose up -d
-
-      - run: ./gradlew assemble nativeImage -Dbuild.profile=release
+      - run: ./gradlew assembleUp nativeImage -Dbuild.profile=release
 
       - name: Docker IPs
         run: docker inspect --format='{{.Name}} - {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps -aq)

@@ -1,23 +1,29 @@
 package integration
 
-import spp.protocol.instrument.breakpoint.LiveBreakpoint
-import spp.protocol.instrument.log.LiveLog
+import com.fasterxml.jackson.module.kotlin.KotlinModule
 import io.vertx.core.json.Json
 import io.vertx.core.json.JsonArray
+import io.vertx.core.json.jackson.DatabindCodec
 import spp.cli.Main
+import spp.protocol.instrument.breakpoint.LiveBreakpoint
+import spp.protocol.instrument.log.LiveLog
 import java.io.OutputStream
 import java.io.PrintStream
 import kotlin.reflect.KClass
 
 abstract class CLIIntegrationTest {
-    init {
-        Main.standalone = false
-        Main.main(
-            arrayOf(
-                "-v",
-                "system", "reset"
+    companion object {
+        init {
+            DatabindCodec.mapper().registerModule(KotlinModule())
+
+            Main.standalone = false
+            Main.main(
+                arrayOf(
+                    "-v",
+                    "system", "reset"
+                )
             )
-        )
+        }
     }
 
     class Interceptor(out: OutputStream) : PrintStream(out, true) {

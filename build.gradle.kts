@@ -4,6 +4,7 @@ plugins {
     id("com.github.johnrengelman.shadow")
     id("com.palantir.graal")
     id("com.apollographql.apollo")
+    id("com.avast.gradle.docker-compose")
     kotlin("jvm")
 }
 
@@ -47,6 +48,8 @@ dependencies {
     implementation("commons-io:commons-io:$commonsIoVersion")
     implementation("com.auth0:java-jwt:$auth0JwtVersion")
     implementation("eu.geekplace.javapinning:java-pinning-core:1.2.0")
+
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
 
     testImplementation("org.junit.jupiter:junit-jupiter-engine:$jupiterVersion")
 }
@@ -115,4 +118,17 @@ tasks.getByName<Test>("test") {
         outputs.upToDateWhen { false }
         showStandardStreams = true
     }
+}
+
+tasks {
+    register("assembleUp") {
+        dependsOn("assemble", "composeUp")
+    }
+    getByName("composeUp").shouldRunAfter("assemble")
+}
+
+dockerCompose {
+    dockerComposeWorkingDirectory.set(File("./e2e"))
+    removeVolumes.set(true)
+    waitForTcpPorts.set(false)
 }

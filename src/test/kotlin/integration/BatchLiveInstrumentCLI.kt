@@ -28,7 +28,7 @@ class BatchLiveInstrumentCLI : CLIIntegrationTest() {
                     "integration.BatchLiveInstrumentCLI", i.toString(),
                 )
             )
-            val addedLiveBp = Json.decodeValue(interceptor.output.toString(), LiveLog::class.java)
+            val addedLiveBp = Json.decodeValue(interceptor.output.toString(), LiveBreakpoint::class.java)
             addedLiveBps.add(addedLiveBp)
             assertNotNull(addedLiveBp.id)
             interceptor.clear()

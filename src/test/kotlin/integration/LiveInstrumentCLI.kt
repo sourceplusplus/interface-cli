@@ -86,11 +86,11 @@ class LiveInstrumentCLI : CLIIntegrationTest() {
                 removedLiveBp.id!!
             )
         )
-        val removedLiveLog = Json.decodeValue(interceptor.output.toString(), LiveLog::class.java)
-        assertEquals(removedLiveBp.id, removedLiveLog.id)
-        assertEquals(removedLiveBp.location.source, removedLiveLog.location.source)
-        assertEquals(removedLiveBp.location.line, removedLiveLog.location.line)
-        assertEquals(removedLiveBp.hitLimit, removedLiveLog.hitLimit)
+        val removedLiveBreakpoint = Json.decodeValue(interceptor.output.toString(), LiveBreakpoint::class.java)
+        assertEquals(removedLiveBp.id, removedLiveBreakpoint.id)
+        assertEquals(removedLiveBp.location.source, removedLiveBreakpoint.location.source)
+        assertEquals(removedLiveBp.location.line, removedLiveBreakpoint.location.line)
+        assertEquals(removedLiveBp.hitLimit, removedLiveBreakpoint.hitLimit)
     }
 
     @Test
@@ -125,7 +125,7 @@ class LiveInstrumentCLI : CLIIntegrationTest() {
                 "integration.LiveInstrumentCLI", "4",
             )
         )
-        val addedLiveBp = Json.decodeValue(interceptor.output.toString(), LiveLog::class.java)
+        val addedLiveBp = Json.decodeValue(interceptor.output.toString(), LiveBreakpoint::class.java)
         assertNotNull(addedLiveBp.id)
         assertEquals("integration.LiveInstrumentCLI", addedLiveBp.location.source)
         assertEquals(4, addedLiveBp.location.line)
@@ -169,7 +169,7 @@ class LiveInstrumentCLI : CLIIntegrationTest() {
                 addedLiveBp.id!!
             )
         )
-        val removedLiveBp = Json.decodeValue(interceptor.output.toString(), LiveLog::class.java)
+        val removedLiveBp = Json.decodeValue(interceptor.output.toString(), LiveBreakpoint::class.java)
         assertEquals(addedLiveBp.id, removedLiveBp.id)
         assertEquals(addedLiveBp.location.source, removedLiveBp.location.source)
         assertEquals(addedLiveBp.location.line, removedLiveBp.location.line)

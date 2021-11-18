@@ -1,13 +1,12 @@
 package integration
 
-import spp.protocol.instrument.LiveInstrument
-import spp.protocol.instrument.breakpoint.LiveBreakpoint
-import spp.protocol.instrument.log.LiveLog
 import io.vertx.core.json.Json
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 import spp.cli.Main
+import spp.protocol.instrument.LiveInstrument
+import spp.protocol.instrument.breakpoint.LiveBreakpoint
 
 class BatchLiveInstrumentCLI : CLIIntegrationTest() {
 

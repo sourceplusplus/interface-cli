@@ -215,5 +215,5 @@ jobs:
         with:
           upload_url: ${{ steps.createDraft.outputs.upload_url }}
           asset_path: ./spp-cli-linux64.zip
-          asset_name: spp-cli-linux64.zip
+          asset_name: spp-cli-${{ needs.buildOnLinux.outputs.version }}-linux64.zip
           asset_content_type: application/zip

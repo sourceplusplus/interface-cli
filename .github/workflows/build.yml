@@ -200,7 +200,7 @@ jobs:
         with:
           upload_url: ${{ steps.createDraft.outputs.upload_url }}
           asset_path: ./spp-cli-macOS.zip
-          asset_name: spp-cli-macOS.zip
+          asset_name: spp-cli-${{ needs.buildOnLinux.outputs.version }}-macOS.zip
           asset_content_type: application/zip
 
       - name: Download spp-cli-linux64 artifact

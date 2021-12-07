@@ -1,4 +1,4 @@
-package spp.cli.commands.developer.instrument
+package spp.cli.commands.instrument
 
 import com.apollographql.apollo.api.ScalarTypeAdapters
 import com.apollographql.apollo.api.internal.SimpleResponseWriter
@@ -7,27 +7,30 @@ import com.apollographql.apollo.exception.ApolloException
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.options.default
+import com.github.ajalt.clikt.parameters.options.multiple
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.int
 import com.github.ajalt.clikt.parameters.types.long
-import instrument.AddLiveBreakpointMutation
+import instrument.AddLiveLogMutation
 import io.vertx.core.json.JsonObject
 import kotlinx.coroutines.runBlocking
 import spp.cli.Main
-import spp.cli.commands.PlatformCLI
-import spp.cli.commands.PlatformCLI.apolloClient
+import spp.cli.PlatformCLI
+import spp.cli.PlatformCLI.apolloClient
 import spp.cli.util.JsonCleaner.cleanJson
 import type.InstrumentThrottleInput
-import type.LiveBreakpointInput
+import type.LiveLogInput
 import type.LiveSourceLocationInput
 import type.ThrottleStep
 import kotlin.system.exitProcess
 
-class AddLiveBreakpoint : CliktCommand() {
+class AddLog : CliktCommand() {
 
     val source by argument(help = "Qualified class name")
     val line by argument(help = "Line number").int()
+    val logFormat by argument(help = "Log format")
+    val logArguments by option("-logArgument", "-l", help = "Log argument").multiple()
     val condition by option("-condition", "-c", help = "Trigger condition")
     val expiresAt by option("-expiresAt", "-e", help = "Expiration time (epoch time [ms])").long()
     val hitLimit by option("-hitLimit", "-h", help = "Trigger hit limit").int()
@@ -36,15 +39,17 @@ class AddLiveBreakpoint : CliktCommand() {
         .default(ThrottleStep.SECOND)
 
     override fun run() = runBlocking {
-        val input = LiveBreakpointInput.builder()
+        val input = LiveLogInput.builder()
             .location(LiveSourceLocationInput.builder().source(source).line(line).build())
+            .logFormat(logFormat)
+            .logArguments(logArguments)
             .condition(condition)
             .expiresAt(expiresAt)
             .hitLimit(hitLimit)
             .throttle(InstrumentThrottleInput.builder().limit(throttleLimit).step(throttleStep).build())
             .build()
         val response = try {
-            apolloClient.mutate(AddLiveBreakpointMutation(input)).await()
+            apolloClient.mutate(AddLiveLogMutation(input)).await()
         } catch (e: ApolloException) {
             echo(e.message, err = true)
             if (PlatformCLI.verbose) {
@@ -57,7 +62,7 @@ class AddLiveBreakpoint : CliktCommand() {
             if (Main.standalone) exitProcess(-1) else return@runBlocking
         }
 
-        echo(response.data!!.addLiveBreakpoint().let {
+        echo(response.data!!.addLiveLog().let {
             val respWriter = SimpleResponseWriter(ScalarTypeAdapters.DEFAULT)
             it.marshaller().marshal(respWriter)
             cleanJson(JsonObject(respWriter.toJson("")).getJsonObject("data")).encodePrettily()

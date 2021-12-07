@@ -7,8 +7,8 @@ import com.github.ajalt.clikt.parameters.arguments.argument
 import developer.RemoveDeveloperMutation
 import kotlinx.coroutines.runBlocking
 import spp.cli.Main
-import spp.cli.commands.PlatformCLI
-import spp.cli.commands.PlatformCLI.apolloClient
+import spp.cli.PlatformCLI
+import spp.cli.PlatformCLI.apolloClient
 import kotlin.system.exitProcess
 
 class RemoveDeveloper : CliktCommand(printHelpOnEmptyArgs = true) {

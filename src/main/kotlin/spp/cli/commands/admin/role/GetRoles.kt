@@ -6,8 +6,8 @@ import com.github.ajalt.clikt.core.CliktCommand
 import kotlinx.coroutines.runBlocking
 import role.GetRolesQuery
 import spp.cli.Main
-import spp.cli.commands.PlatformCLI
-import spp.cli.commands.PlatformCLI.apolloClient
+import spp.cli.PlatformCLI
+import spp.cli.PlatformCLI.apolloClient
 import kotlin.system.exitProcess
 
 class GetRoles : CliktCommand() {

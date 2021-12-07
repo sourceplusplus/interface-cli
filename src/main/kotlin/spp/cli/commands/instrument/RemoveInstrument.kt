@@ -1,24 +1,27 @@
-package spp.cli.commands.developer.instrument
+package spp.cli.commands.instrument
 
 import com.apollographql.apollo.api.ScalarTypeAdapters
 import com.apollographql.apollo.api.internal.SimpleResponseWriter
 import com.apollographql.apollo.coroutines.await
 import com.apollographql.apollo.exception.ApolloException
 import com.github.ajalt.clikt.core.CliktCommand
-import instrument.GetLiveBreakpointsQuery
+import com.github.ajalt.clikt.parameters.arguments.argument
+import instrument.RemoveLiveInstrumentMutation
 import io.vertx.core.json.JsonObject
 import kotlinx.coroutines.runBlocking
 import spp.cli.Main
-import spp.cli.commands.PlatformCLI
-import spp.cli.commands.PlatformCLI.apolloClient
+import spp.cli.PlatformCLI
+import spp.cli.PlatformCLI.apolloClient
 import spp.cli.util.JsonCleaner.cleanJson
 import kotlin.system.exitProcess
 
-class GetLiveBreakpoints : CliktCommand() {
+class RemoveInstrument : CliktCommand(printHelpOnEmptyArgs = true) {
+
+    val id by argument(help = "Instrument ID")
 
     override fun run() = runBlocking {
         val response = try {
-            apolloClient.query(GetLiveBreakpointsQuery()).await()
+            apolloClient.mutate(RemoveLiveInstrumentMutation(id)).await()
         } catch (e: ApolloException) {
             echo(e.message, err = true)
             if (PlatformCLI.verbose) {
@@ -31,7 +34,8 @@ class GetLiveBreakpoints : CliktCommand() {
             if (Main.standalone) exitProcess(-1) else return@runBlocking
         }
 
-        echo(response.data!!.liveBreakpoints.map {
+        echo(response.data!!.removeLiveInstrument().let {
+            if (it == null) return@let null
             val respWriter = SimpleResponseWriter(ScalarTypeAdapters.DEFAULT)
             it.marshaller().marshal(respWriter)
             cleanJson(JsonObject(respWriter.toJson("")).getJsonObject("data")).encodePrettily()

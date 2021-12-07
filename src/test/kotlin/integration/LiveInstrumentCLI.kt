@@ -20,8 +20,7 @@ class LiveInstrumentCLI : CLIIntegrationTest() {
         Main.main(
             arrayOf(
                 "-v",
-                "developer",
-                "add-live-log",
+                "add-log",
                 "-h", "100",
                 "integration.LiveInstrumentCLI",
                 "1",
@@ -41,8 +40,7 @@ class LiveInstrumentCLI : CLIIntegrationTest() {
         Main.main(
             arrayOf(
                 "-v",
-                "developer",
-                "remove-live-instrument",
+                "remove-instrument",
                 addedLiveLog.id!!
             )
         )
@@ -64,8 +62,7 @@ class LiveInstrumentCLI : CLIIntegrationTest() {
         Main.main(
             arrayOf(
                 "-v",
-                "developer",
-                "add-live-breakpoint",
+                "add-breakpoint",
                 "integration.LiveInstrumentCLI", "2",
             )
         )
@@ -81,8 +78,7 @@ class LiveInstrumentCLI : CLIIntegrationTest() {
         Main.main(
             arrayOf(
                 "-v",
-                "developer",
-                "remove-live-instrument",
+                "remove-instrument",
                 removedLiveBp.id!!
             )
         )
@@ -103,8 +99,7 @@ class LiveInstrumentCLI : CLIIntegrationTest() {
         Main.main(
             arrayOf(
                 "-v",
-                "developer",
-                "add-live-log",
+                "add-log",
                 "integration.LiveInstrumentCLI", "4",
                 "getMultipleLiveInstruments"
             )
@@ -120,8 +115,7 @@ class LiveInstrumentCLI : CLIIntegrationTest() {
         Main.main(
             arrayOf(
                 "-v",
-                "developer",
-                "add-live-breakpoint",
+                "add-breakpoint",
                 "integration.LiveInstrumentCLI", "4",
             )
         )
@@ -135,8 +129,7 @@ class LiveInstrumentCLI : CLIIntegrationTest() {
         Main.main(
             arrayOf(
                 "-v",
-                "developer",
-                "get-live-instruments"
+                "get-instruments"
             )
         )
         val liveInstruments = toList(interceptor.output.toString(), LiveInstrument::class)
@@ -149,8 +142,7 @@ class LiveInstrumentCLI : CLIIntegrationTest() {
         Main.main(
             arrayOf(
                 "-v",
-                "developer",
-                "remove-live-instrument",
+                "remove-instrument",
                 addedLiveLog.id!!
             )
         )
@@ -164,8 +156,7 @@ class LiveInstrumentCLI : CLIIntegrationTest() {
         Main.main(
             arrayOf(
                 "-v",
-                "developer",
-                "remove-live-instrument",
+                "remove-instrument",
                 addedLiveBp.id!!
             )
         )

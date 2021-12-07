@@ -14,7 +14,7 @@ import com.github.ajalt.clikt.parameters.types.enum
 import io.vertx.core.json.JsonObject
 import kotlinx.coroutines.runBlocking
 import spp.cli.Main
-import spp.cli.commands.PlatformCLI
+import spp.cli.PlatformCLI
 import spp.cli.util.JsonCleaner.cleanJson
 import type.AccessType
 import kotlin.system.exitProcess

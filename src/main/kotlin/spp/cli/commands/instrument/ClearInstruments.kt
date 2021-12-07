@@ -1,4 +1,4 @@
-package spp.cli.commands.developer.instrument
+package spp.cli.commands.instrument
 
 import com.apollographql.apollo.coroutines.await
 import com.apollographql.apollo.exception.ApolloException
@@ -6,11 +6,11 @@ import com.github.ajalt.clikt.core.CliktCommand
 import instrument.ClearLiveInstrumentsMutation
 import kotlinx.coroutines.runBlocking
 import spp.cli.Main
-import spp.cli.commands.PlatformCLI
-import spp.cli.commands.PlatformCLI.apolloClient
+import spp.cli.PlatformCLI
+import spp.cli.PlatformCLI.apolloClient
 import kotlin.system.exitProcess
 
-class ClearLiveInstruments : CliktCommand() {
+class ClearInstruments : CliktCommand() {
 
     override fun run() = runBlocking {
         val response = try {

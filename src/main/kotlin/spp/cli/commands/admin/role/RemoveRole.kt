@@ -7,8 +7,8 @@ import com.github.ajalt.clikt.parameters.arguments.argument
 import kotlinx.coroutines.runBlocking
 import role.RemoveRoleMutation
 import spp.cli.Main
-import spp.cli.commands.PlatformCLI
-import spp.cli.commands.PlatformCLI.apolloClient
+import spp.cli.PlatformCLI
+import spp.cli.PlatformCLI.apolloClient
 import kotlin.system.exitProcess
 
 class RemoveRole : CliktCommand(printHelpOnEmptyArgs = true) {

@@ -20,7 +20,8 @@ abstract class CLIIntegrationTest {
             Main.main(
                 arrayOf(
                     "-v",
-                    "system", "reset"
+                    "admin",
+                    "reset"
                 )
             )
         }

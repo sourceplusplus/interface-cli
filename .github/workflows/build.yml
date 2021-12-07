@@ -140,17 +140,17 @@ jobs:
       - name: "[CLI] Remove developer"
         run: ./build/graal/spp-cli -v admin remove-developer test
       - name: "[CLI] Add live breakpoint"
-        run: ./build/graal/spp-cli -v developer add-live-breakpoint -h 100 spp.example.webapp.model.User 48
+        run: ./build/graal/spp-cli -v add-breakpoint -h 100 spp.example.webapp.model.User 48
       - name: "[CLI] Add live log"
-        run: ./build/graal/spp-cli -v developer add-live-log -h 100 spp.example.webapp.model.User 48 test-message
+        run: ./build/graal/spp-cli -v add-log -h 100 spp.example.webapp.model.User 48 test-message
       - name: "[CLI] Get live instruments"
-        run: ./build/graal/spp-cli -v developer get-live-instruments
+        run: ./build/graal/spp-cli -v get-instruments
       - name: "[CLI] Get live breakpoints"
-        run: ./build/graal/spp-cli -v developer get-live-breakpoints
+        run: ./build/graal/spp-cli -v get-breakpoints
       - name: "[CLI] Get live logs"
-        run: ./build/graal/spp-cli -v developer get-live-logs
+        run: ./build/graal/spp-cli -v get-logs
       - name: "[CLI] Remove live instruments"
-        run: ./build/graal/spp-cli -v developer remove-live-instruments spp.example.webapp.model.User 48
+        run: ./build/graal/spp-cli -v remove-instruments spp.example.webapp.model.User 48
 
       - name: Zip spp-cli
         run: zip spp-cli-linux64.zip -j build/graal/spp-cli

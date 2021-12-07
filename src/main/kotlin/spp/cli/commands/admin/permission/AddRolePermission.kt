@@ -8,8 +8,8 @@ import com.github.ajalt.clikt.parameters.types.enum
 import kotlinx.coroutines.runBlocking
 import permission.AddRolePermissionMutation
 import spp.cli.Main
-import spp.cli.commands.PlatformCLI
-import spp.cli.commands.PlatformCLI.apolloClient
+import spp.cli.PlatformCLI
+import spp.cli.PlatformCLI.apolloClient
 import type.RolePermission
 import kotlin.system.exitProcess
 

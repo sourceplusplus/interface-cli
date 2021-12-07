@@ -7,7 +7,7 @@ import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import kotlinx.coroutines.runBlocking
 import spp.cli.Main
-import spp.cli.commands.PlatformCLI
+import spp.cli.PlatformCLI
 import kotlin.system.exitProcess
 
 class AddRoleAccessPermission : CliktCommand(printHelpOnEmptyArgs = true) {

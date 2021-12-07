@@ -44,7 +44,7 @@ This project provides a command-line interface client to the [Source++](https://
   <summary>Command</summary>
 
   ```sh
-  ./spp-cli developer add-live-breakpoint com.company.Webapp 42
+  ./spp-cli add-breakpoint com.company.Webapp 42
   ```
 </details>
 

@@ -1,4 +1,4 @@
-package spp.cli.commands.system.etc
+package spp.cli.commands
 
 import com.github.ajalt.clikt.core.CliktCommand
 import java.util.*

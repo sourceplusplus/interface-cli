@@ -22,8 +22,7 @@ class BatchLiveInstrumentCLI : CLIIntegrationTest() {
             Main.main(
                 arrayOf(
                     "-v",
-                    "developer",
-                    "add-live-breakpoint",
+                    "add-breakpoint",
                     "integration.BatchLiveInstrumentCLI", i.toString(),
                 )
             )
@@ -37,8 +36,7 @@ class BatchLiveInstrumentCLI : CLIIntegrationTest() {
         Main.main(
             arrayOf(
                 "-v",
-                "developer",
-                "get-live-instruments"
+                "get-instruments"
             )
         )
 
@@ -46,14 +44,13 @@ class BatchLiveInstrumentCLI : CLIIntegrationTest() {
         assertEquals(100, liveInstruments.size)
         interceptor.clear()
 
-        //todo: need clear-live-instruments method
+        //todo: need clear-instruments method
         addedLiveBps.forEach {
             //remove live instrument
             Main.main(
                 arrayOf(
                     "-v",
-                    "developer",
-                    "remove-live-instrument",
+                    "remove-instrument",
                     it.id!!
                 )
             )

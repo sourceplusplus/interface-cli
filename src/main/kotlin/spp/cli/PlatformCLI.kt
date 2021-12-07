@@ -1,4 +1,4 @@
-package spp.cli.commands
+package spp.cli
 
 import com.apollographql.apollo.ApolloClient
 import com.auth0.jwt.JWT

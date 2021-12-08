@@ -64,6 +64,7 @@ object Main {
             RemoveInstrument(),
             RemoveInstruments(),
             ClearInstruments(),
+            SubscribeEvents(),
             //etc
             Version()
         ).main(args)

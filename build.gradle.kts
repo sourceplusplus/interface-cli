@@ -20,13 +20,13 @@ val commonsIoVersion: String by project
 val auth0JwtVersion: String by project
 val protocolVersion: String by project
 val vertxVersion: String by project
+val graalVersion: String by project
 
 group = cliGroup
 version = cliVersion
 
 repositories {
     mavenCentral()
-    jcenter()
     maven(url = "https://jitpack.io") { name = "jitpack" }
 }
 
@@ -35,9 +35,13 @@ dependencies {
     implementation("com.apollographql.apollo:apollo-coroutines-support:$apolloVersion")
     api("com.apollographql.apollo:apollo-api:$apolloVersion")
 
-    implementation("com.github.sourceplusplus.protocol:protocol:$protocolVersion")
+    implementation("com.github.sourceplusplus.protocol:protocol:724d961ceb")
 
+    implementation("org.slf4j:slf4j-api:1.7.32")
+    implementation("org.slf4j:slf4j-nop:1.7.32")
     implementation("io.vertx:vertx-core:$vertxVersion")
+    implementation("io.vertx:vertx-tcp-eventbus-bridge:$vertxVersion")
+    implementation("io.vertx:vertx-lang-kotlin-coroutines:$vertxVersion")
     implementation("org.apache.commons:commons-lang3:$commonsLang3Version")
     implementation("com.github.ajalt.clikt:clikt:$cliktVersion")
     implementation("org.bouncycastle:bcprov-jdk15on:$bouncycastleVersion")
@@ -75,7 +79,7 @@ tasks.create("createProperties") {
 tasks["processResources"].dependsOn("createProperties")
 
 graal {
-    //graalVersion(graalVersion.toString())
+    graalVersion(project.properties["graalVersion"] as String)
     mainClass("spp.cli.Main")
     outputName("spp-cli")
     option("-H:+PrintClassInitialization")
@@ -100,7 +104,6 @@ tasks.getByName("build").dependsOn("shadowJar")
 
 configurations.runtimeClasspath {
     exclude("ch.qos.logback", "logback-classic")
-    exclude("org.slf4j", "slf4j-api")
 }
 
 tasks.getByName<Test>("test") {

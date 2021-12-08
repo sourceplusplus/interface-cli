@@ -33,7 +33,7 @@ import javax.net.ssl.X509TrustManager
 object PlatformCLI : CliktCommand(name = "spp-cli", allowMultipleSubcommands = true) {
 
     val verbose by option("-v", "--verbose", help = "Enable verbose mode").flag()
-    private val platformHost: String by option("-p", "--platform", help = "Source++ platform host")
+    val platformHost: String by option("-p", "--platform", help = "Source++ platform host")
         .default(
             (if (System.getenv("SPP_DISABLE_TLS") != "true") "https://" else "http://")
                     + (System.getenv("SPP_PLATFORM_HOST") ?: "localhost") + ":5445"
@@ -44,6 +44,17 @@ object PlatformCLI : CliktCommand(name = "spp-cli", allowMultipleSubcommands = t
         .default(File("config/spp-platform.key"))
     private val accessToken by option("-a", "--access-token", help = "Developer access token")
     val apolloClient: ApolloClient by lazy { connectToPlatform() }
+    val certFingerprint: String? by lazy {
+        if (platformCertificate.exists()) {
+            val crtFileData = platformCertificate.readText()
+            val crtParser = PEMParser(StringReader(crtFileData))
+            val crtHolder = crtParser.readObject() as X509CertificateHolder
+            val certificate = JcaX509CertificateConverter().getCertificate(crtHolder)!!
+            fingerprint(certificate)
+        } else {
+            null
+        }
+    }
 
     override fun run() = Unit
 
@@ -52,15 +63,6 @@ object PlatformCLI : CliktCommand(name = "spp-cli", allowMultipleSubcommands = t
             platformHost
         } else {
             "https://$platformHost"
-        }
-
-        var certFingerprint: String? = null
-        if (platformCertificate.exists()) {
-            val crtFileData = platformCertificate.readText()
-            val crtParser = PEMParser(StringReader(crtFileData))
-            val crtHolder = crtParser.readObject() as X509CertificateHolder
-            val certificate = JcaX509CertificateConverter().getCertificate(crtHolder)!!
-            certFingerprint = fingerprint(certificate)
         }
 
         val httpClient = if (certFingerprint != null) {

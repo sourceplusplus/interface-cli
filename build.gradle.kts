@@ -52,6 +52,7 @@ dependencies {
     implementation("eu.geekplace.javapinning:java-pinning-core:1.2.0")
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.3.1")
 
     testImplementation("org.junit.jupiter:junit-jupiter-engine:$jupiterVersion")
 }

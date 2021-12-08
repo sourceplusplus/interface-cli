@@ -21,6 +21,11 @@ import spp.cli.PlatformCLI
 import spp.protocol.SourceMarkerServices
 import spp.protocol.extend.TCPServiceFrameParser
 import spp.protocol.instrument.LiveInstrumentEvent
+import spp.protocol.instrument.LiveInstrumentEventType
+import spp.protocol.instrument.breakpoint.event.LiveBreakpointHit
+import spp.protocol.instrument.breakpoint.event.LiveBreakpointRemoved
+import spp.protocol.instrument.log.event.LiveLogHit
+import spp.protocol.instrument.log.event.LiveLogRemoved
 
 class SubscribeEvents : CliktCommand(
     help = "Listens for and outputs live events. Subscribes to all events by default"
@@ -30,22 +35,17 @@ class SubscribeEvents : CliktCommand(
         name = "Instrument IDs",
         help = "Capture events from specific live instruments"
     ).multiple()
+
     val includeBreakpoints by option("--breakpoints", "-b", help = "Include live breakpoint events")
         .flag(default = false)
     val includeLogs by option("--logs", "-l", help = "Include live log events")
         .flag(default = false)
-    val includeMetrics by option("--metrics", "-m", help = "Include live metric events")
+    val includeMeters by option("--meters", "-m", help = "Include live meter events")
         .flag(default = false)
     val includeTraces by option("--traces", "-t", help = "Include live trace events")
         .flag(default = false)
 
     override fun run() {
-        if (!includeBreakpoints && !includeLogs && !includeMetrics && !includeTraces) {
-            //listen for all events
-        } else {
-            //listen for specific events
-        }
-
         var eventCount = 1
         runBlocking {
             val vertx = Vertx.vertx()
@@ -73,12 +73,75 @@ class SubscribeEvents : CliktCommand(
             socket!!.handler(FrameParser(TCPServiceFrameParser(vertx, socket)))
 
             vertx.eventBus().consumer<JsonObject>("local." + SourceMarkerServices.Provide.LIVE_INSTRUMENT_SUBSCRIBER) {
-                val event = Json.decodeValue(it.body().toString(), LiveInstrumentEvent::class.java)
-                println(
-                    "\nEvent (${eventCount++}):\n" +
-                            "\tType: ${event.eventType}\n" +
-                            "\tData: ${event.data}"
-                )
+                val liveEvent = Json.decodeValue(it.body().toString(), LiveInstrumentEvent::class.java)
+
+                //todo: impl filter on platform
+                if (instrumentIds.isNotEmpty()) {
+                    when (liveEvent.eventType) {
+                        LiveInstrumentEventType.LOG_HIT -> {
+                            val logHit = Json.decodeValue(liveEvent.data, LiveLogHit::class.java)
+                            if (logHit.logId !in instrumentIds) {
+                                return@consumer
+                            }
+                        }
+                        LiveInstrumentEventType.BREAKPOINT_HIT -> {
+                            val breakpointHit = Json.decodeValue(liveEvent.data, LiveBreakpointHit::class.java)
+                            if (breakpointHit.breakpointId !in instrumentIds) {
+                                return@consumer
+                            }
+                        }
+                        LiveInstrumentEventType.BREAKPOINT_REMOVED -> {
+                            val breakpointRemoved = Json.decodeValue(liveEvent.data, LiveBreakpointRemoved::class.java)
+                            if (breakpointRemoved.breakpointId !in instrumentIds) {
+                                return@consumer
+                            }
+                        }
+                        LiveInstrumentEventType.LOG_REMOVED -> {
+                            val logRemoved = Json.decodeValue(liveEvent.data, LiveLogRemoved::class.java)
+                            if (logRemoved.logId !in instrumentIds) {
+                                return@consumer
+                            }
+                        }
+                        else -> TODO("Unhandled event type: ${liveEvent.eventType}")
+                    }
+                }
+
+                if (!includeBreakpoints && !includeLogs && !includeMeters && !includeTraces) {
+                    //listen for all events
+                    println(
+                        "\nEvent (${eventCount++}):\n" +
+                                "\tType: ${liveEvent.eventType}\n" +
+                                "\tData: ${liveEvent.data}"
+                    )
+                } else {
+                    //todo: impl filtering on platform
+                    //listen for specific events
+                    if (includeBreakpoints && liveEvent.eventType.name.startsWith("breakpoint", true)) {
+                        println(
+                            "\nEvent (${eventCount++}):\n" +
+                                    "\tType: ${liveEvent.eventType}\n" +
+                                    "\tData: ${liveEvent.data}"
+                        )
+                    } else if (includeLogs && liveEvent.eventType.name.startsWith("log", true)) {
+                        println(
+                            "\nEvent (${eventCount++}):\n" +
+                                    "\tType: ${liveEvent.eventType}\n" +
+                                    "\tData: ${liveEvent.data}"
+                        )
+                    } else if (includeMeters && liveEvent.eventType.name.startsWith("meter", true)) {
+                        println(
+                            "\nEvent (${eventCount++}):\n" +
+                                    "\tType: ${liveEvent.eventType}\n" +
+                                    "\tData: ${liveEvent.data}"
+                        )
+                    } else if (includeTraces && liveEvent.eventType.name.startsWith("trace", true)) {
+                        println(
+                            "\nEvent (${eventCount++}):\n" +
+                                    "\tType: ${liveEvent.eventType}\n" +
+                                    "\tData: ${liveEvent.data}"
+                        )
+                    }
+                }
             }
 
             //register listener

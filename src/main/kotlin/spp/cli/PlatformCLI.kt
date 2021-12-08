@@ -3,12 +3,18 @@ package spp.cli
 import com.apollographql.apollo.ApolloClient
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
+import com.fasterxml.jackson.databind.module.SimpleModule
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.file
 import eu.geekplace.javapinning.JavaPinning
+import io.vertx.core.json.jackson.DatabindCodec
+import kotlinx.datetime.Clock
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.Instant
+import kotlinx.datetime.plus
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.bouncycastle.cert.X509CertificateHolder
@@ -18,14 +24,13 @@ import org.bouncycastle.openssl.PEMKeyPair
 import org.bouncycastle.openssl.PEMParser
 import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter
 import org.bouncycastle.util.encoders.Hex
+import spp.protocol.util.KSerializers
 import java.io.File
 import java.io.StringReader
 import java.security.SecureRandom
 import java.security.cert.X509Certificate
 import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
-import java.time.Instant
-import java.time.temporal.ChronoUnit
 import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
@@ -56,7 +61,12 @@ object PlatformCLI : CliktCommand(name = "spp-cli", allowMultipleSubcommands = t
         }
     }
 
-    override fun run() = Unit
+    override fun run() {
+        val module = SimpleModule()
+        module.addSerializer(Instant::class.java, KSerializers.KotlinInstantSerializer())
+        module.addDeserializer(Instant::class.java, KSerializers.KotlinInstantDeserializer())
+        DatabindCodec.mapper().registerModule(module)
+    }
 
     private fun connectToPlatform(): ApolloClient {
         val serverUrl = if (platformHost.startsWith("http")) {
@@ -99,8 +109,8 @@ object PlatformCLI : CliktCommand(name = "spp-cli", allowMultipleSubcommands = t
             jwtToken = JWT.create()
                 .withIssuer("cli")
                 .withClaim("developer_id", "system") //users with key are automatically considered system
-                .withClaim("created_at", Instant.now().toEpochMilli())
-                .withClaim("expires_at", Instant.now().plus(365, ChronoUnit.DAYS).toEpochMilli())
+                .withClaim("created_at", Clock.System.now().toEpochMilliseconds())
+                .withClaim("expires_at", Clock.System.now().plus(8760, DateTimeUnit.HOUR).toEpochMilliseconds())
                 .sign(algorithm)
         } else {
             val tokenUri = "$serverUrl/api/new-token?access_token=$accessToken"

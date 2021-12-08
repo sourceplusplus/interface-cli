@@ -20,7 +20,6 @@ val commonsIoVersion: String by project
 val auth0JwtVersion: String by project
 val protocolVersion: String by project
 val vertxVersion: String by project
-val graalVersion: String by project
 
 group = cliGroup
 version = cliVersion
@@ -35,7 +34,7 @@ dependencies {
     implementation("com.apollographql.apollo:apollo-coroutines-support:$apolloVersion")
     api("com.apollographql.apollo:apollo-api:$apolloVersion")
 
-    implementation("com.github.sourceplusplus.protocol:protocol:724d961ceb")
+    implementation("com.github.sourceplusplus.protocol:protocol:$protocolVersion")
 
     implementation("org.slf4j:slf4j-api:1.7.32")
     implementation("org.slf4j:slf4j-nop:1.7.32")

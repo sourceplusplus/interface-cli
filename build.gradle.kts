@@ -26,7 +26,6 @@ version = cliVersion
 
 repositories {
     mavenCentral()
-    jcenter()
     maven(url = "https://jitpack.io") { name = "jitpack" }
 }
 
@@ -37,7 +36,11 @@ dependencies {
 
     implementation("com.github.sourceplusplus.protocol:protocol:$protocolVersion")
 
+    implementation("org.slf4j:slf4j-api:1.7.32")
+    implementation("org.slf4j:slf4j-nop:1.7.32")
     implementation("io.vertx:vertx-core:$vertxVersion")
+    implementation("io.vertx:vertx-tcp-eventbus-bridge:$vertxVersion")
+    implementation("io.vertx:vertx-lang-kotlin-coroutines:$vertxVersion")
     implementation("org.apache.commons:commons-lang3:$commonsLang3Version")
     implementation("com.github.ajalt.clikt:clikt:$cliktVersion")
     implementation("org.bouncycastle:bcprov-jdk15on:$bouncycastleVersion")
@@ -49,6 +52,7 @@ dependencies {
     implementation("eu.geekplace.javapinning:java-pinning-core:1.2.0")
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.3.1")
 
     testImplementation("org.junit.jupiter:junit-jupiter-engine:$jupiterVersion")
 }
@@ -75,7 +79,7 @@ tasks.create("createProperties") {
 tasks["processResources"].dependsOn("createProperties")
 
 graal {
-    //graalVersion(graalVersion.toString())
+    graalVersion(project.properties["graalVersion"] as String)
     mainClass("spp.cli.Main")
     outputName("spp-cli")
     option("-H:+PrintClassInitialization")
@@ -100,7 +104,6 @@ tasks.getByName("build").dependsOn("shadowJar")
 
 configurations.runtimeClasspath {
     exclude("ch.qos.logback", "logback-classic")
-    exclude("org.slf4j", "slf4j-api")
 }
 
 tasks.getByName<Test>("test") {

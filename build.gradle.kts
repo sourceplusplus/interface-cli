@@ -126,7 +126,7 @@ tasks {
     register("assembleUp") {
         dependsOn("assemble", "composeUp")
     }
-    getByName("composeUp").shouldRunAfter("assemble")
+    getByName("composeUp").mustRunAfter("assemble")
 }
 
 dockerCompose {

@@ -14,6 +14,7 @@ import spp.cli.commands.admin.permission.GetDeveloperPermissions
 import spp.cli.commands.admin.permission.GetRolePermissions
 import spp.cli.commands.admin.permission.RemoveRolePermission
 import spp.cli.commands.admin.role.*
+import spp.cli.commands.developer.GetSelf
 import spp.cli.commands.instrument.*
 
 object Main {
@@ -66,6 +67,7 @@ object Main {
             ClearInstruments(),
             SubscribeEvents(),
             //etc
+            GetSelf(),
             Version()
         ).main(args)
     }

@@ -1,0 +1,16 @@
+query getSelf {
+    getSelf {
+        developer {
+            id
+        }
+        roles {
+            roleName
+        }
+        permissions
+        access {
+            id
+            type
+            locationPatterns
+        }
+    }
+}

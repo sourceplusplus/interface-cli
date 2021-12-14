@@ -1,4 +1,4 @@
-query getDevelopers{
+query getDevelopers {
     getDevelopers {
         id
     }

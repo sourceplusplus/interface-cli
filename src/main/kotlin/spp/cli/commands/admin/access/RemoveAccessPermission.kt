@@ -2,12 +2,12 @@ package spp.cli.commands.admin.access
 
 import access.RemoveAccessPermissionMutation
 import com.apollographql.apollo.coroutines.await
-import com.apollographql.apollo.exception.ApolloException
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import kotlinx.coroutines.runBlocking
 import spp.cli.Main
 import spp.cli.PlatformCLI
+import spp.cli.PlatformCLI.echoError
 import kotlin.system.exitProcess
 
 class RemoveAccessPermission : CliktCommand(printHelpOnEmptyArgs = true) {
@@ -19,11 +19,8 @@ class RemoveAccessPermission : CliktCommand(printHelpOnEmptyArgs = true) {
             PlatformCLI.apolloClient.mutate(
                 RemoveAccessPermissionMutation(id)
             ).await()
-        } catch (e: ApolloException) {
-            echo(e.message, err = true)
-            if (PlatformCLI.verbose) {
-                echo(e.stackTraceToString(), err = true)
-            }
+        } catch (e: Exception) {
+            echoError(e)
             if (Main.standalone) exitProcess(-1) else return@runBlocking
         }
         if (response.hasErrors()) {

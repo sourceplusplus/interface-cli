@@ -1,6 +1,7 @@
 package spp.cli
 
 import com.apollographql.apollo.ApolloClient
+import com.apollographql.apollo.exception.ApolloException
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.fasterxml.jackson.databind.module.SimpleModule
@@ -138,6 +139,23 @@ object PlatformCLI : CliktCommand(name = "spp-cli", allowMultipleSubcommands = t
             )
             .serverUrl("$serverUrl/graphql")
             .build()
+    }
+
+    fun echoError(e: Exception) {
+        when (e) {
+            is ApolloException -> {
+                echo(e.cause!!.message, err = true)
+                if (verbose) {
+                    echo(e.cause!!.stackTraceToString(), err = true)
+                }
+            }
+            else -> {
+                echo(e.message, err = true)
+                if (verbose) {
+                    echo(e.stackTraceToString(), err = true)
+                }
+            }
+        }
     }
 
     private fun fingerprint(c: X509Certificate): String {

@@ -1,13 +1,12 @@
 package spp.cli.commands.admin.role
 
-import com.apollographql.apollo.coroutines.await
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import kotlinx.coroutines.runBlocking
-import role.GetDeveloperRolesQuery
 import spp.cli.Main
 import spp.cli.PlatformCLI.apolloClient
 import spp.cli.PlatformCLI.echoError
+import spp.cli.protocol.role.GetDeveloperRolesQuery
 import kotlin.system.exitProcess
 
 class GetDeveloperRoles : CliktCommand() {
@@ -16,7 +15,7 @@ class GetDeveloperRoles : CliktCommand() {
 
     override fun run() = runBlocking {
         val response = try {
-            apolloClient.query(GetDeveloperRolesQuery(id)).await()
+            apolloClient.query(GetDeveloperRolesQuery(id)).execute()
         } catch (e: Exception) {
             echoError(e)
             if (Main.standalone) exitProcess(-1) else return@runBlocking
@@ -26,7 +25,7 @@ class GetDeveloperRoles : CliktCommand() {
             if (Main.standalone) exitProcess(-1) else return@runBlocking
         }
 
-        echo(response.data!!.developerRoles.map { it.roleName() })
+        echo(response.data!!.getDeveloperRoles.map { it.roleName })
         if (Main.standalone) exitProcess(0)
     }
 }

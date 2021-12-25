@@ -1,13 +1,12 @@
 package spp.cli.commands.admin.access
 
-import access.RemoveRoleAccessPermissionMutation
-import com.apollographql.apollo.coroutines.await
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import kotlinx.coroutines.runBlocking
 import spp.cli.Main
 import spp.cli.PlatformCLI
 import spp.cli.PlatformCLI.echoError
+import spp.cli.protocol.access.RemoveRoleAccessPermissionMutation
 import kotlin.system.exitProcess
 
 class RemoveRoleAccessPermission : CliktCommand(printHelpOnEmptyArgs = true) {
@@ -17,9 +16,9 @@ class RemoveRoleAccessPermission : CliktCommand(printHelpOnEmptyArgs = true) {
 
     override fun run() = runBlocking {
         val response = try {
-            PlatformCLI.apolloClient.mutate(
+            PlatformCLI.apolloClient.mutation(
                 RemoveRoleAccessPermissionMutation(role, id)
-            ).await()
+            ).execute()
         } catch (e: Exception) {
             echoError(e)
             if (Main.standalone) exitProcess(-1) else return@runBlocking
@@ -29,7 +28,7 @@ class RemoveRoleAccessPermission : CliktCommand(printHelpOnEmptyArgs = true) {
             if (Main.standalone) exitProcess(-1) else return@runBlocking
         }
 
-        echo(response.data!!.removeRoleAccessPermission())
+        echo(response.data!!.removeRoleAccessPermission)
         if (Main.standalone) exitProcess(0)
     }
 }

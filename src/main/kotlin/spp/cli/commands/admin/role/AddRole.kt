@@ -1,13 +1,12 @@
 package spp.cli.commands.admin.role
 
-import com.apollographql.apollo.coroutines.await
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import kotlinx.coroutines.runBlocking
-import role.AddRoleMutation
 import spp.cli.Main
 import spp.cli.PlatformCLI.apolloClient
 import spp.cli.PlatformCLI.echoError
+import spp.cli.protocol.role.AddRoleMutation
 import kotlin.system.exitProcess
 
 class AddRole : CliktCommand(printHelpOnEmptyArgs = true) {
@@ -16,7 +15,7 @@ class AddRole : CliktCommand(printHelpOnEmptyArgs = true) {
 
     override fun run() = runBlocking {
         val response = try {
-            apolloClient.mutate(AddRoleMutation(role)).await()
+            apolloClient.mutation(AddRoleMutation(role)).execute()
         } catch (e: Exception) {
             echoError(e)
             if (Main.standalone) exitProcess(-1) else return@runBlocking
@@ -26,7 +25,7 @@ class AddRole : CliktCommand(printHelpOnEmptyArgs = true) {
             if (Main.standalone) exitProcess(-1) else return@runBlocking
         }
 
-        if (response.data!!.addRole()) {
+        if (response.data!!.addRole) {
             if (Main.standalone) exitProcess(0)
         } else {
             if (Main.standalone) exitProcess(-1) else return@runBlocking

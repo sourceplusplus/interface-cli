@@ -1,13 +1,12 @@
 package spp.cli.commands.admin.permission
 
-import com.apollographql.apollo.coroutines.await
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import kotlinx.coroutines.runBlocking
-import permission.GetRolePermissionsQuery
 import spp.cli.Main
 import spp.cli.PlatformCLI.apolloClient
 import spp.cli.PlatformCLI.echoError
+import spp.cli.protocol.permission.GetRolePermissionsQuery
 import kotlin.system.exitProcess
 
 class GetRolePermissions : CliktCommand() {
@@ -16,7 +15,7 @@ class GetRolePermissions : CliktCommand() {
 
     override fun run() = runBlocking {
         val response = try {
-            apolloClient.query(GetRolePermissionsQuery(role)).await()
+            apolloClient.query(GetRolePermissionsQuery(role)).execute()
         } catch (e: Exception) {
             echoError(e)
             if (Main.standalone) exitProcess(-1) else return@runBlocking
@@ -26,7 +25,7 @@ class GetRolePermissions : CliktCommand() {
             if (Main.standalone) exitProcess(-1) else return@runBlocking
         }
 
-        echo(response.data!!.rolePermissions.map { it.name })
+        echo(response.data!!.getRolePermissions.map { it.name })
         if (Main.standalone) exitProcess(0)
     }
 }

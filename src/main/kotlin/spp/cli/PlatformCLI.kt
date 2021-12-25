@@ -1,7 +1,8 @@
 package spp.cli
 
-import com.apollographql.apollo.ApolloClient
-import com.apollographql.apollo.exception.ApolloException
+import com.apollographql.apollo3.ApolloClient
+import com.apollographql.apollo3.exception.ApolloException
+import com.apollographql.apollo3.network.okHttpClient
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.fasterxml.jackson.databind.module.SimpleModule
@@ -116,18 +117,18 @@ object PlatformCLI : CliktCommand(name = "spp-cli", allowMultipleSubcommands = t
         } else {
             val tokenUri = "$serverUrl/api/new-token?access_token=$accessToken"
             val resp = httpClient.newCall(Request.Builder().url(tokenUri).build()).execute()
-            if (resp.code() in 200..299) {
-                jwtToken = resp.body()!!.string()
-            } else if (resp.code() == 401 && accessToken.isNullOrEmpty()) {
+            if (resp.code in 200..299) {
+                jwtToken = resp.body!!.string()
+            } else if (resp.code == 401 && accessToken.isNullOrEmpty()) {
                 throw IllegalStateException("Connection failed. Reason: Missing access token")
-            } else if (resp.code() == 401) {
+            } else if (resp.code == 401) {
                 throw IllegalStateException("Connection failed. Reason: Invalid access token")
             } else {
-                throw IllegalStateException("Connection failed. Reason: " + resp.message())
+                throw IllegalStateException("Connection failed. Reason: " + resp.message)
             }
         }
 
-        return ApolloClient.builder()
+        return ApolloClient.Builder()
             .okHttpClient(
                 httpClient.newBuilder().addInterceptor { chain ->
                     chain.proceed(

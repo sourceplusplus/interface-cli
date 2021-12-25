@@ -146,7 +146,7 @@ class SubscribeEvents : CliktCommand(
 
             //register listener
             FrameHelper.sendFrame(
-                BridgeEventType.REGISTER.name.toLowerCase(),
+                BridgeEventType.REGISTER.name.lowercase(),
                 SourceMarkerServices.Provide.LIVE_INSTRUMENT_SUBSCRIBER,
                 JsonObject(),
                 socket

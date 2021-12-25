@@ -3,7 +3,7 @@ import java.util.*
 plugins {
     id("com.github.johnrengelman.shadow")
     id("com.palantir.graal")
-    id("com.apollographql.apollo")
+    id("com.apollographql.apollo3")
     id("com.avast.gradle.docker-compose")
     kotlin("jvm")
 }
@@ -30,12 +30,12 @@ repositories {
 }
 
 dependencies {
-    implementation("com.apollographql.apollo:apollo-runtime:$apolloVersion")
-    implementation("com.apollographql.apollo:apollo-coroutines-support:$apolloVersion")
-    api("com.apollographql.apollo:apollo-api:$apolloVersion")
+    implementation("com.apollographql.apollo3:apollo-runtime:$apolloVersion")
+    api("com.apollographql.apollo3:apollo-api:$apolloVersion")
 
     implementation("com.github.sourceplusplus.protocol:protocol:$protocolVersion")
 
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
     implementation("org.slf4j:slf4j-api:1.7.32")
     implementation("org.slf4j:slf4j-nop:1.7.32")
     implementation("io.vertx:vertx-core:$vertxVersion")
@@ -133,4 +133,8 @@ dockerCompose {
     dockerComposeWorkingDirectory.set(File("./e2e"))
     removeVolumes.set(true)
     waitForTcpPorts.set(false)
+}
+
+apollo {
+    packageNamesFromFilePaths("spp.cli.protocol")
 }

@@ -1,22 +1,18 @@
 package spp.cli.commands.admin.access
 
-import access.AddAccessPermissionMutation
-import com.apollographql.apollo.api.Input
-import com.apollographql.apollo.api.ScalarTypeAdapters
-import com.apollographql.apollo.api.internal.SimpleResponseWriter
-import com.apollographql.apollo.coroutines.await
+import com.apollographql.apollo3.api.Optional
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.options.multiple
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.enum
-import io.vertx.core.json.JsonObject
+import io.vertx.core.json.Json
 import kotlinx.coroutines.runBlocking
 import spp.cli.Main
 import spp.cli.PlatformCLI
 import spp.cli.PlatformCLI.echoError
-import spp.cli.util.JsonCleaner.cleanJson
-import type.AccessType
+import spp.cli.protocol.access.AddAccessPermissionMutation
+import spp.cli.protocol.type.AccessType
 import kotlin.system.exitProcess
 
 class AddAccessPermission : CliktCommand(printHelpOnEmptyArgs = true) {
@@ -26,9 +22,9 @@ class AddAccessPermission : CliktCommand(printHelpOnEmptyArgs = true) {
 
     override fun run() = runBlocking {
         val response = try {
-            PlatformCLI.apolloClient.mutate(
-                AddAccessPermissionMutation(Input.fromNullable(locationPatterns), type)
-            ).await()
+            PlatformCLI.apolloClient.mutation(
+                AddAccessPermissionMutation(Optional.Present(locationPatterns), type)
+            ).execute()
         } catch (e: Exception) {
             echoError(e)
             if (Main.standalone) exitProcess(-1) else return@runBlocking
@@ -38,11 +34,7 @@ class AddAccessPermission : CliktCommand(printHelpOnEmptyArgs = true) {
             if (Main.standalone) exitProcess(-1) else return@runBlocking
         }
 
-        echo(response.data!!.addAccessPermission().let {
-            val respWriter = SimpleResponseWriter(ScalarTypeAdapters.DEFAULT)
-            it.marshaller().marshal(respWriter)
-            cleanJson(JsonObject(respWriter.toJson("")).getJsonObject("data")).encodePrettily()
-        })
+        echo(Json.encodePrettily(response.data!!.addAccessPermission))
         if (Main.standalone) exitProcess(0)
     }
 }

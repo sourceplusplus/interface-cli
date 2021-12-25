@@ -1,17 +1,13 @@
 package spp.cli.commands.admin.access
 
-import access.GetDeveloperAccessPermissionsQuery
-import com.apollographql.apollo.api.ScalarTypeAdapters
-import com.apollographql.apollo.api.internal.SimpleResponseWriter
-import com.apollographql.apollo.coroutines.await
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
-import io.vertx.core.json.JsonObject
+import io.vertx.core.json.Json
 import kotlinx.coroutines.runBlocking
 import spp.cli.Main
 import spp.cli.PlatformCLI
 import spp.cli.PlatformCLI.echoError
-import spp.cli.util.JsonCleaner.cleanJson
+import spp.cli.protocol.access.GetDeveloperAccessPermissionsQuery
 import kotlin.system.exitProcess
 
 class GetDeveloperAccessPermissions : CliktCommand(printHelpOnEmptyArgs = true) {
@@ -20,7 +16,7 @@ class GetDeveloperAccessPermissions : CliktCommand(printHelpOnEmptyArgs = true) 
 
     override fun run() = runBlocking {
         val response = try {
-            PlatformCLI.apolloClient.query(GetDeveloperAccessPermissionsQuery(id)).await()
+            PlatformCLI.apolloClient.query(GetDeveloperAccessPermissionsQuery(id)).execute()
         } catch (e: Exception) {
             echoError(e)
             if (Main.standalone) exitProcess(-1) else return@runBlocking
@@ -30,11 +26,7 @@ class GetDeveloperAccessPermissions : CliktCommand(printHelpOnEmptyArgs = true) 
             if (Main.standalone) exitProcess(-1) else return@runBlocking
         }
 
-        echo(response.data!!.developerAccessPermissions.map {
-            val respWriter = SimpleResponseWriter(ScalarTypeAdapters.DEFAULT)
-            it.marshaller().marshal(respWriter)
-            cleanJson(JsonObject(respWriter.toJson("")).getJsonObject("data")).encodePrettily()
-        })
+        echo(Json.encodePrettily(response.data!!.getDeveloperAccessPermissions))
         if (Main.standalone) exitProcess(0)
     }
 }

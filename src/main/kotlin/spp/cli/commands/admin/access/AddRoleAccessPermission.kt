@@ -1,13 +1,12 @@
 package spp.cli.commands.admin.access
 
-import access.AddRoleAccessPermissionMutation
-import com.apollographql.apollo.coroutines.await
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import kotlinx.coroutines.runBlocking
 import spp.cli.Main
 import spp.cli.PlatformCLI
 import spp.cli.PlatformCLI.echoError
+import spp.cli.protocol.access.AddRoleAccessPermissionMutation
 import kotlin.system.exitProcess
 
 class AddRoleAccessPermission : CliktCommand(printHelpOnEmptyArgs = true) {
@@ -17,9 +16,9 @@ class AddRoleAccessPermission : CliktCommand(printHelpOnEmptyArgs = true) {
 
     override fun run() = runBlocking {
         val response = try {
-            PlatformCLI.apolloClient.mutate(
+            PlatformCLI.apolloClient.mutation(
                 AddRoleAccessPermissionMutation(role, id)
-            ).await()
+            ).execute()
         } catch (e: Exception) {
             echoError(e)
             if (Main.standalone) exitProcess(-1) else return@runBlocking
@@ -29,7 +28,7 @@ class AddRoleAccessPermission : CliktCommand(printHelpOnEmptyArgs = true) {
             if (Main.standalone) exitProcess(-1) else return@runBlocking
         }
 
-        echo(response.data!!.addRoleAccessPermission())
+        echo(response.data!!.addRoleAccessPermission)
         if (Main.standalone) exitProcess(0)
     }
 }

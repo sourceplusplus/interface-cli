@@ -1,23 +1,19 @@
 package spp.cli.commands.admin.access
 
-import access.GetAccessPermissionsQuery
-import com.apollographql.apollo.api.ScalarTypeAdapters
-import com.apollographql.apollo.api.internal.SimpleResponseWriter
-import com.apollographql.apollo.coroutines.await
 import com.github.ajalt.clikt.core.CliktCommand
-import io.vertx.core.json.JsonObject
+import io.vertx.core.json.Json
 import kotlinx.coroutines.runBlocking
 import spp.cli.Main
 import spp.cli.PlatformCLI
 import spp.cli.PlatformCLI.echoError
-import spp.cli.util.JsonCleaner.cleanJson
+import spp.cli.protocol.access.GetAccessPermissionsQuery
 import kotlin.system.exitProcess
 
 class GetAccessPermissions : CliktCommand() {
 
     override fun run() = runBlocking {
         val response = try {
-            PlatformCLI.apolloClient.query(GetAccessPermissionsQuery()).await()
+            PlatformCLI.apolloClient.query(GetAccessPermissionsQuery()).execute()
         } catch (e: Exception) {
             echoError(e)
             if (Main.standalone) exitProcess(-1) else return@runBlocking
@@ -27,11 +23,7 @@ class GetAccessPermissions : CliktCommand() {
             if (Main.standalone) exitProcess(-1) else return@runBlocking
         }
 
-        echo(response.data!!.accessPermissions.map {
-            val respWriter = SimpleResponseWriter(ScalarTypeAdapters.DEFAULT)
-            it.marshaller().marshal(respWriter)
-            cleanJson(JsonObject(respWriter.toJson("")).getJsonObject("data")).encodePrettily()
-        })
+        echo(Json.encodePrettily(response.data!!.getAccessPermissions))
         if (Main.standalone) exitProcess(0)
     }
 }

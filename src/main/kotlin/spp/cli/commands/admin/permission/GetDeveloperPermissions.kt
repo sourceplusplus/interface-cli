@@ -1,13 +1,12 @@
 package spp.cli.commands.admin.permission
 
-import com.apollographql.apollo.coroutines.await
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import kotlinx.coroutines.runBlocking
-import permission.GetDeveloperPermissionsQuery
 import spp.cli.Main
 import spp.cli.PlatformCLI.apolloClient
 import spp.cli.PlatformCLI.echoError
+import spp.cli.protocol.permission.GetDeveloperPermissionsQuery
 import kotlin.system.exitProcess
 
 class GetDeveloperPermissions : CliktCommand() {
@@ -16,7 +15,7 @@ class GetDeveloperPermissions : CliktCommand() {
 
     override fun run() = runBlocking {
         val response = try {
-            apolloClient.query(GetDeveloperPermissionsQuery(id)).await()
+            apolloClient.query(GetDeveloperPermissionsQuery(id)).execute()
         } catch (e: Exception) {
             echoError(e)
             if (Main.standalone) exitProcess(-1) else return@runBlocking
@@ -26,7 +25,7 @@ class GetDeveloperPermissions : CliktCommand() {
             if (Main.standalone) exitProcess(-1) else return@runBlocking
         }
 
-        echo(response.data!!.developerPermissions.map { it.name })
+        echo(response.data!!.getDeveloperPermissions.map { it.name })
         if (Main.standalone) exitProcess(0)
     }
 }

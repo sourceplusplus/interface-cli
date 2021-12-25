@@ -1,8 +1,6 @@
 package spp.cli.commands.instrument
 
-import com.apollographql.apollo.api.ScalarTypeAdapters
-import com.apollographql.apollo.api.internal.SimpleResponseWriter
-import com.apollographql.apollo.coroutines.await
+import com.apollographql.apollo3.api.Optional
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.options.default
@@ -11,17 +9,16 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.int
 import com.github.ajalt.clikt.parameters.types.long
-import instrument.AddLiveLogMutation
-import io.vertx.core.json.JsonObject
+import io.vertx.core.json.Json
 import kotlinx.coroutines.runBlocking
 import spp.cli.Main
 import spp.cli.PlatformCLI.apolloClient
 import spp.cli.PlatformCLI.echoError
-import spp.cli.util.JsonCleaner.cleanJson
-import type.InstrumentThrottleInput
-import type.LiveLogInput
-import type.LiveSourceLocationInput
-import type.ThrottleStep
+import spp.cli.protocol.instrument.AddLiveLogMutation
+import spp.cli.protocol.type.InstrumentThrottleInput
+import spp.cli.protocol.type.LiveLogInput
+import spp.cli.protocol.type.LiveSourceLocationInput
+import spp.cli.protocol.type.ThrottleStep
 import kotlin.system.exitProcess
 
 class AddLog : CliktCommand() {
@@ -38,17 +35,17 @@ class AddLog : CliktCommand() {
         .default(ThrottleStep.SECOND)
 
     override fun run() = runBlocking {
-        val input = LiveLogInput.builder()
-            .location(LiveSourceLocationInput.builder().source(source).line(line).build())
-            .logFormat(logFormat)
-            .logArguments(logArguments)
-            .condition(condition)
-            .expiresAt(expiresAt)
-            .hitLimit(hitLimit)
-            .throttle(InstrumentThrottleInput.builder().limit(throttleLimit).step(throttleStep).build())
-            .build()
+        val input = LiveLogInput(
+            logFormat = logFormat,
+            logArguments = Optional.Present(logArguments),
+            location = LiveSourceLocationInput(source, line),
+            condition = Optional.Present(condition),
+            expiresAt = Optional.Present(expiresAt),
+            hitLimit = Optional.Present(hitLimit),
+            throttle = Optional.Present(InstrumentThrottleInput(throttleLimit, throttleStep))
+        )
         val response = try {
-            apolloClient.mutate(AddLiveLogMutation(input)).await()
+            apolloClient.mutation(AddLiveLogMutation(input)).execute()
         } catch (e: Exception) {
             echoError(e)
             if (Main.standalone) exitProcess(-1) else return@runBlocking
@@ -58,11 +55,7 @@ class AddLog : CliktCommand() {
             if (Main.standalone) exitProcess(-1) else return@runBlocking
         }
 
-        echo(response.data!!.addLiveLog().let {
-            val respWriter = SimpleResponseWriter(ScalarTypeAdapters.DEFAULT)
-            it.marshaller().marshal(respWriter)
-            cleanJson(JsonObject(respWriter.toJson("")).getJsonObject("data")).encodePrettily()
-        })
+        echo(Json.encodePrettily(response.data!!.addLiveLog))
         if (Main.standalone) exitProcess(0)
     }
 }

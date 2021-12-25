@@ -1,13 +1,12 @@
 package spp.cli.commands.admin.developer
 
-import com.apollographql.apollo.coroutines.await
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
-import developer.RefreshDeveloperTokenMutation
 import kotlinx.coroutines.runBlocking
 import spp.cli.Main
 import spp.cli.PlatformCLI.apolloClient
 import spp.cli.PlatformCLI.echoError
+import spp.cli.protocol.developer.RefreshDeveloperTokenMutation
 import kotlin.system.exitProcess
 
 class RefreshDeveloperToken : CliktCommand(printHelpOnEmptyArgs = true) {
@@ -16,7 +15,7 @@ class RefreshDeveloperToken : CliktCommand(printHelpOnEmptyArgs = true) {
 
     override fun run() = runBlocking {
         val response = try {
-            apolloClient.mutate(RefreshDeveloperTokenMutation(id)).await()
+            apolloClient.mutation(RefreshDeveloperTokenMutation(id)).execute()
         } catch (e: Exception) {
             echoError(e)
             if (Main.standalone) exitProcess(-1) else return@runBlocking
@@ -26,7 +25,7 @@ class RefreshDeveloperToken : CliktCommand(printHelpOnEmptyArgs = true) {
             if (Main.standalone) exitProcess(-1) else return@runBlocking
         }
 
-        echo(response.data!!.refreshDeveloperToken().accessToken()!!)
+        echo(response.data!!.refreshDeveloperToken.accessToken!!)
         if (Main.standalone) exitProcess(0)
     }
 }

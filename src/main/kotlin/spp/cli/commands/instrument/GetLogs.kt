@@ -1,23 +1,19 @@
 package spp.cli.commands.instrument
 
-import com.apollographql.apollo.api.ScalarTypeAdapters
-import com.apollographql.apollo.api.internal.SimpleResponseWriter
-import com.apollographql.apollo.coroutines.await
 import com.github.ajalt.clikt.core.CliktCommand
-import instrument.GetLiveLogsQuery
-import io.vertx.core.json.JsonObject
+import io.vertx.core.json.Json
 import kotlinx.coroutines.runBlocking
 import spp.cli.Main
 import spp.cli.PlatformCLI.apolloClient
 import spp.cli.PlatformCLI.echoError
-import spp.cli.util.JsonCleaner.cleanJson
+import spp.cli.protocol.instrument.GetLiveLogsQuery
 import kotlin.system.exitProcess
 
 class GetLogs : CliktCommand() {
 
     override fun run() = runBlocking {
         val response = try {
-            apolloClient.query(GetLiveLogsQuery()).await()
+            apolloClient.query(GetLiveLogsQuery()).execute()
         } catch (e: Exception) {
             echoError(e)
             if (Main.standalone) exitProcess(-1) else return@runBlocking
@@ -27,11 +23,7 @@ class GetLogs : CliktCommand() {
             if (Main.standalone) exitProcess(-1) else return@runBlocking
         }
 
-        echo(response.data!!.liveLogs.map {
-            val respWriter = SimpleResponseWriter(ScalarTypeAdapters.DEFAULT)
-            it.marshaller().marshal(respWriter)
-            cleanJson(JsonObject(respWriter.toJson("")).getJsonObject("data")).encodePrettily()
-        })
+        echo(Json.encodePrettily(response.data!!.getLiveLogs))
         if (Main.standalone) exitProcess(0)
     }
 }

@@ -39,7 +39,6 @@ import javax.net.ssl.X509TrustManager
 
 object PlatformCLI : CliktCommand(name = "spp-cli", allowMultipleSubcommands = true) {
 
-    private val json = kotlinx.serialization.json.Json { ignoreUnknownKeys = true }
     val verbose by option("-v", "--verbose", help = "Enable verbose mode").flag()
     val platformHost: String by option("-p", "--platform", help = "Source++ platform host")
         .default(

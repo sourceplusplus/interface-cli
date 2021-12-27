@@ -1,12 +1,12 @@
 package spp.cli.commands.instrument
 
 import com.github.ajalt.clikt.core.CliktCommand
-import io.vertx.core.json.Json
 import kotlinx.coroutines.runBlocking
 import spp.cli.Main
 import spp.cli.PlatformCLI.apolloClient
 import spp.cli.PlatformCLI.echoError
 import spp.cli.protocol.instrument.GetLiveBreakpointsQuery
+import spp.cli.util.JsonCleaner
 import kotlin.system.exitProcess
 
 class GetBreakpoints : CliktCommand() {
@@ -23,7 +23,7 @@ class GetBreakpoints : CliktCommand() {
             if (Main.standalone) exitProcess(-1) else return@runBlocking
         }
 
-        echo(Json.encodePrettily(response.data!!.getLiveBreakpoints))
+        echo(JsonCleaner.cleanJson(response.data!!.getLiveBreakpoints).encodePrettily())
         if (Main.standalone) exitProcess(0)
     }
 }

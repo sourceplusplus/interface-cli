@@ -2,12 +2,12 @@ package spp.cli.commands.admin.access
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
-import io.vertx.core.json.Json
 import kotlinx.coroutines.runBlocking
 import spp.cli.Main
 import spp.cli.PlatformCLI
 import spp.cli.PlatformCLI.echoError
 import spp.cli.protocol.access.GetDeveloperAccessPermissionsQuery
+import spp.cli.util.JsonCleaner
 import kotlin.system.exitProcess
 
 class GetDeveloperAccessPermissions : CliktCommand(printHelpOnEmptyArgs = true) {
@@ -26,7 +26,7 @@ class GetDeveloperAccessPermissions : CliktCommand(printHelpOnEmptyArgs = true) 
             if (Main.standalone) exitProcess(-1) else return@runBlocking
         }
 
-        echo(Json.encodePrettily(response.data!!.getDeveloperAccessPermissions))
+        echo(JsonCleaner.cleanJson(response.data!!.getDeveloperAccessPermissions).encodePrettily())
         if (Main.standalone) exitProcess(0)
     }
 }

@@ -5,10 +5,6 @@ import com.apollographql.apollo3.exception.ApolloException
 import com.apollographql.apollo3.network.okHttpClient
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.databind.DeserializationContext
-import com.fasterxml.jackson.databind.JsonDeserializer
-import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.module.SimpleModule
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.default
@@ -16,14 +12,11 @@ import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.file
 import eu.geekplace.javapinning.JavaPinning
-import io.vertx.core.json.JsonArray
-import io.vertx.core.json.JsonObject
 import io.vertx.core.json.jackson.DatabindCodec
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.Instant
 import kotlinx.datetime.plus
-import kotlinx.serialization.decodeFromString
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.bouncycastle.cert.X509CertificateHolder
@@ -33,8 +26,6 @@ import org.bouncycastle.openssl.PEMKeyPair
 import org.bouncycastle.openssl.PEMParser
 import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter
 import org.bouncycastle.util.encoders.Hex
-import spp.protocol.instrument.breakpoint.LiveBreakpoint
-import spp.protocol.instrument.log.LiveLog
 import spp.protocol.util.KSerializers
 import java.io.File
 import java.io.StringReader
@@ -77,42 +68,6 @@ object PlatformCLI : CliktCommand(name = "spp-cli", allowMultipleSubcommands = t
         val module = SimpleModule()
         module.addSerializer(Instant::class.java, KSerializers.KotlinInstantSerializer())
         module.addDeserializer(Instant::class.java, KSerializers.KotlinInstantDeserializer())
-        module.addDeserializer(LiveBreakpoint::class.java, object : JsonDeserializer<LiveBreakpoint>() {
-            override fun deserialize(p: JsonParser, ctxt: DeserializationContext): LiveBreakpoint {
-                val cleanJson = JsonObject((p.codec.readTree(p) as JsonNode).toString())
-
-                //reformat meta
-                val metaData = mutableMapOf<String, Any>()
-                if (cleanJson.containsKey("meta") && cleanJson.getValue("meta") is JsonArray) {
-                    val metaArr = cleanJson.getJsonArray("meta")
-                    for (i in 0 until metaArr.size()) {
-                        val entry = metaArr.getJsonObject(i)
-                        metaData[entry.getString("name")] = entry.getValue("value")
-                    }
-                    cleanJson.remove("meta")
-                }
-                return json.decodeFromString<LiveBreakpoint>(cleanJson.toString())
-                    .copy(meta = metaData)
-            }
-        })
-        module.addDeserializer(LiveLog::class.java, object : JsonDeserializer<LiveLog>() {
-            override fun deserialize(p: JsonParser, ctxt: DeserializationContext): LiveLog {
-                val cleanJson = JsonObject((p.codec.readTree(p) as JsonNode).toString())
-
-                //reformat meta
-                val metaData = mutableMapOf<String, Any>()
-                if (cleanJson.containsKey("meta") && cleanJson.getValue("meta") is JsonArray) {
-                    val metaArr = cleanJson.getJsonArray("meta")
-                    for (i in 0 until metaArr.size()) {
-                        val entry = metaArr.getJsonObject(i)
-                        metaData[entry.getString("name")] = entry.getValue("value")
-                    }
-                    cleanJson.remove("meta")
-                }
-                return json.decodeFromString<LiveLog>(cleanJson.toString())
-                    .copy(meta = metaData)
-            }
-        })
         DatabindCodec.mapper().registerModule(module)
     }
 

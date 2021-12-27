@@ -1,12 +1,12 @@
 package spp.cli.commands.instrument
 
 import com.github.ajalt.clikt.core.CliktCommand
-import io.vertx.core.json.Json
 import kotlinx.coroutines.runBlocking
 import spp.cli.Main
 import spp.cli.PlatformCLI.apolloClient
 import spp.cli.PlatformCLI.echoError
 import spp.cli.protocol.instrument.GetLiveInstrumentsQuery
+import spp.cli.util.JsonCleaner
 import kotlin.system.exitProcess
 
 class GetInstruments : CliktCommand() {
@@ -23,7 +23,7 @@ class GetInstruments : CliktCommand() {
             if (Main.standalone) exitProcess(-1) else return@runBlocking
         }
 
-        echo(Json.encodePrettily(response.data!!.getLiveInstruments))
+        echo(JsonCleaner.cleanJson(response.data!!.getLiveInstruments).encodePrettily())
         if (Main.standalone) exitProcess(0)
     }
 }

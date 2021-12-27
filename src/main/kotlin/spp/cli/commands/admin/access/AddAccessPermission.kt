@@ -6,13 +6,13 @@ import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.options.multiple
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.enum
-import io.vertx.core.json.Json
 import kotlinx.coroutines.runBlocking
 import spp.cli.Main
 import spp.cli.PlatformCLI
 import spp.cli.PlatformCLI.echoError
 import spp.cli.protocol.access.AddAccessPermissionMutation
 import spp.cli.protocol.type.AccessType
+import spp.cli.util.JsonCleaner
 import kotlin.system.exitProcess
 
 class AddAccessPermission : CliktCommand(printHelpOnEmptyArgs = true) {
@@ -34,7 +34,7 @@ class AddAccessPermission : CliktCommand(printHelpOnEmptyArgs = true) {
             if (Main.standalone) exitProcess(-1) else return@runBlocking
         }
 
-        echo(Json.encodePrettily(response.data!!.addAccessPermission))
+        echo(JsonCleaner.cleanJson(response.data!!.addAccessPermission).encodePrettily())
         if (Main.standalone) exitProcess(0)
     }
 }

@@ -8,13 +8,16 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.int
 import com.github.ajalt.clikt.parameters.types.long
-import io.vertx.core.json.Json
 import kotlinx.coroutines.runBlocking
 import spp.cli.Main
 import spp.cli.PlatformCLI.apolloClient
 import spp.cli.PlatformCLI.echoError
 import spp.cli.protocol.instrument.AddLiveBreakpointMutation
-import spp.cli.protocol.type.*
+import spp.cli.protocol.type.InstrumentThrottleInput
+import spp.cli.protocol.type.LiveBreakpointInput
+import spp.cli.protocol.type.LiveSourceLocationInput
+import spp.cli.protocol.type.ThrottleStep
+import spp.cli.util.JsonCleaner
 import kotlin.system.exitProcess
 
 class AddBreakpoint : CliktCommand() {
@@ -37,7 +40,7 @@ class AddBreakpoint : CliktCommand() {
             throttle = Optional.Present(InstrumentThrottleInput(throttleLimit, throttleStep))
         )
         val response = try {
-            apolloClient.mutate(AddLiveBreakpointMutation(input)).execute()
+            apolloClient.mutation(AddLiveBreakpointMutation(input)).execute()
         } catch (e: Exception) {
             echoError(e)
             if (Main.standalone) exitProcess(-1) else return@runBlocking
@@ -47,7 +50,7 @@ class AddBreakpoint : CliktCommand() {
             if (Main.standalone) exitProcess(-1) else return@runBlocking
         }
 
-        echo(Json.encodePrettily(response.data!!.addLiveBreakpoint))
+        echo(JsonCleaner.cleanJson(response.data!!.addLiveBreakpoint).encodePrettily())
         if (Main.standalone) exitProcess(0)
     }
 }

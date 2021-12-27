@@ -9,7 +9,6 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.int
 import com.github.ajalt.clikt.parameters.types.long
-import io.vertx.core.json.Json
 import kotlinx.coroutines.runBlocking
 import spp.cli.Main
 import spp.cli.PlatformCLI.apolloClient
@@ -19,6 +18,7 @@ import spp.cli.protocol.type.InstrumentThrottleInput
 import spp.cli.protocol.type.LiveLogInput
 import spp.cli.protocol.type.LiveSourceLocationInput
 import spp.cli.protocol.type.ThrottleStep
+import spp.cli.util.JsonCleaner
 import kotlin.system.exitProcess
 
 class AddLog : CliktCommand() {
@@ -55,7 +55,7 @@ class AddLog : CliktCommand() {
             if (Main.standalone) exitProcess(-1) else return@runBlocking
         }
 
-        echo(Json.encodePrettily(response.data!!.addLiveLog))
+        echo(JsonCleaner.cleanJson(response.data!!.addLiveLog).encodePrettily())
         if (Main.standalone) exitProcess(0)
     }
 }

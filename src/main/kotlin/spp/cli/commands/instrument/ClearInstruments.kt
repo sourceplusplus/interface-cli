@@ -22,7 +22,7 @@ class ClearInstruments : CliktCommand() {
             if (Main.standalone) exitProcess(-1) else return@runBlocking
         }
 
-        echo(response.data!!)
+        echo(response.data!!.clearLiveInstruments)
         if (Main.standalone) exitProcess(0)
     }
 }

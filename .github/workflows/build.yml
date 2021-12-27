@@ -15,6 +15,7 @@ on:
 jobs:
   buildOnMac:
     runs-on: macos-latest
+    timeout-minutes: 20
 
     steps:
       - uses: actions/checkout@v2
@@ -61,6 +62,7 @@ jobs:
 
   buildOnLinux:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
 
     outputs:
       version: ${{ steps.properties.outputs.version }}

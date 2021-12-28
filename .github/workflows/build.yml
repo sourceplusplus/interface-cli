@@ -99,8 +99,6 @@ jobs:
         with:
           file: build/graal/spp-cli
 
-      - name: "[CLI] Get self"
-        run: ./build/graal/spp-cli -v get-self
       - name: "[CLI] Get developers"
         run: ./build/graal/spp-cli -v admin get-developers
       - name: "[CLI] Add developer"

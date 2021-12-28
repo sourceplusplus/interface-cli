@@ -36,29 +36,30 @@ jobs:
           name: spp-cli-macOS.zip
           path: ./spp-cli-macOS.zip
 
-#   buildOnWindows:
-#     runs-on: windows-2016
+  buildOnWindows:
+    runs-on: windows-2019
 
-#     steps:
-#       - uses: actions/checkout@v2
-#       - uses: microsoft/setup-msbuild@v1.0.2
-#       - uses: seanmiddleditch/gha-setup-vsdevenv@master
+    steps:
+      - uses: actions/checkout@v2
+      - uses: microsoft/setup-msbuild@v1.1
+      #- uses: seanmiddleditch/gha-setup-vsdevenv@master
+      - uses: GuillaumeFalourd/setup-windows10-sdk-action@v1
 
-#       - name: Build native spp-cli.exe
-#         run: ./gradlew assemble nativeImage --debug --info --stacktrace
-#         shell: powershell
-#       - run: ls build/graal
-# #       - name: Run UPX
-# #         uses: crazy-max/ghaction-upx@v1.3.3
-# #         with:
-# #           version: latest
-# #           file: target/demo-cli.exe
-# #           args: '-7'
-#       - uses: actions/upload-artifact@v2
+      - name: Build native spp-cli.exe
+        run: ./gradlew assemble nativeImage --debug --info --stacktrace
+        shell: powershell
+      - run: ls build/graal
+#       - name: Run UPX
+#         uses: crazy-max/ghaction-upx@v1.3.3
 #         with:
-#           if-no-files-found: warn
-#           name: spp-cli.exe
-#           path: build/graal/spp-cli.exe
+#           version: latest
+#           file: target/demo-cli.exe
+#           args: '-7'
+      - uses: actions/upload-artifact@v2
+        with:
+          if-no-files-found: warn
+          name: spp-cli.exe
+          path: build/graal/spp-cli.exe
 
   buildOnLinux:
     runs-on: ubuntu-latest

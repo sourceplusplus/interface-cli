@@ -46,8 +46,10 @@ jobs:
       - uses: GuillaumeFalourd/setup-windows10-sdk-action@v1
 
       - name: Build native spp-cli.exe
-        run: ./gradlew assemble nativeImage --debug --info --stacktrace
-        shell: powershell
+        run: |
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+          ./gradlew assemble nativeImage --debug --info --stacktrace
+        shell: cmd
       - run: ls build/graal
 #       - name: Run UPX
 #         uses: crazy-max/ghaction-upx@v1.3.3

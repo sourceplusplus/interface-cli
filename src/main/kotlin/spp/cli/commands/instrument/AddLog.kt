@@ -1,6 +1,8 @@
 package spp.cli.commands.instrument
 
+import com.apollographql.apollo3.api.CustomScalarAdapters
 import com.apollographql.apollo3.api.Optional
+import com.apollographql.apollo3.api.json.MapJsonWriter
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.options.default
@@ -14,6 +16,7 @@ import spp.cli.Main
 import spp.cli.PlatformCLI.apolloClient
 import spp.cli.PlatformCLI.echoError
 import spp.cli.protocol.instrument.AddLiveLogMutation
+import spp.cli.protocol.instrument.adapter.AddLiveLogMutation_ResponseAdapter.AddLiveLog
 import spp.cli.protocol.type.InstrumentThrottleInput
 import spp.cli.protocol.type.LiveLogInput
 import spp.cli.protocol.type.LiveSourceLocationInput
@@ -55,7 +58,12 @@ class AddLog : CliktCommand() {
             if (Main.standalone) exitProcess(-1) else return@runBlocking
         }
 
-        echo(JsonCleaner.cleanJson(response.data!!.addLiveLog).encodePrettily())
+        echo(JsonCleaner.cleanJson(MapJsonWriter().let {
+            it.beginObject()
+            AddLiveLog.toJson(it, CustomScalarAdapters.Empty, response.data!!.addLiveLog)
+            it.endObject()
+            (it.root() as LinkedHashMap<*, *>)
+        }).encodePrettily())
         if (Main.standalone) exitProcess(0)
     }
 }

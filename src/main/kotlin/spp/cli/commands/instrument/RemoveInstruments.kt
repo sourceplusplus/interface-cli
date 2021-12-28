@@ -1,5 +1,7 @@
 package spp.cli.commands.instrument
 
+import com.apollographql.apollo3.api.CustomScalarAdapters
+import com.apollographql.apollo3.api.json.MapJsonWriter
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.types.int
@@ -8,6 +10,7 @@ import spp.cli.Main
 import spp.cli.PlatformCLI.apolloClient
 import spp.cli.PlatformCLI.echoError
 import spp.cli.protocol.instrument.RemoveLiveInstrumentsMutation
+import spp.cli.protocol.instrument.adapter.RemoveLiveInstrumentsMutation_ResponseAdapter.RemoveLiveInstrument
 import spp.cli.util.JsonCleaner
 import kotlin.system.exitProcess
 
@@ -28,7 +31,16 @@ class RemoveInstruments : CliktCommand() {
             if (Main.standalone) exitProcess(-1) else return@runBlocking
         }
 
-        echo(JsonCleaner.cleanJson(response.data!!.removeLiveInstruments).encodePrettily())
+        echo(JsonCleaner.cleanJson(MapJsonWriter().let {
+            it.beginArray()
+            response.data!!.removeLiveInstruments.forEach { ob ->
+                it.beginObject()
+                RemoveLiveInstrument.toJson(it, CustomScalarAdapters.Empty, ob)
+                it.endObject()
+            }
+            it.endArray()
+            (it.root() as ArrayList<*>)
+        }).encodePrettily())
         if (Main.standalone) exitProcess(0)
     }
 }

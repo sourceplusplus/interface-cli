@@ -1,6 +1,8 @@
 package spp.cli.commands.admin.access
 
+import com.apollographql.apollo3.api.CustomScalarAdapters
 import com.apollographql.apollo3.api.Optional
+import com.apollographql.apollo3.api.json.MapJsonWriter
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.options.multiple
@@ -11,6 +13,7 @@ import spp.cli.Main
 import spp.cli.PlatformCLI
 import spp.cli.PlatformCLI.echoError
 import spp.cli.protocol.access.AddAccessPermissionMutation
+import spp.cli.protocol.access.adapter.AddAccessPermissionMutation_ResponseAdapter.AddAccessPermission
 import spp.cli.protocol.type.AccessType
 import spp.cli.util.JsonCleaner
 import kotlin.system.exitProcess
@@ -34,7 +37,12 @@ class AddAccessPermission : CliktCommand(printHelpOnEmptyArgs = true) {
             if (Main.standalone) exitProcess(-1) else return@runBlocking
         }
 
-        echo(JsonCleaner.cleanJson(response.data!!.addAccessPermission).encodePrettily())
+        echo(JsonCleaner.cleanJson(MapJsonWriter().let {
+            it.beginObject()
+            AddAccessPermission.toJson(it, CustomScalarAdapters.Empty, response.data!!.addAccessPermission)
+            it.endObject()
+            (it.root() as LinkedHashMap<*, *>)
+        }).encodePrettily())
         if (Main.standalone) exitProcess(0)
     }
 }

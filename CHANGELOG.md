@@ -1,3 +1,7 @@
+# 0.2.3
+- Added `get-self` command
+- Dependency upgrades
+
 # 0.2.2
 - Simplified instrument commands
 - Added `subscribe-events` command

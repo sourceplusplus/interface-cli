@@ -7,6 +7,8 @@ import io.vertx.core.json.jackson.DatabindCodec
 import spp.cli.Main
 import spp.protocol.instrument.breakpoint.LiveBreakpoint
 import spp.protocol.instrument.log.LiveLog
+import spp.protocol.instrument.meter.LiveMeter
+import spp.protocol.instrument.span.LiveSpan
 import java.io.OutputStream
 import java.io.PrintStream
 import kotlin.reflect.KClass
@@ -44,10 +46,14 @@ abstract class CLIIntegrationTest {
         val list = mutableListOf<T>()
         for (it in value.withIndex()) {
             val v = value.getJsonObject(it.index)
-            if (v.getString("type") == "LOG") {
-                list.add(v.mapTo(LiveLog::class.java) as T)
-            } else if (v.getString("type") == "BREAKPOINT") {
+            if (v.getString("type") == "BREAKPOINT") {
                 list.add(v.mapTo(LiveBreakpoint::class.java) as T)
+            } else if (v.getString("type") == "LOG") {
+                list.add(v.mapTo(LiveLog::class.java) as T)
+            } else if (v.getString("type") == "METER") {
+                list.add(v.mapTo(LiveMeter::class.java) as T)
+            } else if (v.getString("type") == "SPAN") {
+                list.add(v.mapTo(LiveSpan::class.java) as T)
             } else {
                 list.add(v.mapTo(clazz.java) as T)
             }

@@ -1,0 +1,26 @@
+mutation addLiveMeter($input: LiveMeterInput!) {
+    addLiveMeter(input: $input) {
+        id
+        meterName
+        meterType
+        metricValue {
+            valueType
+            value
+        }
+        location {
+            source
+            line
+        }
+        condition
+        expiresAt
+        hitLimit
+        throttle {
+            limit
+            step
+        }
+        meta {
+            name
+            value
+        }
+    }
+}

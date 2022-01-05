@@ -1,0 +1,28 @@
+query getLiveMeters{
+    getLiveMeters {
+        id
+        meterName
+        meterType
+        metricValue {
+            valueType
+            value
+        }
+        location {
+            source
+            line
+        }
+        condition
+        expiresAt
+        hitLimit
+        applied
+        pending
+        throttle {
+            limit
+            step
+        }
+        meta {
+            name
+            value
+        }
+    }
+}

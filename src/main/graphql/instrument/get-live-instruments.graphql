@@ -18,6 +18,17 @@ query getLiveInstruments{
             logFormat
             logArguments
         }
+        ... on LiveMeter {
+            meterName
+            meterType
+            metricValue {
+                valueType
+                value
+            }
+        }
+        ... on LiveSpan {
+            operationName
+        }
         type
         meta {
             name

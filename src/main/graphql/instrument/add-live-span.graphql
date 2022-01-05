@@ -1,0 +1,21 @@
+mutation addLiveSpan($input: LiveSpanInput!) {
+    addLiveSpan(input: $input) {
+        id
+        operationName
+        location {
+            source
+            line
+        }
+        condition
+        expiresAt
+        hitLimit
+        throttle {
+            limit
+            step
+        }
+        meta {
+            name
+            value
+        }
+    }
+}

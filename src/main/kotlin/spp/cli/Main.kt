@@ -59,9 +59,13 @@ object Main {
             //instrument
             AddBreakpoint(),
             AddLog(),
+            AddMeter(),
+            AddSpan(),
             GetBreakpoints(),
             GetInstruments(),
             GetLogs(),
+            GetMeters(),
+            GetSpans(),
             RemoveInstrument(),
             RemoveInstruments(),
             ClearInstruments(),

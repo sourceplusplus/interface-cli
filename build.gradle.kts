@@ -113,7 +113,7 @@ tasks {
 nativeImage {
     dependsOn("shadowJar")
     runtimeClasspath = configurations.shadow.get()
-    graalVmHome = System.getProperty("GRAALVM_HOME")
+    graalVmHome = System.getenv("GRAALVM_HOME")
 //    mainClass ="com.example.App" // Deprecated, use `buildType.executable.main` as follows instead.
     buildType { build ->
         build.executable(main = "spp.cli.Main")

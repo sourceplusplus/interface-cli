@@ -1,5 +1,8 @@
 # 0.2.3
 - Added `get-self` command
+- Added `add-span`/`get-spans` commands
+- Added `add-meter`/`get-meters` commands
+- Fixed Windows native build
 - Dependency upgrades
 
 # 0.2.2

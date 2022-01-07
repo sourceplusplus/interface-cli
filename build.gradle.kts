@@ -79,9 +79,14 @@ tasks.create("createProperties") {
 }
 tasks["processResources"].dependsOn("createProperties")
 
+configurations {
+    create("empty")
+}
+
 nativeImage {
     dependsOn("shadowJar")
     setClasspath(File(project.buildDir, "libs/spp-cli-$version.jar"))
+    runtimeClasspath = configurations.getByName("empty")
     graalVmHome = System.getenv("GRAALVM_HOME")
     buildType { build ->
         build.executable(main = "spp.cli.Main")

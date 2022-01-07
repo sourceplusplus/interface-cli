@@ -46,6 +46,7 @@ jobs:
 
   buildOnWindows:
     runs-on: windows-2019
+    timeout-minutes: 20
 
     steps:
       - uses: actions/checkout@v2
@@ -72,7 +73,8 @@ jobs:
           args: '-7'
 
       - name: Zip CLI
-        run: jar -cfM spp-cli-win64.zip build/graal/
+        run: Compress-Archive -LiteralPath build/graal/spp-cli.exe -DestinationPath spp-cli-win64.zip
+        shell: powershell
 
       - uses: actions/upload-artifact@v2
         with:
@@ -239,7 +241,7 @@ jobs:
         with:
           upload_url: ${{ steps.createDraft.outputs.upload_url }}
           asset_path: ./spp-cli-win64.zip
-          asset_name: spp-cli-${{ needs.buildOnWindows.outputs.version }}-win64.zip
+          asset_name: spp-cli-${{ needs.buildOnLinux.outputs.version }}-win64.zip
           asset_content_type: application/zip
 
       - name: Download spp-cli-linux64 artifact

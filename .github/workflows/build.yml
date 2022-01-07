@@ -55,7 +55,7 @@ jobs:
           native-image: true
 
       - name: Build native spp-cli.exe
-        run: ./gradlew assemble nativeImage -Dbuild.profile=release
+        run: ./gradlew assemble nativeImage '-Dbuild.profile=release'
         shell: powershell
       - name: Run UPX
         uses: crazy-max/ghaction-upx@v1.3.3
@@ -80,7 +80,7 @@ jobs:
       - uses: ayltai/setup-graalvm@v1
         with:
           java-version: 11
-          graalvm-version: 21.1.0
+          graalvm-version: 21.3.0
           native-image: true
 
       - name: Export Properties

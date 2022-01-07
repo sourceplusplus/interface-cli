@@ -114,33 +114,13 @@ nativeImage {
     dependsOn("shadowJar")
     runtimeClasspath = configurations.shadow.get()
     graalVmHome = System.getenv("GRAALVM_HOME")
-//    mainClass ="com.example.App" // Deprecated, use `buildType.executable.main` as follows instead.
     buildType { build ->
         build.executable(main = "spp.cli.Main")
     }
-    executableName = "my-native-application"
-    outputDirectory = file("$buildDir/executable")
-    arguments(
-        "--no-fallback"
-//        "--enable-all-security-services",
-//        options.traceClassInitialization("com.example.MyDataProvider,com.example.MyDataConsumer"),
-//        "--initialize-at-run-time=com.example.runtime",
-//        "--report-unsupported-elements-at-runtime"
-    )
+    executableName = "spp-cli"
+    outputDirectory = file("$buildDir/graal")
+    arguments("--no-fallback")
 }
-
-//graal {
-//    windowsVsVersion("2022")
-//    windowsVsEdition("BuildTools")
-//    graalVersion(project.properties["graalVersion"] as String)
-//    javaVersion("11")
-//    mainClass("spp.cli.Main")
-//    outputName("spp-cli")
-//    option("-H:+PrintClassInitialization")
-//    option("-H:+ReportExceptionStackTraces")
-//    option("-H:IncludeResourceBundles=build")
-//    option("-H:+AddAllCharsets")
-//}
 
 tasks.getByName<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar") {
     archiveBaseName.set("spp-cli")

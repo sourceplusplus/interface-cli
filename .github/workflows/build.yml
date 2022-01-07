@@ -19,20 +19,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Setup Graalvm
-        id: setup-graalvm
-        uses: DeLaGuardo/setup-graalvm@master
+      - uses: ayltai/setup-graalvm@v1
         with:
-          # GraalVM version, no pattern syntax available atm
-          graalvm: '21.3.0'
-          # Java version, optional, defaults to 'java8'. Available options are 'java8' and 'java11'.
-          java: 'java11'
-          # Architecture flag, optional, defaults to 'amd64'. Available options are 'amd64' and 'aarch64'. Later is available only for linux runners.
-          arch: 'amd64'
-
-      - name: Install native-image component
-        run: |
-          gu install native-image
+          java-version: 11
+          graalvm-version: 21.3.0
+          native-image: true
 
       - name: Build native spp-cli
         run: gradle assemble nativeImage -Dbuild.profile=release
@@ -64,15 +55,14 @@ jobs:
           native-image: true
 
       - name: Build native spp-cli.exe
-        run: ./gradlew assemble nativeImage --debug --info --stacktrace
+        run: ./gradlew assemble nativeImage -Dbuild.profile=release
         shell: powershell
-      - run: ls build/graal
-#       - name: Run UPX
-#         uses: crazy-max/ghaction-upx@v1.3.3
-#         with:
-#           version: latest
-#           file: target/demo-cli.exe
-#           args: '-7'
+      - name: Run UPX
+        uses: crazy-max/ghaction-upx@v1.3.3
+        with:
+          version: latest
+          file: build/graal/spp-cli
+          args: '-7'
       - uses: actions/upload-artifact@v2
         with:
           if-no-files-found: warn
@@ -179,10 +169,10 @@ jobs:
         with:
           name: spp-cli-linux64.zip
           path: ./spp-cli-linux64.zip
-          
+
   releaseDraft:
     name: Release Draft
-    needs: [buildOnMac, buildOnLinux]
+    needs: [ buildOnMac, buildOnLinux ]
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
     steps:

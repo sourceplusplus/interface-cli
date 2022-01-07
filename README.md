@@ -20,16 +20,13 @@ This project provides a command-line interface client to the [Source++](https://
 ### Create developers
 
 <details>
-  <summary>Scenario</summary>
-
-  > Two developers...
-</details>
-
-<details>
   <summary>Command</summary>
 
   ```sh
   ./spp-cli admin add-developer bob@email.com
+  ./spp-cli admin add-developer john@email.com
+  
+  ./spp-cli admin add-role contractors
   ```
 </details>
 

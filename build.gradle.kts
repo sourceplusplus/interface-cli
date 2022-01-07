@@ -1,8 +1,10 @@
 import java.util.*
+import org.mikeneck.graalvm.GenerateNativeImageConfigTask
 
 plugins {
+    id("org.mikeneck.graalvm-native-image") version "v1.4.0"
     id("com.github.johnrengelman.shadow")
-    id("com.palantir.graal")
+    //id("com.palantir.graal")
     id("com.apollographql.apollo3")
     id("com.avast.gradle.docker-compose")
     kotlin("jvm")
@@ -79,16 +81,66 @@ tasks.create("createProperties") {
 }
 tasks["processResources"].dependsOn("createProperties")
 
-graal {
-    graalVersion(project.properties["graalVersion"] as String)
-    javaVersion("11")
-    mainClass("spp.cli.Main")
-    outputName("spp-cli")
-    option("-H:+PrintClassInitialization")
-    option("-H:+ReportExceptionStackTraces")
-    option("-H:IncludeResourceBundles=build")
-    option("-H:+AddAllCharsets")
+tasks {
+    register("buildNativeImage") {
+        doLast {
+            val libs = File(buildDir, "libs").apply { mkdir() }
+            val nativeImage = File(buildDir, "native-image").apply { mkdir() }
+
+            val args = listOf(
+                "--shared",
+                "-cp",
+                "${libs.toString().replace("\\", "/").trimEnd { it == '/' }}/*",
+                "-H:Path=$nativeImage"
+            )
+
+            logger.info("============================")
+            logger.info("")
+            logger.info("Native-Image args are:")
+            logger.info("$args")
+            logger.info("")
+            logger.info("============================")
+
+            val windows = true
+            exec {
+                this.executable = "native-image".let { if (windows) "C:\\Users\\ferge\\Desktop\\graalvm-ce-java11-21.3.0\\bin\\$it.cmd" else it }
+                this.args = args
+            }
+        }
+    }
 }
+
+nativeImage {
+    dependsOn("shadowJar")
+    runtimeClasspath = configurations.shadow.get()
+    graalVmHome = "C:\\Users\\ferge\\Desktop\\graalvm-ce-java11-21.3.0"
+//    mainClass ="com.example.App" // Deprecated, use `buildType.executable.main` as follows instead.
+    buildType { build ->
+        build.executable(main = "spp.cli.Main")
+    }
+    executableName = "my-native-application"
+    outputDirectory = file("$buildDir/executable")
+    arguments(
+        "--no-fallback"
+//        "--enable-all-security-services",
+//        options.traceClassInitialization("com.example.MyDataProvider,com.example.MyDataConsumer"),
+//        "--initialize-at-run-time=com.example.runtime",
+//        "--report-unsupported-elements-at-runtime"
+    )
+}
+
+//graal {
+//    windowsVsVersion("2022")
+//    windowsVsEdition("BuildTools")
+//    graalVersion(project.properties["graalVersion"] as String)
+//    javaVersion("11")
+//    mainClass("spp.cli.Main")
+//    outputName("spp-cli")
+//    option("-H:+PrintClassInitialization")
+//    option("-H:+ReportExceptionStackTraces")
+//    option("-H:IncludeResourceBundles=build")
+//    option("-H:+AddAllCharsets")
+//}
 
 tasks.getByName<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar") {
     archiveBaseName.set("spp-cli")

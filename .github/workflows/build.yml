@@ -63,11 +63,15 @@ jobs:
           version: latest
           file: build/graal/spp-cli.exe
           args: '-7'
+
+      - name: Zip CLI
+        run: zip spp-cli-win64.zip -j build/graal/spp-cli.exe
+
       - uses: actions/upload-artifact@v2
         with:
           if-no-files-found: warn
-          name: spp-cli.exe
-          path: build/graal/spp-cli.exe
+          name: spp-cli-win64.zip
+          path: ./spp-cli-win64.zip
 
   buildOnLinux:
     runs-on: ubuntu-latest
@@ -172,7 +176,7 @@ jobs:
 
   releaseDraft:
     name: Release Draft
-    needs: [ buildOnMac, buildOnLinux ]
+    needs: [ buildOnMac, buildOnWindows, buildOnLinux ]
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
     steps:
@@ -211,6 +215,21 @@ jobs:
           upload_url: ${{ steps.createDraft.outputs.upload_url }}
           asset_path: ./spp-cli-macOS.zip
           asset_name: spp-cli-${{ needs.buildOnLinux.outputs.version }}-macOS.zip
+          asset_content_type: application/zip
+
+      - name: Download spp-cli-win64 artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: spp-cli-win64.zip
+
+      - name: Upload spp-cli-win64 asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.createDraft.outputs.upload_url }}
+          asset_path: ./spp-cli-win64.zip
+          asset_name: spp-cli-${{ needs.buildOnWindows.outputs.version }}-win64.zip
           asset_content_type: application/zip
 
       - name: Download spp-cli-linux64 artifact

@@ -26,7 +26,10 @@ jobs:
           native-image: true
 
       - name: Build native spp-cli
-        run: gradle assemble nativeImage -Dbuild.profile=release
+        run: gradle assembleUp nativeImage -Dbuild.profile=release
+
+      - name: Docker IPs
+        run: docker inspect --format='{{.Name}} - {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps -aq)
 
       - name: "[CLI] Get version"
         run: ./build/graal/spp-cli -v version
@@ -59,8 +62,11 @@ jobs:
           native-image: true
 
       - name: Build native spp-cli.exe
-        run: ./gradlew assemble nativeImage '-Dbuild.profile=release'
+        run: ./gradlew assembleUp nativeImage '-Dbuild.profile=release'
         shell: powershell
+
+      - name: Docker IPs
+        run: docker inspect --format='{{.Name}} - {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps -aq)
 
       - name: "[CLI] Get version"
         run: ./build/graal/spp-cli -v version

@@ -1,9 +1,8 @@
 import java.util.*
 
 plugins {
-    id("org.mikeneck.graalvm-native-image") version "v1.4.0"
+    id("org.mikeneck.graalvm-native-image")
     id("com.github.johnrengelman.shadow")
-    //id("com.palantir.graal")
     id("com.apollographql.apollo3")
     id("com.avast.gradle.docker-compose")
     kotlin("jvm")
@@ -80,14 +79,9 @@ tasks.create("createProperties") {
 }
 tasks["processResources"].dependsOn("createProperties")
 
-configurations {
-    create("empty")
-}
-
 nativeImage {
     dependsOn("shadowJar")
     setClasspath(File(project.buildDir, "libs/spp-cli-$version.jar"))
-    runtimeClasspath = configurations.getByName("empty")
     graalVmHome = System.getenv("GRAALVM_HOME")
     buildType { build ->
         build.executable(main = "spp.cli.Main")

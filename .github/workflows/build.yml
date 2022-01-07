@@ -61,6 +61,9 @@ jobs:
           graalvm-version: 21.3.0
           native-image: true
 
+      - run: dockercli -SwitchDaemon
+        shell: powershell
+
       - name: Build native spp-cli.exe
         run: ./gradlew assembleUp nativeImage '-Dbuild.profile=release'
         shell: powershell

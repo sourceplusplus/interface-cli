@@ -19,11 +19,20 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: ayltai/setup-graalvm@v1
+      - name: Setup Graalvm
+        id: setup-graalvm
+        uses: DeLaGuardo/setup-graalvm@master
         with:
-          java-version: 11
-          graalvm-version: 21.3.0
-          native-image: true
+          # GraalVM version, no pattern syntax available atm
+          graalvm: '21.3.0'
+          # Java version, optional, defaults to 'java8'. Available options are 'java8' and 'java11'.
+          java: 'java11'
+          # Architecture flag, optional, defaults to 'amd64'. Available options are 'amd64' and 'aarch64'. Later is available only for linux runners.
+          arch: 'amd64'
+
+      - name: Install native-image component
+        run: |
+          gu install native-image
 
       - name: Build native spp-cli
         run: gradle assemble nativeImage -Dbuild.profile=release

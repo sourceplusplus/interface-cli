@@ -11,9 +11,8 @@ spp-platform:
   processor:
     bridge_port: 5460
 
-redis:
-  host: localhost
-  port: 6379
+storage:
+  selector: memory
 
 skywalking-oap:
   host: localhost

@@ -1,8 +1,8 @@
 import java.util.*
 
 plugins {
+    id("org.mikeneck.graalvm-native-image")
     id("com.github.johnrengelman.shadow")
-    id("com.palantir.graal")
     id("com.apollographql.apollo3")
     id("com.avast.gradle.docker-compose")
     kotlin("jvm")
@@ -79,15 +79,21 @@ tasks.create("createProperties") {
 }
 tasks["processResources"].dependsOn("createProperties")
 
-graal {
-    graalVersion(project.properties["graalVersion"] as String)
-    javaVersion("11")
-    mainClass("spp.cli.Main")
-    outputName("spp-cli")
-    option("-H:+PrintClassInitialization")
-    option("-H:+ReportExceptionStackTraces")
-    option("-H:IncludeResourceBundles=build")
-    option("-H:+AddAllCharsets")
+configurations {
+    create("empty")
+}
+
+nativeImage {
+    dependsOn("shadowJar")
+    setClasspath(File(project.buildDir, "libs/spp-cli-$version.jar"))
+    runtimeClasspath = configurations.getByName("empty")
+    graalVmHome = System.getenv("GRAALVM_HOME")
+    buildType { build ->
+        build.executable(main = "spp.cli.Main")
+    }
+    executableName = "spp-cli"
+    outputDirectory = file("$buildDir/graal")
+    arguments("--no-fallback")
 }
 
 tasks.getByName<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar") {

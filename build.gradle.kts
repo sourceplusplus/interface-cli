@@ -83,7 +83,7 @@ tasks["processResources"].dependsOn("createProperties")
 
 nativeImage {
     dependsOn("shadowJar")
-    runtimeClasspath = configurations.shadow.get()
+    runtimeClasspath = configurations.runtimeClasspath.get()
     graalVmHome = System.getenv("GRAALVM_HOME")
     buildType { build ->
         build.executable(main = "spp.cli.Main")

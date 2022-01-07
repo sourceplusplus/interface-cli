@@ -81,35 +81,6 @@ tasks.create("createProperties") {
 }
 tasks["processResources"].dependsOn("createProperties")
 
-tasks {
-    register("buildNativeImage") {
-        doLast {
-            val libs = File(buildDir, "libs").apply { mkdir() }
-            val nativeImage = File(buildDir, "native-image").apply { mkdir() }
-
-            val args = listOf(
-                "--shared",
-                "-cp",
-                "${libs.toString().replace("\\", "/").trimEnd { it == '/' }}/*",
-                "-H:Path=$nativeImage"
-            )
-
-            logger.info("============================")
-            logger.info("")
-            logger.info("Native-Image args are:")
-            logger.info("$args")
-            logger.info("")
-            logger.info("============================")
-
-            val windows = true
-            exec {
-                this.executable = "native-image".let { if (windows) "C:\\Users\\ferge\\Desktop\\graalvm-ce-java11-21.3.0\\bin\\$it.cmd" else it }
-                this.args = args
-            }
-        }
-    }
-}
-
 nativeImage {
     dependsOn("shadowJar")
     runtimeClasspath = configurations.shadow.get()

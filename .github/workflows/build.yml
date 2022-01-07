@@ -61,7 +61,7 @@ jobs:
         uses: crazy-max/ghaction-upx@v1.3.3
         with:
           version: latest
-          file: build/graal/spp-cli
+          file: build/graal/spp-cli.exe
           args: '-7'
       - uses: actions/upload-artifact@v2
         with:

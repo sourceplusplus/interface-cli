@@ -1,5 +1,4 @@
 import java.util.*
-import org.mikeneck.graalvm.GenerateNativeImageConfigTask
 
 plugins {
     id("org.mikeneck.graalvm-native-image") version "v1.4.0"
@@ -81,9 +80,14 @@ tasks.create("createProperties") {
 }
 tasks["processResources"].dependsOn("createProperties")
 
+configurations {
+    create("empty")
+}
+
 nativeImage {
     dependsOn("shadowJar")
-    runtimeClasspath = configurations.shadow.get()
+    setClasspath(File(project.buildDir, "libs/spp-cli-$version.jar"))
+    runtimeClasspath = configurations.getByName("empty")
     graalVmHome = System.getenv("GRAALVM_HOME")
     buildType { build ->
         build.executable(main = "spp.cli.Main")

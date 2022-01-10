@@ -8,6 +8,8 @@
 
 This project provides a command-line interface to [Source++](https://github.com/sourceplusplus/live-platform), the open-source live coding platform.
 
+# Usage
+
 Try executing `spp-cli --help` to output the usage instructions like so:
 
 ```

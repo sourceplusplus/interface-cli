@@ -6,7 +6,7 @@
 
 # What is this?
 
-This project provides a command-line interface client to the [Source++](https://github.com/sourceplusplus/live-platform) open-source live coding platform.
+This project provides a command-line interface to [Source++](https://github.com/sourceplusplus/live-platform), the open-source live coding platform.
 
 # Basic Usage
 

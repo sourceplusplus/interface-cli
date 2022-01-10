@@ -8,42 +8,70 @@
 
 This project provides a command-line interface to [Source++](https://github.com/sourceplusplus/live-platform), the open-source live coding platform.
 
-# Basic Usage
+Try executing `spp-cli --help` to output the usage instructions like so:
 
-## Admin Guide
+```
+Usage: spp-cli [OPTIONS] COMMAND [ARGS]...
 
-- [ ] Create developers
-- [ ] Create roles
-- [ ] Configure role permissions
-- [ ] Add roles to developers
+Options:
+  -v, --verbose            Enable verbose mode
+  -p, --platform TEXT      Source++ platform host
+  -c, --certificate PATH   Source++ platform certificate
+  -k, --key PATH           Source++ platform key
+  -a, --access-token TEXT  Developer access token
+  -h, --help               Show this message and exit
 
-### Create developers
+Commands:
+  admin
+  add-breakpoint
+  add-log
+  add-meter
+  add-span
+  get-breakpoints
+  get-instruments
+  get-logs
+  get-meters
+  get-spans
+  remove-instrument
+  remove-instruments
+  clear-instruments
+  subscribe-events    Listens for and outputs live events. Subscribes to all events by default
+  get-self
+  version
+```
 
-<details>
-  <summary>Command</summary>
+To get information about a sub-command, try `spp-cli <command> --help`:
 
-  ```sh
-  ./spp-cli admin add-developer bob@email.com
-  ./spp-cli admin add-developer john@email.com
-  
-  ./spp-cli admin add-role contractors
-  ```
-</details>
+```
+Usage: spp-cli admin [OPTIONS] COMMAND [ARGS]...
 
-## Developer Guide
+Options:
+  -h, --help  Show this message and exit
 
-- [ ] Create live instruments
-- [ ] Listen for live instrument events
-
-### Add Live Instrument
-
-<details>
-  <summary>Command</summary>
-
-  ```sh
-  ./spp-cli add-breakpoint com.company.Webapp 42
-  ```
-</details>
+Commands:
+  add-role
+  get-developer-roles
+  get-roles
+  remove-role
+  add-developer-role
+  remove-developer-role
+  add-role-permission
+  get-developer-permissions
+  get-role-permissions
+  remove-role-permission
+  add-developer
+  get-developers
+  remove-developer
+  refresh-developer-token
+  add-access-permission
+  add-role-access-permission
+  get-access-permissions
+  get-developer-access-permissions
+  get-role-access-permissions
+  remove-access-permission
+  remove-role-access-permission
+  reset
+```
 
 # Documentation
-- [Admin Commands](https://docs.sourceplusplus.com/implementation/tools/clients/cli/admin/) / [Developer Commands](https://docs.sourceplusplus.com/implementation/tools/clients/cli/developer/)
+- [Developer Commands](https://docs.sourceplusplus.com/implementation/tools/clients/cli/developer/) / [Admin Commands](https://docs.sourceplusplus.com/implementation/tools/clients/cli/admin/)

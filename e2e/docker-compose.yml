@@ -11,7 +11,4 @@ services:
       - "5450:5450"
       - "5455:5455"
     environment:
-      - SPP_CLUSTER_URL=localhost
-      - SPP_CLUSTER_NAME=docker
-      - SPP_SKYWALKING_HOST=skywalking-oap
       - SPP_DISABLE_JWT=true

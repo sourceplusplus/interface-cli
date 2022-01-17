@@ -1626,61 +1626,46 @@
                 "name": null,
                 "ofType": {
                   "kind": "INPUT_OBJECT",
-                  "name": "LiveSourceLocationInput",
+                  "name": "LiveSpanLocationInput",
                   "ofType": null
                 }
               },
               "defaultValue": null
             },
             {
-              "name": "condition",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "expiresAt",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Long",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "hitLimit",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Int",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "throttle",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "InstrumentThrottleInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "meta",
-              "description": null,
+              "description": "condition: String #todo: impl\nexpiresAt: Long #todo: impl\nhitLimit: Int #todo: impl\nthrottle: InstrumentThrottleInput #todo: impl",
               "type": {
                 "kind": "LIST",
                 "name": null,
                 "ofType": {
                   "kind": "INPUT_OBJECT",
                   "name": "MetaInfoInput",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "LiveSpanLocationInput",
+          "description": null,
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "source",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
                   "ofType": null
                 }
               },

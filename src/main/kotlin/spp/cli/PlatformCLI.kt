@@ -26,6 +26,7 @@ import org.bouncycastle.openssl.PEMKeyPair
 import org.bouncycastle.openssl.PEMParser
 import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter
 import org.bouncycastle.util.encoders.Hex
+import spp.protocol.developer.Developer
 import spp.protocol.util.KSerializers
 import java.io.File
 import java.io.StringReader
@@ -62,6 +63,7 @@ object PlatformCLI : CliktCommand(name = "spp-cli", allowMultipleSubcommands = t
             null
         }
     }
+    var developer: Developer = Developer("system")
 
     override fun run() {
         val module = SimpleModule()
@@ -114,11 +116,15 @@ object PlatformCLI : CliktCommand(name = "spp-cli", allowMultipleSubcommands = t
                 .withClaim("created_at", Clock.System.now().toEpochMilliseconds())
                 .withClaim("expires_at", Clock.System.now().plus(8760, DateTimeUnit.HOUR).toEpochMilliseconds())
                 .sign(algorithm)
+            developer = Developer("system", accessToken)
         } else {
             val tokenUri = "$serverUrl/api/new-token?access_token=$accessToken"
             val resp = httpClient.newCall(Request.Builder().url(tokenUri).build()).execute()
             if (resp.code in 200..299) {
                 jwtToken = resp.body!!.string()
+
+                val decoded = JWT.decode(jwtToken)
+                developer = Developer(decoded.getClaim("developer_id").asString(), accessToken)
             } else if (resp.code == 401 && accessToken.isNullOrEmpty()) {
                 throw IllegalStateException("Connection failed. Reason: Missing access token")
             } else if (resp.code == 401) {

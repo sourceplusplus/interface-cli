@@ -1,9 +1,7 @@
 version: '3.3'
 services:
   spp-platform:
-    build:
-      context: .
-      dockerfile: Dockerfile-spp-platform
+    image: sourceplusplus/spp-platform:latest
     container_name: spp-platform
     hostname: spp-platform
     ports:
@@ -12,3 +10,11 @@ services:
       - "5455:5455"
     environment:
       - SPP_DISABLE_JWT=true
+  skywalking-oap:
+    image: sourceplusplus/spp-oap-server:latest
+    container_name: skywalking-oap
+    hostname: skywalking-oap
+    environment:
+      - SPP_PLATFORM_HOST=spp-platform
+      - SPP_PLATFORM_PORT=5460
+      - SPP_PLATFORM_SSL_TRUST_ALL=true

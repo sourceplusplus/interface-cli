@@ -17,3 +17,4 @@ services:
     environment:
       - SPP_PLATFORM_HOST=spp-platform
       - SPP_PLATFORM_PORT=5460
+      - SPP_PLATFORM_SSL_TRUST_ALL=true

@@ -9,7 +9,7 @@ plugins {
 }
 
 val cliGroup: String by project
-val cliVersion: String by project
+val projectVersion: String by project
 val jacksonVersion: String by project
 val apolloVersion: String by project
 val commonsLang3Version: String by project
@@ -18,11 +18,10 @@ val bouncycastleVersion: String by project
 val jupiterVersion: String by project
 val commonsIoVersion: String by project
 val auth0JwtVersion: String by project
-val protocolVersion: String by project
 val vertxVersion: String by project
 
 group = cliGroup
-version = cliVersion
+version = projectVersion
 
 repositories {
     mavenCentral()
@@ -33,7 +32,7 @@ dependencies {
     implementation("com.apollographql.apollo3:apollo-runtime:$apolloVersion")
     api("com.apollographql.apollo3:apollo-api:$apolloVersion")
 
-    implementation("com.github.sourceplusplus.protocol:protocol:$protocolVersion")
+    implementation("com.github.sourceplusplus.protocol:protocol:$projectVersion")
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
@@ -85,7 +84,7 @@ configurations {
 
 nativeImage {
     dependsOn("shadowJar")
-    setClasspath(File(project.buildDir, "libs/spp-cli-$version.jar"))
+    setClasspath(File(project.buildDir, "libs/spp-cli-$projectVersion.jar"))
     runtimeClasspath = configurations.getByName("empty")
     if (System.getenv("GRAALVM_HOME") != null) {
         graalVmHome = System.getenv("GRAALVM_HOME")

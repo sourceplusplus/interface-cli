@@ -4122,6 +4122,30 @@
               "deprecationReason": null
             },
             {
+              "name": "CLEAR_ALL_LIVE_INSTRUMENTS",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "ADD_LIVE_VIEW_SUBSCRIPTION",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "REMOVE_LIVE_VIEW_SUBSCRIPTION",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "GET_LIVE_VIEW_SUBSCRIPTIONS",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "VIEW_ACTIVITY",
               "description": null,
               "isDeprecated": false,

@@ -116,7 +116,7 @@ object PlatformCLI : CliktCommand(name = "spp-cli", allowMultipleSubcommands = t
                 .withClaim("created_at", Clock.System.now().toEpochMilliseconds())
                 .withClaim("expires_at", Clock.System.now().plus(8760, DateTimeUnit.HOUR).toEpochMilliseconds())
                 .sign(algorithm)
-            developer = Developer("system", accessToken)
+            developer = Developer("system")
         } else {
             val tokenUri = "$serverUrl/api/new-token?access_token=$accessToken"
             val resp = httpClient.newCall(Request.Builder().url(tokenUri).build()).execute()
@@ -124,7 +124,7 @@ object PlatformCLI : CliktCommand(name = "spp-cli", allowMultipleSubcommands = t
                 jwtToken = resp.body!!.string()
 
                 val decoded = JWT.decode(jwtToken)
-                developer = Developer(decoded.getClaim("developer_id").asString(), accessToken)
+                developer = Developer(decoded.getClaim("developer_id").asString())
             } else if (resp.code == 401 && accessToken.isNullOrEmpty()) {
                 throw IllegalStateException("Connection failed. Reason: Missing access token")
             } else if (resp.code == 401) {

@@ -53,6 +53,7 @@ class SubscribeView : CliktCommand(
                 vertx.createNetClient(options)
             } else {
                 val options = NetClientOptions()
+                    .setTrustAll(true)
                     .setReconnectAttempts(Int.MAX_VALUE).setReconnectInterval(5000)
                     .setSsl(PlatformCLI.platformHost.startsWith("https"))
                 vertx.createNetClient(options)

@@ -123,8 +123,10 @@ object PlatformCLI : CliktCommand(name = "spp-cli", allowMultipleSubcommands = t
             if (resp.code in 200..299) {
                 jwtToken = resp.body!!.string()
 
-                val decoded = JWT.decode(jwtToken)
-                developer = Developer(decoded.getClaim("developer_id").asString())
+                if (resp.code != 202) {
+                    val decoded = JWT.decode(jwtToken)
+                    developer = Developer(decoded.getClaim("developer_id").asString())
+                }
             } else if (resp.code == 401 && accessToken.isNullOrEmpty()) {
                 throw IllegalStateException("Connection failed. Reason: Missing access token")
             } else if (resp.code == 401) {

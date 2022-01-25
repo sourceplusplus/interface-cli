@@ -9,6 +9,7 @@ import eu.geekplace.javapinning.JavaPinning
 import eu.geekplace.javapinning.pin.Pin
 import io.vertx.core.Vertx
 import io.vertx.core.json.Json
+import io.vertx.core.json.JsonArray
 import io.vertx.core.json.JsonObject
 import io.vertx.core.net.NetClientOptions
 import io.vertx.core.net.TrustOptions
@@ -24,15 +25,25 @@ import spp.protocol.artifact.log.LogOrderType
 import spp.protocol.artifact.log.LogResult
 import spp.protocol.extend.TCPServiceFrameParser
 import spp.protocol.view.LiveViewEvent
+import java.time.LocalDateTime
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatterBuilder
 
 class SubscribeView : CliktCommand(
     help = "Listens for and outputs live views. Subscribes to all views by default"
 ) {
 
-    val viewIds by argument(
-        name = "View Subscription IDs",
-        help = "Capture events from specific live views"
-    ).multiple()
+    companion object {
+        private val formatter = DateTimeFormatterBuilder()
+            .appendPattern("yyyyMMddHHmm")
+            .toFormatter()
+            .withZone(ZoneOffset.UTC)
+    }
+
+//    val viewIds by argument(
+//        name = "View Subscription IDs",
+//        help = "Capture events from specific live views"
+//    ).multiple()
     val outputFullEvent by option(
         "--full",
         help = "Output full event data"
@@ -68,19 +79,12 @@ class SubscribeView : CliktCommand(
             vertx.eventBus().consumer<JsonObject>("local.$LIVE_VIEW_SUBSCRIBER.${PlatformCLI.developer.id}") {
                 val event = Json.decodeValue(it.body().toString(), LiveViewEvent::class.java)
                 if (outputFullEvent) {
-                    println(JsonObject(event.metricsData))
+                    println(event.metricsData)
                 } else {
-                    val rawMetrics = JsonObject(event.metricsData)
-                    val logData = Json.decodeValue(rawMetrics.getJsonObject("log").toString(), Log::class.java)
-                    val logsResult = LogResult(
-                        event.artifactQualifiedName,
-                        LogOrderType.NEWEST_LOGS,
-                        logData.timestamp,
-                        listOf(logData),
-                        Int.MAX_VALUE
-                    )
-                    logsResult.logs.forEach {
-                        println(it.getFormattedMessage())
+                    when (event.viewConfig.viewName) {
+                        "LOG" -> outputLogEvent(event)
+                        "ACTIVITY" -> outputActivityEvent(event)
+                        else -> println(JsonObject(event.metricsData).encodePrettily())
                     }
                 }
             }
@@ -93,6 +97,37 @@ class SubscribeView : CliktCommand(
                 socket
             )
             println("Listening for events...")
+        }
+    }
+
+    private fun outputActivityEvent(event: LiveViewEvent) {
+        val metrics = JsonArray(event.metricsData)
+        for (i in 0 until metrics.size()) {
+            val metric = metrics.getJsonObject(i)
+            val eventTime = LocalDateTime.from(formatter.parse(metric.getString("timeBucket")))
+            var value: String? = null
+            if (metric.getNumber("percentage") != null) {
+                value = (metric.getNumber("percentage").toDouble() / 100.0).toString() + "%"
+            }
+            if (value == null) value = metric.getNumber("value").toString()
+
+            val metricType = metric.getJsonObject("meta").getString("metricsName")
+            println("$eventTime ${metric.getString("entityId")} ($metricType): $value")
+        }
+    }
+
+    private fun outputLogEvent(event: LiveViewEvent) {
+        val rawMetrics = JsonObject(event.metricsData)
+        val logData = Json.decodeValue(rawMetrics.getJsonObject("log").toString(), Log::class.java)
+        val logsResult = LogResult(
+            event.artifactQualifiedName,
+            LogOrderType.NEWEST_LOGS,
+            logData.timestamp,
+            listOf(logData),
+            Int.MAX_VALUE
+        )
+        logsResult.logs.forEach {
+            println(it.getFormattedMessage())
         }
     }
 }

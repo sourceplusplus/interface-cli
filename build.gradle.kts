@@ -19,6 +19,7 @@ val jupiterVersion: String by project
 val commonsIoVersion: String by project
 val auth0JwtVersion: String by project
 val vertxVersion: String by project
+val slf4jVersion: String by project
 
 group = cliGroup
 version = projectVersion
@@ -36,8 +37,8 @@ dependencies {
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
-    implementation("org.slf4j:slf4j-api:1.7.33")
-    implementation("org.slf4j:slf4j-nop:1.7.33")
+    implementation("org.slf4j:slf4j-api:$slf4jVersion")
+    implementation("org.slf4j:slf4j-nop:$slf4jVersion")
     implementation("io.vertx:vertx-core:$vertxVersion")
     implementation("io.vertx:vertx-tcp-eventbus-bridge:$vertxVersion")
     implementation("io.vertx:vertx-lang-kotlin-coroutines:$vertxVersion")

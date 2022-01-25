@@ -95,6 +95,7 @@ nativeImage {
     executableName = "spp-cli"
     outputDirectory = file("$buildDir/graal")
     arguments("--no-fallback")
+    arguments("-H:+ReportExceptionStackTraces")
 }
 
 tasks.getByName<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar") {

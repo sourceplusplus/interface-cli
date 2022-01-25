@@ -16,6 +16,10 @@ import spp.cli.commands.admin.permission.RemoveRolePermission
 import spp.cli.commands.admin.role.*
 import spp.cli.commands.developer.GetSelf
 import spp.cli.commands.instrument.*
+import spp.cli.commands.view.AddViewSubscription
+import spp.cli.commands.view.ClearViewSubscriptions
+import spp.cli.commands.view.GetViewSubscriptions
+import spp.cli.commands.view.SubscribeView
 
 object Main {
 
@@ -70,6 +74,11 @@ object Main {
             RemoveInstruments(),
             ClearInstruments(),
             SubscribeEvents(),
+            //view
+            AddViewSubscription(),
+            ClearViewSubscriptions(),
+            GetViewSubscriptions(),
+            SubscribeView(),
             //etc
             GetSelf(),
             Version()

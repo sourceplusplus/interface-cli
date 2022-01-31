@@ -1,6 +1,7 @@
 import java.util.*
 
 plugins {
+    id("com.diffplug.spotless")
     id("org.mikeneck.graalvm-native-image")
     id("com.github.johnrengelman.shadow")
     id("com.apollographql.apollo3")
@@ -147,4 +148,10 @@ dockerCompose {
 
 apollo {
     packageNamesFromFilePaths("spp.cli.protocol")
+}
+
+spotless {
+    kotlin {
+        licenseHeaderFile(file("LICENSE-HEADER.txt"))
+    }
 }

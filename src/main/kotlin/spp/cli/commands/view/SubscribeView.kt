@@ -34,7 +34,7 @@ import io.vertx.ext.eventbus.bridge.tcp.impl.protocol.FrameParser
 import io.vertx.kotlin.coroutines.await
 import kotlinx.coroutines.runBlocking
 import spp.cli.PlatformCLI
-import spp.protocol.SourceMarkerServices.Provide.LIVE_VIEW_SUBSCRIBER
+import spp.protocol.SourceServices.Provide.LIVE_VIEW_SUBSCRIBER
 import spp.protocol.artifact.log.Log
 import spp.protocol.artifact.log.LogOrderType
 import spp.protocol.artifact.log.LogResult

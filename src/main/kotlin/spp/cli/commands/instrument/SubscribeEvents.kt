@@ -35,7 +35,7 @@ import io.vertx.ext.eventbus.bridge.tcp.impl.protocol.FrameParser
 import io.vertx.kotlin.coroutines.await
 import kotlinx.coroutines.runBlocking
 import spp.cli.PlatformCLI
-import spp.protocol.SourceMarkerServices
+import spp.protocol.SourceServices
 import spp.protocol.extend.TCPServiceFrameParser
 import spp.protocol.instrument.event.*
 
@@ -84,7 +84,7 @@ class SubscribeEvents : CliktCommand(
             ).await()
             socket!!.handler(FrameParser(TCPServiceFrameParser(vertx, socket)))
 
-            vertx.eventBus().consumer<JsonObject>("local." + SourceMarkerServices.Provide.LIVE_INSTRUMENT_SUBSCRIBER) {
+            vertx.eventBus().consumer<JsonObject>("local." + SourceServices.Provide.LIVE_INSTRUMENT_SUBSCRIBER) {
                 val liveEvent = Json.decodeValue(it.body().toString(), LiveInstrumentEvent::class.java)
 
                 //todo: impl filter on platform
@@ -153,7 +153,7 @@ class SubscribeEvents : CliktCommand(
             //register listener
             FrameHelper.sendFrame(
                 BridgeEventType.REGISTER.name.lowercase(),
-                SourceMarkerServices.Provide.LIVE_INSTRUMENT_SUBSCRIBER,
+                SourceServices.Provide.LIVE_INSTRUMENT_SUBSCRIBER,
                 JsonObject(),
                 socket
             )

@@ -37,11 +37,7 @@ import kotlinx.coroutines.runBlocking
 import spp.cli.PlatformCLI
 import spp.protocol.SourceMarkerServices
 import spp.protocol.extend.TCPServiceFrameParser
-import spp.protocol.instrument.LiveInstrumentEvent
-import spp.protocol.instrument.LiveInstrumentEventType
-import spp.protocol.instrument.LiveInstrumentRemoved
-import spp.protocol.instrument.breakpoint.event.LiveBreakpointHit
-import spp.protocol.instrument.log.event.LiveLogHit
+import spp.protocol.instrument.event.*
 
 class SubscribeEvents : CliktCommand(
     help = "Listens for and outputs live events. Subscribes to all events by default"

@@ -152,6 +152,7 @@ apollo {
 
 spotless {
     kotlin {
+        targetExclude("**/generated/**")
         licenseHeaderFile(file("LICENSE-HEADER.txt"))
     }
 }

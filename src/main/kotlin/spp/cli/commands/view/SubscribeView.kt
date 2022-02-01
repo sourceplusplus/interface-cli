@@ -144,7 +144,7 @@ class SubscribeView : CliktCommand(
             Int.MAX_VALUE
         )
         logsResult.logs.forEach {
-            println(it.getFormattedMessage())
+            println(it.toFormattedMessage())
         }
     }
 }

@@ -39,10 +39,9 @@ import spp.protocol.SourceMarkerServices
 import spp.protocol.extend.TCPServiceFrameParser
 import spp.protocol.instrument.LiveInstrumentEvent
 import spp.protocol.instrument.LiveInstrumentEventType
+import spp.protocol.instrument.LiveInstrumentRemoved
 import spp.protocol.instrument.breakpoint.event.LiveBreakpointHit
-import spp.protocol.instrument.breakpoint.event.LiveBreakpointRemoved
 import spp.protocol.instrument.log.event.LiveLogHit
-import spp.protocol.instrument.log.event.LiveLogRemoved
 
 class SubscribeEvents : CliktCommand(
     help = "Listens for and outputs live events. Subscribes to all events by default"
@@ -107,15 +106,9 @@ class SubscribeEvents : CliktCommand(
                                 return@consumer
                             }
                         }
-                        LiveInstrumentEventType.BREAKPOINT_REMOVED -> {
-                            val breakpointRemoved = Json.decodeValue(liveEvent.data, LiveBreakpointRemoved::class.java)
-                            if (breakpointRemoved.breakpointId !in instrumentIds) {
-                                return@consumer
-                            }
-                        }
-                        LiveInstrumentEventType.LOG_REMOVED -> {
-                            val logRemoved = Json.decodeValue(liveEvent.data, LiveLogRemoved::class.java)
-                            if (logRemoved.logId !in instrumentIds) {
+                        LiveInstrumentEventType.BREAKPOINT_REMOVED, LiveInstrumentEventType.LOG_REMOVED -> {
+                            val logRemoved = Json.decodeValue(liveEvent.data, LiveInstrumentRemoved::class.java)
+                            if (logRemoved.liveInstrument.id !in instrumentIds) {
                                 return@consumer
                             }
                         }

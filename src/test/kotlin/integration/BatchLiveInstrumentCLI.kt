@@ -22,8 +22,8 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 import spp.cli.Main
+import spp.protocol.instrument.LiveBreakpoint
 import spp.protocol.instrument.LiveInstrument
-import spp.protocol.instrument.breakpoint.LiveBreakpoint
 
 class BatchLiveInstrumentCLI : CLIIntegrationTest() {
 

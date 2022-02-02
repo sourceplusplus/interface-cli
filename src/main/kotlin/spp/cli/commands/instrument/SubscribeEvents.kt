@@ -35,9 +35,13 @@ import io.vertx.ext.eventbus.bridge.tcp.impl.protocol.FrameParser
 import io.vertx.kotlin.coroutines.await
 import kotlinx.coroutines.runBlocking
 import spp.cli.PlatformCLI
+import spp.protocol.ProtocolMarshaller.deserializeLiveInstrumentRemoved
 import spp.protocol.SourceServices
 import spp.protocol.extend.TCPServiceFrameParser
-import spp.protocol.instrument.event.*
+import spp.protocol.instrument.event.LiveBreakpointHit
+import spp.protocol.instrument.event.LiveInstrumentEvent
+import spp.protocol.instrument.event.LiveInstrumentEventType
+import spp.protocol.instrument.event.LiveLogHit
 
 class SubscribeEvents : CliktCommand(
     help = "Listens for and outputs live events. Subscribes to all events by default"
@@ -103,7 +107,7 @@ class SubscribeEvents : CliktCommand(
                             }
                         }
                         LiveInstrumentEventType.BREAKPOINT_REMOVED, LiveInstrumentEventType.LOG_REMOVED -> {
-                            val logRemoved = Json.decodeValue(liveEvent.data, LiveInstrumentRemoved::class.java)
+                            val logRemoved = deserializeLiveInstrumentRemoved(JsonObject(liveEvent.data))
                             if (logRemoved.liveInstrument.id !in instrumentIds) {
                                 return@consumer
                             }

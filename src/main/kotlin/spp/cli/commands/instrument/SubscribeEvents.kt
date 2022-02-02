@@ -157,9 +157,9 @@ class SubscribeEvents : CliktCommand(
             //register listener
             FrameHelper.sendFrame(
                 BridgeEventType.REGISTER.name.lowercase(),
-                SourceServices.Provide.LIVE_INSTRUMENT_SUBSCRIBER,
-                JsonObject(),
-                socket
+                SourceServices.Provide.LIVE_INSTRUMENT_SUBSCRIBER, null,
+                JsonObject().apply { PlatformCLI.developer.accessToken?.let { put("auth-token", it) } },
+                null, null, socket
             )
             println("Listening for events...")
         }

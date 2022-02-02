@@ -91,7 +91,7 @@ class SubscribeView : CliktCommand(
             ).await()
             socket!!.handler(FrameParser(TCPServiceFrameParser(vertx, socket)))
 
-            vertx.eventBus().consumer<JsonObject>("local.$LIVE_VIEW_SUBSCRIBER.${PlatformCLI.developer.id}") {
+            vertx.eventBus().consumer<JsonObject>("$LIVE_VIEW_SUBSCRIBER.${PlatformCLI.developer.id}") {
                 val event = Json.decodeValue(it.body().toString(), LiveViewEvent::class.java)
                 if (outputFullEvent) {
                     println(event.metricsData)

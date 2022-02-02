@@ -88,7 +88,7 @@ class SubscribeEvents : CliktCommand(
             ).await()
             socket!!.handler(FrameParser(TCPServiceFrameParser(vertx, socket)))
 
-            vertx.eventBus().consumer<JsonObject>("local." + SourceServices.Provide.LIVE_INSTRUMENT_SUBSCRIBER) {
+            vertx.eventBus().consumer<JsonObject>(SourceServices.Provide.LIVE_INSTRUMENT_SUBSCRIBER) {
                 val liveEvent = Json.decodeValue(it.body().toString(), LiveInstrumentEvent::class.java)
 
                 //todo: impl filter on platform

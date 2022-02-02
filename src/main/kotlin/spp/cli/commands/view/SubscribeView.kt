@@ -34,7 +34,7 @@ import io.vertx.ext.eventbus.bridge.tcp.impl.protocol.FrameParser
 import io.vertx.kotlin.coroutines.await
 import kotlinx.coroutines.runBlocking
 import spp.cli.PlatformCLI
-import spp.protocol.SourceServices.Provide.LIVE_VIEW_SUBSCRIBER
+import spp.protocol.SourceServices.Provide.toLiveViewSubscriberAddress
 import spp.protocol.artifact.log.Log
 import spp.protocol.artifact.log.LogOrderType
 import spp.protocol.artifact.log.LogResult
@@ -91,7 +91,7 @@ class SubscribeView : CliktCommand(
             ).await()
             socket!!.handler(FrameParser(TCPServiceFrameParser(vertx, socket)))
 
-            vertx.eventBus().consumer<JsonObject>("$LIVE_VIEW_SUBSCRIBER.${PlatformCLI.developer.id}") {
+            vertx.eventBus().consumer<JsonObject>(toLiveViewSubscriberAddress(PlatformCLI.developer.id)) {
                 val event = Json.decodeValue(it.body().toString(), LiveViewEvent::class.java)
                 if (outputFullEvent) {
                     println(event.metricsData)
@@ -107,7 +107,7 @@ class SubscribeView : CliktCommand(
             //register listener
             FrameHelper.sendFrame(
                 BridgeEventType.REGISTER.name.lowercase(),
-                "$LIVE_VIEW_SUBSCRIBER.${PlatformCLI.developer.id}", null,
+                toLiveViewSubscriberAddress(PlatformCLI.developer.id), null,
                 JsonObject().apply { PlatformCLI.developer.accessToken?.let { put("auth-token", it) } },
                 null, null, socket
             )

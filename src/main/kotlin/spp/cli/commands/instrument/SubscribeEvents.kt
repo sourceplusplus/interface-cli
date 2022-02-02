@@ -36,7 +36,7 @@ import io.vertx.kotlin.coroutines.await
 import kotlinx.coroutines.runBlocking
 import spp.cli.PlatformCLI
 import spp.protocol.ProtocolMarshaller.deserializeLiveInstrumentRemoved
-import spp.protocol.SourceServices
+import spp.protocol.SourceServices.Provide.toLiveInstrumentSubscriberAddress
 import spp.protocol.extend.TCPServiceFrameParser
 import spp.protocol.instrument.event.LiveBreakpointHit
 import spp.protocol.instrument.event.LiveInstrumentEvent
@@ -88,7 +88,7 @@ class SubscribeEvents : CliktCommand(
             ).await()
             socket!!.handler(FrameParser(TCPServiceFrameParser(vertx, socket)))
 
-            vertx.eventBus().consumer<JsonObject>(SourceServices.Provide.LIVE_INSTRUMENT_SUBSCRIBER) {
+            vertx.eventBus().consumer<JsonObject>(toLiveInstrumentSubscriberAddress(PlatformCLI.developer.id)) {
                 val liveEvent = Json.decodeValue(it.body().toString(), LiveInstrumentEvent::class.java)
 
                 //todo: impl filter on platform
@@ -157,7 +157,7 @@ class SubscribeEvents : CliktCommand(
             //register listener
             FrameHelper.sendFrame(
                 BridgeEventType.REGISTER.name.lowercase(),
-                SourceServices.Provide.LIVE_INSTRUMENT_SUBSCRIBER, null,
+                toLiveInstrumentSubscriberAddress(PlatformCLI.developer.id), null,
                 JsonObject().apply { PlatformCLI.developer.accessToken?.let { put("auth-token", it) } },
                 null, null, socket
             )

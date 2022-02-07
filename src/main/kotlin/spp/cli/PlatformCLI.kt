@@ -43,7 +43,7 @@ import org.bouncycastle.openssl.PEMKeyPair
 import org.bouncycastle.openssl.PEMParser
 import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter
 import org.bouncycastle.util.encoders.Hex
-import spp.protocol.developer.Developer
+import spp.protocol.platform.developer.Developer
 import spp.protocol.util.KSerializers
 import java.io.File
 import java.io.StringReader

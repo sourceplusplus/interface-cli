@@ -22,10 +22,10 @@ import io.vertx.core.json.Json
 import io.vertx.core.json.JsonArray
 import io.vertx.core.json.jackson.DatabindCodec
 import spp.cli.Main
-import spp.protocol.instrument.breakpoint.LiveBreakpoint
-import spp.protocol.instrument.log.LiveLog
-import spp.protocol.instrument.meter.LiveMeter
-import spp.protocol.instrument.span.LiveSpan
+import spp.protocol.instrument.LiveBreakpoint
+import spp.protocol.instrument.LiveLog
+import spp.protocol.instrument.LiveMeter
+import spp.protocol.instrument.LiveSpan
 import java.io.OutputStream
 import java.io.PrintStream
 import kotlin.reflect.KClass

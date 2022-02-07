@@ -35,14 +35,13 @@ import io.vertx.ext.eventbus.bridge.tcp.impl.protocol.FrameParser
 import io.vertx.kotlin.coroutines.await
 import kotlinx.coroutines.runBlocking
 import spp.cli.PlatformCLI
-import spp.protocol.SourceMarkerServices
+import spp.protocol.ProtocolMarshaller.deserializeLiveInstrumentRemoved
+import spp.protocol.SourceServices.Provide.toLiveInstrumentSubscriberAddress
 import spp.protocol.extend.TCPServiceFrameParser
-import spp.protocol.instrument.LiveInstrumentEvent
-import spp.protocol.instrument.LiveInstrumentEventType
-import spp.protocol.instrument.breakpoint.event.LiveBreakpointHit
-import spp.protocol.instrument.breakpoint.event.LiveBreakpointRemoved
-import spp.protocol.instrument.log.event.LiveLogHit
-import spp.protocol.instrument.log.event.LiveLogRemoved
+import spp.protocol.instrument.event.LiveBreakpointHit
+import spp.protocol.instrument.event.LiveInstrumentEvent
+import spp.protocol.instrument.event.LiveInstrumentEventType
+import spp.protocol.instrument.event.LiveLogHit
 
 class SubscribeEvents : CliktCommand(
     help = "Listens for and outputs live events. Subscribes to all events by default"
@@ -89,7 +88,7 @@ class SubscribeEvents : CliktCommand(
             ).await()
             socket!!.handler(FrameParser(TCPServiceFrameParser(vertx, socket)))
 
-            vertx.eventBus().consumer<JsonObject>("local." + SourceMarkerServices.Provide.LIVE_INSTRUMENT_SUBSCRIBER) {
+            vertx.eventBus().consumer<JsonObject>(toLiveInstrumentSubscriberAddress(PlatformCLI.developer.id)) {
                 val liveEvent = Json.decodeValue(it.body().toString(), LiveInstrumentEvent::class.java)
 
                 //todo: impl filter on platform
@@ -107,15 +106,9 @@ class SubscribeEvents : CliktCommand(
                                 return@consumer
                             }
                         }
-                        LiveInstrumentEventType.BREAKPOINT_REMOVED -> {
-                            val breakpointRemoved = Json.decodeValue(liveEvent.data, LiveBreakpointRemoved::class.java)
-                            if (breakpointRemoved.breakpointId !in instrumentIds) {
-                                return@consumer
-                            }
-                        }
-                        LiveInstrumentEventType.LOG_REMOVED -> {
-                            val logRemoved = Json.decodeValue(liveEvent.data, LiveLogRemoved::class.java)
-                            if (logRemoved.logId !in instrumentIds) {
+                        LiveInstrumentEventType.BREAKPOINT_REMOVED, LiveInstrumentEventType.LOG_REMOVED -> {
+                            val logRemoved = deserializeLiveInstrumentRemoved(JsonObject(liveEvent.data))
+                            if (logRemoved.liveInstrument.id !in instrumentIds) {
                                 return@consumer
                             }
                         }
@@ -164,9 +157,9 @@ class SubscribeEvents : CliktCommand(
             //register listener
             FrameHelper.sendFrame(
                 BridgeEventType.REGISTER.name.lowercase(),
-                SourceMarkerServices.Provide.LIVE_INSTRUMENT_SUBSCRIBER,
-                JsonObject(),
-                socket
+                toLiveInstrumentSubscriberAddress(PlatformCLI.developer.id), null,
+                JsonObject().apply { PlatformCLI.developer.accessToken?.let { put("auth-token", it) } },
+                null, null, socket
             )
             println("Listening for events...")
         }

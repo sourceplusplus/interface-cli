@@ -18,8 +18,6 @@
 package spp.cli.commands.view
 
 import com.github.ajalt.clikt.core.CliktCommand
-import com.github.ajalt.clikt.parameters.arguments.argument
-import com.github.ajalt.clikt.parameters.arguments.multiple
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import eu.geekplace.javapinning.JavaPinning
@@ -36,7 +34,7 @@ import io.vertx.ext.eventbus.bridge.tcp.impl.protocol.FrameParser
 import io.vertx.kotlin.coroutines.await
 import kotlinx.coroutines.runBlocking
 import spp.cli.PlatformCLI
-import spp.protocol.SourceMarkerServices.Provide.LIVE_VIEW_SUBSCRIBER
+import spp.protocol.SourceServices.Provide.toLiveViewSubscriberAddress
 import spp.protocol.artifact.log.Log
 import spp.protocol.artifact.log.LogOrderType
 import spp.protocol.artifact.log.LogResult
@@ -93,7 +91,7 @@ class SubscribeView : CliktCommand(
             ).await()
             socket!!.handler(FrameParser(TCPServiceFrameParser(vertx, socket)))
 
-            vertx.eventBus().consumer<JsonObject>("local.$LIVE_VIEW_SUBSCRIBER.${PlatformCLI.developer.id}") {
+            vertx.eventBus().consumer<JsonObject>(toLiveViewSubscriberAddress(PlatformCLI.developer.id)) {
                 val event = Json.decodeValue(it.body().toString(), LiveViewEvent::class.java)
                 if (outputFullEvent) {
                     println(event.metricsData)
@@ -109,9 +107,9 @@ class SubscribeView : CliktCommand(
             //register listener
             FrameHelper.sendFrame(
                 BridgeEventType.REGISTER.name.lowercase(),
-                "$LIVE_VIEW_SUBSCRIBER.${PlatformCLI.developer.id}",
-                JsonObject(),
-                socket
+                toLiveViewSubscriberAddress(PlatformCLI.developer.id), null,
+                JsonObject().apply { PlatformCLI.developer.accessToken?.let { put("auth-token", it) } },
+                null, null, socket
             )
             println("Listening for events...")
         }
@@ -144,7 +142,7 @@ class SubscribeView : CliktCommand(
             Int.MAX_VALUE
         )
         logsResult.logs.forEach {
-            println(it.getFormattedMessage())
+            println(it.toFormattedMessage())
         }
     }
 }

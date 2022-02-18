@@ -8,11 +8,11 @@
 
 This project provides a command-line interface to [Source++](https://github.com/sourceplusplus/live-platform), the open-source live coding platform.
 
-## Install
+# Install
 
-### Quick install
+## Quick install
 
-#### Linux or macOS
+### Linux or macOS
 
 Install the latest version with the following command:
 
@@ -20,15 +20,15 @@ Install the latest version with the following command:
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/sourceplusplus/interface-cli/master/scripts/install.sh)"
 ```
 
-#### Windows
+### Windows
 
-Note: you need to start cmd or powershell in administrator mode.
+Note: you need to start cmd or PowerShell in administrator mode.
 
 ```shell
 curl -LO "https://raw.githubusercontent.com/sourceplusplus/interface-cli/master/scripts/install.bat" && .\install.bat
 ```
 
-### Install by available binaries
+## Install by available binaries
 
 Go to the [releases page](https://github.com/sourceplusplus/interface-cli/releases) to download all available binaries,
 including macOS, Linux, Windows.

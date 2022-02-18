@@ -8,6 +8,31 @@
 
 This project provides a command-line interface to [Source++](https://github.com/sourceplusplus/live-platform), the open-source live coding platform.
 
+## Install
+
+### Quick install
+
+#### Linux or macOS
+
+Install the latest version with the following command:
+
+```shell
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/sourceplusplus/interface-cli/master/scripts/install.sh)"
+```
+
+#### Windows
+
+Note: you need to start cmd or powershell in administrator mode.
+
+```shell
+curl -LO "https://raw.githubusercontent.com/sourceplusplus/interface-cli/master/scripts/install.bat" && .\install.bat
+```
+
+### Install by available binaries
+
+Go to the [releases page](https://github.com/sourceplusplus/interface-cli/releases) to download all available binaries,
+including macOS, Linux, Windows.
+
 # Usage
 
 Try executing `spp-cli --help` to output the usage instructions like so:

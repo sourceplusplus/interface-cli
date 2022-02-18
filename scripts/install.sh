@@ -43,20 +43,22 @@ OS=$(echo $OS | awk '{print tolower($0)}')
 VERSION=$(get_latest_release_number)
 echo "Installing spp-cli $VERSION"
 
+ARCHIVE_NAME="spp-cli-$VERSION-${OS}64.zip"
+
 # Download the binary package.
-curl -sSLO "https://github.com/sourceplusplus/interface-cli/releases/download/$VERSION/spp-cli-$VERSION-${OS}64.zip" > /dev/null
-if [ -f "spp-cli-$VERSION-${OS}64.zip" ]; then
-    unzip -q spp-cli-$VERSION-${OS}64.zip
+curl -sSLO "https://github.com/sourceplusplus/interface-cli/releases/download/$VERSION/$ARCHIVE_NAME" > /dev/null
+if [ -f "$ARCHIVE_NAME" ]; then
+    unzip -q $ARCHIVE_NAME
 
     echo "Adding spp-cli to your PATH"
     # Add spp-cli to the environment variable PATH.
     sudo mv spp-cli /usr/local/bin/spp-cli
 
     # Delete unnecessary files.
-    rm "./spp-cli-$VERSION-${OS}64.zip"
+    rm "./$ARCHIVE_NAME"
     echo "Installation complete."
 
     echo "Type 'spp-cli --help' to get more information."
 else
-    abort "Failed to download spp-cli-$VERSION-${OS}64.zip"
+    abort "Failed to download $ARCHIVE_NAME"
 fi

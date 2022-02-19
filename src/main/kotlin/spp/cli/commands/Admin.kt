@@ -15,10 +15,10 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package spp.cli.commands.admin
+package spp.cli.commands
 
 import com.github.ajalt.clikt.core.CliktCommand
 
-class Admin : CliktCommand() {
+class Admin : CliktCommand(help = "Administrator commands") {
     override fun run() = Unit
 }

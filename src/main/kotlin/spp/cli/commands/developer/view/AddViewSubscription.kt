@@ -15,29 +15,33 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package spp.cli.commands.instrument
+package spp.cli.commands.developer.view
 
 import com.apollographql.apollo3.api.CustomScalarAdapters
 import com.apollographql.apollo3.api.json.MapJsonWriter
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
-import io.vertx.core.json.JsonObject
+import com.github.ajalt.clikt.parameters.arguments.multiple
 import kotlinx.coroutines.runBlocking
 import spp.cli.Main
 import spp.cli.PlatformCLI.apolloClient
 import spp.cli.PlatformCLI.echoError
-import spp.cli.protocol.instrument.RemoveLiveInstrumentMutation
-import spp.cli.protocol.instrument.adapter.RemoveLiveInstrumentMutation_ResponseAdapter.RemoveLiveInstrument
+import spp.cli.protocol.type.LiveViewSubscriptionInput
+import spp.cli.protocol.view.AddLiveViewSubscriptionMutation
+import spp.cli.protocol.view.adapter.AddLiveViewSubscriptionMutation_ResponseAdapter.AddLiveViewSubscription
 import spp.cli.util.JsonCleaner
 import kotlin.system.exitProcess
 
-class RemoveInstrument : CliktCommand(printHelpOnEmptyArgs = true) {
+class AddViewSubscription : CliktCommand() {
 
-    val id by argument(help = "Instrument ID")
+    val entityIds by argument(name = "Entity IDs").multiple(required = true)
 
     override fun run() = runBlocking {
+        val input = LiveViewSubscriptionInput(
+            entityIds = entityIds.toList(),
+        )
         val response = try {
-            apolloClient.mutation(RemoveLiveInstrumentMutation(id)).execute()
+            apolloClient.mutation(AddLiveViewSubscriptionMutation(input)).execute()
         } catch (e: Exception) {
             echoError(e)
             if (Main.standalone) exitProcess(-1) else return@runBlocking
@@ -47,16 +51,12 @@ class RemoveInstrument : CliktCommand(printHelpOnEmptyArgs = true) {
             if (Main.standalone) exitProcess(-1) else return@runBlocking
         }
 
-        if (response.data!!.removeLiveInstrument != null) {
-            echo(JsonCleaner.cleanJson(MapJsonWriter().let {
-                it.beginObject()
-                RemoveLiveInstrument.toJson(it, CustomScalarAdapters.Empty, response.data!!.removeLiveInstrument!!)
-                it.endObject()
-                (it.root() as LinkedHashMap<*, *>)
-            }).encodePrettily())
-        } else {
-            echo(JsonObject().encodePrettily())
-        }
+        echo(JsonCleaner.cleanJson(MapJsonWriter().let {
+            it.beginObject()
+            AddLiveViewSubscription.toJson(it, CustomScalarAdapters.Empty, response.data!!.addLiveViewSubscription)
+            it.endObject()
+            (it.root() as LinkedHashMap<*, *>)
+        }).encodePrettily())
         if (Main.standalone) exitProcess(0)
     }
 }

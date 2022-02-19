@@ -29,7 +29,7 @@ import spp.cli.protocol.developer.adapter.GetSelfQuery_ResponseAdapter.GetSelf
 import spp.cli.util.JsonCleaner
 import kotlin.system.exitProcess
 
-class GetSelf : CliktCommand() {
+class GetSelf : CliktCommand(help = "Get the current developer's profile") {
 
     override fun run() = runBlocking {
         val response = try {

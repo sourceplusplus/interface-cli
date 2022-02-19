@@ -15,21 +15,25 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package spp.cli.commands.instrument
+package spp.cli.commands.developer.instrument
 
+import com.apollographql.apollo3.api.CustomScalarAdapters
+import com.apollographql.apollo3.api.json.MapJsonWriter
 import com.github.ajalt.clikt.core.CliktCommand
 import kotlinx.coroutines.runBlocking
 import spp.cli.Main
 import spp.cli.PlatformCLI.apolloClient
 import spp.cli.PlatformCLI.echoError
-import spp.cli.protocol.instrument.ClearLiveInstrumentsMutation
+import spp.cli.protocol.instrument.GetLiveMetersQuery
+import spp.cli.protocol.instrument.adapter.GetLiveMetersQuery_ResponseAdapter.GetLiveMeter
+import spp.cli.util.JsonCleaner
 import kotlin.system.exitProcess
 
-class ClearInstruments : CliktCommand() {
+class GetMeters : CliktCommand(name = "meters", help = "Get live meters") {
 
     override fun run() = runBlocking {
         val response = try {
-            apolloClient.mutation(ClearLiveInstrumentsMutation()).execute()
+            apolloClient.query(GetLiveMetersQuery()).execute()
         } catch (e: Exception) {
             echoError(e)
             if (Main.standalone) exitProcess(-1) else return@runBlocking
@@ -39,7 +43,16 @@ class ClearInstruments : CliktCommand() {
             if (Main.standalone) exitProcess(-1) else return@runBlocking
         }
 
-        echo(response.data!!.clearLiveInstruments)
+        echo(JsonCleaner.cleanJson(MapJsonWriter().let {
+            it.beginArray()
+            response.data!!.getLiveMeters.forEach { ob ->
+                it.beginObject()
+                GetLiveMeter.toJson(it, CustomScalarAdapters.Empty, ob)
+                it.endObject()
+            }
+            it.endArray()
+            (it.root() as ArrayList<*>)
+        }).encodePrettily())
         if (Main.standalone) exitProcess(0)
     }
 }

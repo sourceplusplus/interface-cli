@@ -18,8 +18,9 @@
 package spp.cli
 
 import com.github.ajalt.clikt.core.subcommands
+import spp.cli.commands.Admin
+import spp.cli.commands.Developer
 import spp.cli.commands.Version
-import spp.cli.commands.admin.Admin
 import spp.cli.commands.admin.Reset
 import spp.cli.commands.admin.access.*
 import spp.cli.commands.admin.developer.AddDeveloper
@@ -31,12 +32,15 @@ import spp.cli.commands.admin.permission.GetDeveloperPermissions
 import spp.cli.commands.admin.permission.GetRolePermissions
 import spp.cli.commands.admin.permission.RemoveRolePermission
 import spp.cli.commands.admin.role.*
+import spp.cli.commands.developer.Add
+import spp.cli.commands.developer.Get
 import spp.cli.commands.developer.GetSelf
-import spp.cli.commands.instrument.*
-import spp.cli.commands.view.AddViewSubscription
-import spp.cli.commands.view.ClearViewSubscriptions
-import spp.cli.commands.view.GetViewSubscriptions
-import spp.cli.commands.view.SubscribeView
+import spp.cli.commands.developer.Remove
+import spp.cli.commands.developer.instrument.*
+import spp.cli.commands.developer.view.AddViewSubscription
+import spp.cli.commands.developer.view.ClearViewSubscriptions
+import spp.cli.commands.developer.view.GetViewSubscriptions
+import spp.cli.commands.developer.view.SubscribeView
 
 object Main {
 
@@ -77,27 +81,38 @@ object Main {
                 //etc
                 Reset()
             ),
-            //instrument
-            AddBreakpoint(),
-            AddLog(),
-            AddMeter(),
-            AddSpan(),
-            GetBreakpoints(),
-            GetInstruments(),
-            GetLogs(),
-            GetMeters(),
-            GetSpans(),
-            RemoveInstrument(),
-            RemoveInstruments(),
+            Developer().subcommands(
+                GetSelf()
+            ),
+            Add().subcommands(
+                //instrument
+                AddBreakpoint(),
+                AddLog(),
+                AddMeter(),
+                AddSpan(),
+                //view
+                AddViewSubscription()
+            ),
+            Get().subcommands(
+                //instrument
+                GetInstruments(),
+                GetBreakpoints(),
+                GetLogs(),
+                GetMeters(),
+                GetSpans(),
+                //view
+                GetViewSubscriptions()
+            ),
+            Remove().subcommands(
+                RemoveInstrument(),
+                RemoveInstruments(),
+            ),
             ClearInstruments(),
             SubscribeEvents(),
             //view
-            AddViewSubscription(),
             ClearViewSubscriptions(),
-            GetViewSubscriptions(),
             SubscribeView(),
             //etc
-            GetSelf(),
             Version()
         ).main(args)
     }

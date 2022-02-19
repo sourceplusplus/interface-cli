@@ -40,7 +40,7 @@ import spp.cli.protocol.type.ThrottleStep
 import spp.cli.util.JsonCleaner
 import kotlin.system.exitProcess
 
-class AddBreakpoint : CliktCommand() {
+class AddBreakpoint : CliktCommand(name = "breakpoint", help = "Add a live breakpoint instrument") {
 
     val source by argument(help = "Qualified class name")
     val line by argument(help = "Line number").int()

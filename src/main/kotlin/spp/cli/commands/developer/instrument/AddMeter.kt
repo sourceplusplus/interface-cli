@@ -37,7 +37,7 @@ import spp.cli.protocol.type.*
 import spp.cli.util.JsonCleaner
 import kotlin.system.exitProcess
 
-class AddMeter : CliktCommand() {
+class AddMeter : CliktCommand(name = "meter", help = "Add a live meter instrument") {
 
     val source by argument(help = "Qualified class name")
     val line by argument(help = "Line number").int()

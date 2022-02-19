@@ -41,7 +41,7 @@ import spp.cli.protocol.type.ThrottleStep
 import spp.cli.util.JsonCleaner
 import kotlin.system.exitProcess
 
-class AddLog : CliktCommand() {
+class AddLog : CliktCommand(name = "log", help = "Add a live log instrument") {
 
     val source by argument(help = "Qualified class name")
     val line by argument(help = "Line number").int()

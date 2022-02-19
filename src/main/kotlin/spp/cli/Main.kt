@@ -37,10 +37,9 @@ import spp.cli.commands.developer.Get
 import spp.cli.commands.developer.GetSelf
 import spp.cli.commands.developer.Remove
 import spp.cli.commands.developer.instrument.*
-import spp.cli.commands.developer.view.AddViewSubscription
-import spp.cli.commands.developer.view.ClearViewSubscriptions
-import spp.cli.commands.developer.view.GetViewSubscriptions
-import spp.cli.commands.developer.view.SubscribeView
+import spp.cli.commands.developer.view.AddView
+import spp.cli.commands.developer.view.GetViews
+import spp.cli.commands.developer.view.RemoveAllViews
 
 object Main {
 
@@ -91,7 +90,7 @@ object Main {
                 AddMeter(),
                 AddSpan(),
                 //view
-                AddViewSubscription()
+                AddView()
             ),
             Get().subcommands(
                 //instrument
@@ -101,17 +100,18 @@ object Main {
                 GetMeters(),
                 GetSpans(),
                 //view
-                GetViewSubscriptions()
+                GetViews()
             ),
             Remove().subcommands(
+                //instrument
                 RemoveInstrument(),
                 RemoveInstruments(),
+                RemoveAllInstruments(),
+                //view
+                RemoveAllViews(),
             ),
-            ClearInstruments(),
-            SubscribeEvents(),
-            //view
-            ClearViewSubscriptions(),
-            SubscribeView(),
+//            SubscribeEvents(),
+//            SubscribeView(),
             //etc
             Version()
         ).main(args)

@@ -29,7 +29,7 @@ import spp.cli.protocol.instrument.adapter.GetLiveMetersQuery_ResponseAdapter.Ge
 import spp.cli.util.JsonCleaner
 import kotlin.system.exitProcess
 
-class GetMeters : CliktCommand(name = "meters", help = "Get live meters") {
+class GetMeters : CliktCommand(name = "meters", help = "Get live meter instruments") {
 
     override fun run() = runBlocking {
         val response = try {

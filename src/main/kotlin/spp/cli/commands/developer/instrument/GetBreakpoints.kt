@@ -29,7 +29,7 @@ import spp.cli.protocol.instrument.adapter.GetLiveBreakpointsQuery_ResponseAdapt
 import spp.cli.util.JsonCleaner
 import kotlin.system.exitProcess
 
-class GetBreakpoints : CliktCommand(name = "breakpoints", help = "Get live breakpoints") {
+class GetBreakpoints : CliktCommand(name = "breakpoints", help = "Get live breakpoint instruments") {
 
     override fun run() = runBlocking {
         val response = try {

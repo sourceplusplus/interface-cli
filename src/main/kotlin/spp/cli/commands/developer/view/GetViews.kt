@@ -29,7 +29,7 @@ import spp.cli.protocol.view.adapter.GetLiveViewSubscriptionsQuery_ResponseAdapt
 import spp.cli.util.JsonCleaner
 import kotlin.system.exitProcess
 
-class GetViewSubscriptions : CliktCommand(name = "view-subscriptions", help = "Get live view subscriptions") {
+class GetViews : CliktCommand(name = "views", help = "Get live view subscriptions") {
 
     override fun run() = runBlocking {
         val response = try {

@@ -25,7 +25,7 @@ import spp.cli.PlatformCLI.echoError
 import spp.cli.protocol.instrument.ClearLiveInstrumentsMutation
 import kotlin.system.exitProcess
 
-class ClearInstruments : CliktCommand() {
+class RemoveAllInstruments : CliktCommand(name = "all-instruments", help = "Remove all live instruments") {
 
     override fun run() = runBlocking {
         val response = try {

@@ -29,7 +29,7 @@ import spp.cli.protocol.instrument.adapter.GetLiveSpansQuery_ResponseAdapter.Get
 import spp.cli.util.JsonCleaner
 import kotlin.system.exitProcess
 
-class GetSpans : CliktCommand(name = "spans", help = "Get live spans") {
+class GetSpans : CliktCommand(name = "spans", help = "Get live span instruments") {
 
     override fun run() = runBlocking {
         val response = try {

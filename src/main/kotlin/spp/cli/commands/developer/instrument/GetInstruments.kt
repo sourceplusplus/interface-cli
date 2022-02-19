@@ -29,7 +29,7 @@ import spp.cli.protocol.instrument.adapter.GetLiveInstrumentsQuery_ResponseAdapt
 import spp.cli.util.JsonCleaner
 import kotlin.system.exitProcess
 
-class GetInstruments : CliktCommand(name = "instruments", help = "Get live instruments") {
+class GetInstruments : CliktCommand(name = "instruments", help = "Get all live instruments") {
 
     override fun run() = runBlocking {
         val response = try {

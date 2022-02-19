@@ -32,7 +32,7 @@ import spp.cli.protocol.type.LiveSpanLocationInput
 import spp.cli.util.JsonCleaner
 import kotlin.system.exitProcess
 
-class AddSpan : CliktCommand() {
+class AddSpan : CliktCommand(name = "span", help = "Add a live span instrument") {
 
     val source by argument(help = "Qualified function name")
     val operationName by argument(help = "Operation name")

@@ -29,7 +29,7 @@ import spp.cli.protocol.instrument.adapter.GetLiveLogsQuery_ResponseAdapter.GetL
 import spp.cli.util.JsonCleaner
 import kotlin.system.exitProcess
 
-class GetLogs : CliktCommand(name = "logs", help = "Get live logs") {
+class GetLogs : CliktCommand(name = "logs", help = "Get live log instruments") {
 
     override fun run() = runBlocking {
         val response = try {

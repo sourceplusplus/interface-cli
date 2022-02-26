@@ -44,7 +44,7 @@ import org.bouncycastle.openssl.PEMParser
 import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter
 import org.bouncycastle.util.encoders.Hex
 import spp.protocol.platform.developer.Developer
-import spp.protocol.util.KSerializers
+import spp.protocol.marshall.KSerializers
 import java.io.File
 import java.io.StringReader
 import java.security.SecureRandom

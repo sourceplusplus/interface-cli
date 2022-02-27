@@ -17,10 +17,8 @@
  */
 package integration
 
-import com.fasterxml.jackson.module.kotlin.KotlinModule
 import io.vertx.core.json.Json
 import io.vertx.core.json.JsonArray
-import io.vertx.core.json.jackson.DatabindCodec
 import spp.cli.Main
 import spp.protocol.instrument.LiveBreakpoint
 import spp.protocol.instrument.LiveLog
@@ -33,8 +31,6 @@ import kotlin.reflect.KClass
 abstract class CLIIntegrationTest {
     companion object {
         init {
-            DatabindCodec.mapper().registerModule(KotlinModule())
-
             Main.standalone = false
             Main.main(
                 arrayOf(

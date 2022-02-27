@@ -11,7 +11,6 @@ plugins {
 
 val cliGroup: String by project
 val projectVersion: String by project
-val jacksonVersion: String by project
 val apolloVersion: String by project
 val commonsLang3Version: String by project
 val cliktVersion: String by project
@@ -47,13 +46,10 @@ dependencies {
     implementation("com.github.ajalt.clikt:clikt:$cliktVersion")
     implementation("org.bouncycastle:bcprov-jdk15on:$bouncycastleVersion")
     implementation("org.bouncycastle:bcpkix-jdk15on:$bouncycastleVersion")
-    implementation("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jacksonVersion")
     implementation("commons-io:commons-io:$commonsIoVersion")
     implementation("com.auth0:java-jwt:$auth0JwtVersion")
     implementation("eu.geekplace.javapinning:java-pinning-core:1.2.0")
 
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.3.2")
 
     testImplementation("org.junit.jupiter:junit-jupiter-engine:$jupiterVersion")

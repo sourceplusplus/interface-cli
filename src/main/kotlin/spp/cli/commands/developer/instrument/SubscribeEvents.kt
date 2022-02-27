@@ -38,10 +38,10 @@ import spp.cli.PlatformCLI
 import spp.protocol.marshall.ProtocolMarshaller.deserializeLiveInstrumentRemoved
 import spp.protocol.SourceServices.Provide.toLiveInstrumentSubscriberAddress
 import spp.protocol.extend.TCPServiceFrameParser
-import spp.protocol.instrument.event.LiveBreakpointHit
 import spp.protocol.instrument.event.LiveInstrumentEvent
 import spp.protocol.instrument.event.LiveInstrumentEventType
 import spp.protocol.instrument.event.LiveLogHit
+import spp.protocol.marshall.ProtocolMarshaller
 
 class SubscribeEvents : CliktCommand(
     help = "Listens for and outputs live events. Subscribes to all events by default"
@@ -101,7 +101,7 @@ class SubscribeEvents : CliktCommand(
                             }
                         }
                         LiveInstrumentEventType.BREAKPOINT_HIT -> {
-                            val breakpointHit = Json.decodeValue(liveEvent.data, LiveBreakpointHit::class.java)
+                            val breakpointHit = ProtocolMarshaller.deserializeLiveBreakpointHit(JsonObject(liveEvent.data))
                             if (breakpointHit.breakpointId !in instrumentIds) {
                                 return@consumer
                             }

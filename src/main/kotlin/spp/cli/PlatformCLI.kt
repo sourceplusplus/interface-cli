@@ -89,7 +89,7 @@ object PlatformCLI : CliktCommand(name = "spp-cli", allowMultipleSubcommands = t
         DatabindCodec.mapper().registerModule(module)
     }
 
-    private fun connectToPlatform(): ApolloClient {
+    fun connectToPlatform(): ApolloClient {
         val serverUrl = if (platformHost.startsWith("http")) {
             platformHost
         } else {
@@ -142,7 +142,7 @@ object PlatformCLI : CliktCommand(name = "spp-cli", allowMultipleSubcommands = t
 
                 if (resp.code != 202) {
                     val decoded = JWT.decode(jwtToken)
-                    developer = Developer(decoded.getClaim("developer_id").asString())
+                    developer = Developer(decoded.getClaim("developer_id").asString(), jwtToken)
                 }
             } else if (resp.code == 401 && accessToken.isNullOrEmpty()) {
                 throw IllegalStateException("Connection failed. Reason: Missing access token")

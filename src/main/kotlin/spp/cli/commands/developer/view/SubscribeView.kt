@@ -45,7 +45,8 @@ import java.time.ZoneOffset
 import java.time.format.DateTimeFormatterBuilder
 
 class SubscribeView : CliktCommand(
-    help = "Listens for and outputs live views. Subscribes to all views by default"
+    name = "view",
+    help = "Listen to live views. Subscribes to all views by default"
 ) {
 
     companion object {
@@ -65,6 +66,8 @@ class SubscribeView : CliktCommand(
     ).flag()
 
     override fun run() {
+        PlatformCLI.connectToPlatform()
+
         runBlocking {
             val vertx = Vertx.vertx()
             val client = if (PlatformCLI.certFingerprint != null) {

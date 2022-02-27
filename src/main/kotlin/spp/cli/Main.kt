@@ -32,14 +32,12 @@ import spp.cli.commands.admin.permission.GetDeveloperPermissions
 import spp.cli.commands.admin.permission.GetRolePermissions
 import spp.cli.commands.admin.permission.RemoveRolePermission
 import spp.cli.commands.admin.role.*
-import spp.cli.commands.developer.Add
-import spp.cli.commands.developer.Get
-import spp.cli.commands.developer.GetSelf
-import spp.cli.commands.developer.Remove
+import spp.cli.commands.developer.*
 import spp.cli.commands.developer.instrument.*
 import spp.cli.commands.developer.view.AddView
 import spp.cli.commands.developer.view.GetViews
 import spp.cli.commands.developer.view.RemoveAllViews
+import spp.cli.commands.developer.view.SubscribeView
 
 object Main {
 
@@ -108,10 +106,14 @@ object Main {
                 RemoveInstruments(),
                 RemoveAllInstruments(),
                 //view
-                RemoveAllViews(),
+                RemoveAllViews()
             ),
-//            SubscribeEvents(),
-//            SubscribeView(),
+            Subscribe().subcommands(
+                //instrument
+                SubscribeInstrument(),
+                //view
+                SubscribeView()
+            ),
             //etc
             Version()
         ).main(args)

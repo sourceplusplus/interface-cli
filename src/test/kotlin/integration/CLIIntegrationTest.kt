@@ -35,6 +35,7 @@ abstract class CLIIntegrationTest {
             Main.main(
                 arrayOf(
                     "-v",
+                    "-a", "change-me",
                     "admin",
                     "reset"
                 )

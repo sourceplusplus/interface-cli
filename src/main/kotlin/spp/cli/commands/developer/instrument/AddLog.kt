@@ -37,8 +37,8 @@ import spp.cli.protocol.instrument.adapter.AddLiveLogMutation_ResponseAdapter.Ad
 import spp.cli.protocol.type.InstrumentThrottleInput
 import spp.cli.protocol.type.LiveLogInput
 import spp.cli.protocol.type.LiveSourceLocationInput
-import spp.cli.protocol.type.ThrottleStep
 import spp.cli.util.JsonCleaner
+import spp.protocol.instrument.throttle.ThrottleStep
 import kotlin.system.exitProcess
 
 class AddLog : CliktCommand(name = "log", help = "Add a live log instrument") {
@@ -62,7 +62,11 @@ class AddLog : CliktCommand(name = "log", help = "Add a live log instrument") {
             condition = Optional.Present(condition),
             expiresAt = Optional.Present(expiresAt),
             hitLimit = Optional.Present(hitLimit),
-            throttle = Optional.Present(InstrumentThrottleInput(throttleLimit, throttleStep))
+            throttle = Optional.Present(
+                InstrumentThrottleInput(
+                    throttleLimit, spp.cli.protocol.type.ThrottleStep.valueOf(throttleStep.toString())
+                )
+            )
         )
         val response = try {
             apolloClient.mutation(AddLiveLogMutation(input)).execute()

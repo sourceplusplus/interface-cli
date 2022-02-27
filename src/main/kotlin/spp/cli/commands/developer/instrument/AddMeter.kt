@@ -33,8 +33,14 @@ import spp.cli.PlatformCLI.apolloClient
 import spp.cli.PlatformCLI.echoError
 import spp.cli.protocol.instrument.AddLiveMeterMutation
 import spp.cli.protocol.instrument.adapter.AddLiveMeterMutation_ResponseAdapter.AddLiveMeter
-import spp.cli.protocol.type.*
+import spp.cli.protocol.type.InstrumentThrottleInput
+import spp.cli.protocol.type.LiveMeterInput
+import spp.cli.protocol.type.LiveSourceLocationInput
+import spp.cli.protocol.type.MetricValueInput
 import spp.cli.util.JsonCleaner
+import spp.protocol.instrument.meter.MeterType
+import spp.protocol.instrument.meter.MetricValueType
+import spp.protocol.instrument.throttle.ThrottleStep
 import kotlin.system.exitProcess
 
 class AddMeter : CliktCommand(name = "meter", help = "Add a live meter instrument") {
@@ -55,16 +61,20 @@ class AddMeter : CliktCommand(name = "meter", help = "Add a live meter instrumen
     override fun run() = runBlocking {
         val input = LiveMeterInput(
             meterName = meterName,
-            meterType = meterType,
+            meterType = spp.cli.protocol.type.MeterType.valueOf(meterType.toString()),
             metricValue = MetricValueInput(
-                valueType = valueType,
+                valueType = spp.cli.protocol.type.MetricValueType.valueOf(valueType.toString()),
                 value = Optional.presentIfNotNull(value)
             ),
             location = LiveSourceLocationInput(source, line),
             condition = Optional.Present(condition),
             expiresAt = Optional.Present(expiresAt),
             hitLimit = Optional.Present(hitLimit),
-            throttle = Optional.Present(InstrumentThrottleInput(throttleLimit, throttleStep))
+            throttle = Optional.Present(
+                InstrumentThrottleInput(
+                    throttleLimit, spp.cli.protocol.type.ThrottleStep.valueOf(throttleStep.toString())
+                )
+            )
         )
         val response = try {
             apolloClient.mutation(AddLiveMeterMutation(input)).execute()

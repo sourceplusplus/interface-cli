@@ -36,8 +36,8 @@ import spp.cli.protocol.instrument.adapter.AddLiveBreakpointMutation_ResponseAda
 import spp.cli.protocol.type.InstrumentThrottleInput
 import spp.cli.protocol.type.LiveBreakpointInput
 import spp.cli.protocol.type.LiveSourceLocationInput
-import spp.cli.protocol.type.ThrottleStep
 import spp.cli.util.JsonCleaner
+import spp.protocol.instrument.throttle.ThrottleStep
 import kotlin.system.exitProcess
 
 class AddBreakpoint : CliktCommand(name = "breakpoint", help = "Add a live breakpoint instrument") {
@@ -57,7 +57,11 @@ class AddBreakpoint : CliktCommand(name = "breakpoint", help = "Add a live break
             condition = Optional.Present(condition),
             expiresAt = Optional.Present(expiresAt),
             hitLimit = Optional.Present(hitLimit),
-            throttle = Optional.Present(InstrumentThrottleInput(throttleLimit, throttleStep))
+            throttle = Optional.Present(
+                InstrumentThrottleInput(
+                    throttleLimit, spp.cli.protocol.type.ThrottleStep.valueOf(throttleStep.toString())
+                )
+            )
         )
         val response = try {
             apolloClient.mutation(AddLiveBreakpointMutation(input)).execute()

@@ -25,7 +25,7 @@ import spp.cli.Main
 import spp.cli.PlatformCLI.apolloClient
 import spp.cli.PlatformCLI.echoError
 import spp.cli.protocol.permission.AddRolePermissionMutation
-import spp.cli.protocol.type.RolePermission
+import spp.protocol.platform.auth.RolePermission
 import kotlin.system.exitProcess
 
 class AddRolePermission : CliktCommand(printHelpOnEmptyArgs = true) {

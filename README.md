@@ -73,7 +73,7 @@ Commands:
   log         Add a live log instrument
   meter       Add a live meter instrument
   span        Add a live span instrument
-  view        Add a live view
+  view        Add a live view subscription
 ```
 
 # Documentation

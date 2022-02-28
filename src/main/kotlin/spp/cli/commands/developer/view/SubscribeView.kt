@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package spp.cli.commands.view
+package spp.cli.commands.developer.view
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.flag
@@ -45,7 +45,8 @@ import java.time.ZoneOffset
 import java.time.format.DateTimeFormatterBuilder
 
 class SubscribeView : CliktCommand(
-    help = "Listens for and outputs live views. Subscribes to all views by default"
+    name = "view",
+    help = "Listen to live views. Subscribes to all views by default"
 ) {
 
     companion object {
@@ -65,6 +66,8 @@ class SubscribeView : CliktCommand(
     ).flag()
 
     override fun run() {
+        PlatformCLI.connectToPlatform()
+
         runBlocking {
             val vertx = Vertx.vertx()
             val client = if (PlatformCLI.certFingerprint != null) {

@@ -39,7 +39,7 @@ class BatchLiveInstrumentCLI : CLIIntegrationTest() {
             Main.main(
                 arrayOf(
                     "-v",
-                    "add-breakpoint",
+                    "add", "breakpoint",
                     "integration.BatchLiveInstrumentCLI", i.toString(),
                 )
             )
@@ -53,7 +53,7 @@ class BatchLiveInstrumentCLI : CLIIntegrationTest() {
         Main.main(
             arrayOf(
                 "-v",
-                "get-instruments"
+                "get", "instruments"
             )
         )
 
@@ -67,7 +67,7 @@ class BatchLiveInstrumentCLI : CLIIntegrationTest() {
             Main.main(
                 arrayOf(
                     "-v",
-                    "remove-instrument",
+                    "remove", "instrument",
                     it.id!!
                 )
             )

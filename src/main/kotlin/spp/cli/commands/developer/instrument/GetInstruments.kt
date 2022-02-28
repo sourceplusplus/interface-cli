@@ -15,29 +15,25 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package spp.cli.commands.instrument
+package spp.cli.commands.developer.instrument
 
 import com.apollographql.apollo3.api.CustomScalarAdapters
 import com.apollographql.apollo3.api.json.MapJsonWriter
 import com.github.ajalt.clikt.core.CliktCommand
-import com.github.ajalt.clikt.parameters.arguments.argument
-import io.vertx.core.json.JsonObject
 import kotlinx.coroutines.runBlocking
 import spp.cli.Main
 import spp.cli.PlatformCLI.apolloClient
 import spp.cli.PlatformCLI.echoError
-import spp.cli.protocol.instrument.RemoveLiveInstrumentMutation
-import spp.cli.protocol.instrument.adapter.RemoveLiveInstrumentMutation_ResponseAdapter.RemoveLiveInstrument
+import spp.cli.protocol.instrument.GetLiveInstrumentsQuery
+import spp.cli.protocol.instrument.adapter.GetLiveInstrumentsQuery_ResponseAdapter.GetLiveInstrument
 import spp.cli.util.JsonCleaner
 import kotlin.system.exitProcess
 
-class RemoveInstrument : CliktCommand(printHelpOnEmptyArgs = true) {
-
-    val id by argument(help = "Instrument ID")
+class GetInstruments : CliktCommand(name = "instruments", help = "Get all live instruments") {
 
     override fun run() = runBlocking {
         val response = try {
-            apolloClient.mutation(RemoveLiveInstrumentMutation(id)).execute()
+            apolloClient.query(GetLiveInstrumentsQuery()).execute()
         } catch (e: Exception) {
             echoError(e)
             if (Main.standalone) exitProcess(-1) else return@runBlocking
@@ -47,16 +43,16 @@ class RemoveInstrument : CliktCommand(printHelpOnEmptyArgs = true) {
             if (Main.standalone) exitProcess(-1) else return@runBlocking
         }
 
-        if (response.data!!.removeLiveInstrument != null) {
-            echo(JsonCleaner.cleanJson(MapJsonWriter().let {
+        echo(JsonCleaner.cleanJson(MapJsonWriter().let {
+            it.beginArray()
+            response.data!!.getLiveInstruments.forEach { ob ->
                 it.beginObject()
-                RemoveLiveInstrument.toJson(it, CustomScalarAdapters.Empty, response.data!!.removeLiveInstrument!!)
+                GetLiveInstrument.toJson(it, CustomScalarAdapters.Empty, ob)
                 it.endObject()
-                (it.root() as LinkedHashMap<*, *>)
-            }).encodePrettily())
-        } else {
-            echo(JsonObject().encodePrettily())
-        }
+            }
+            it.endArray()
+            (it.root() as ArrayList<*>)
+        }).encodePrettily())
         if (Main.standalone) exitProcess(0)
     }
 }

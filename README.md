@@ -1,12 +1,37 @@
 # ![](https://github.com/sourceplusplus/live-platform/blob/master/.github/media/sourcepp_logo.svg)
 
-[![License](https://img.shields.io/github/license/sourceplusplus/interface-cli)](LICENSE)
+[![License](https://camo.githubusercontent.com/93398bf31ebbfa60f726c4f6a0910291b8156be0708f3160bad60d0d0e1a4c3f/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f6c6963656e73652f736f75726365706c7573706c75732f6c6976652d706c6174666f726d)](LICENSE)
 ![GitHub release](https://img.shields.io/github/v/release/sourceplusplus/interface-cli?include_prereleases)
 [![Build](https://github.com/sourceplusplus/interface-cli/actions/workflows/build.yml/badge.svg)](https://github.com/sourceplusplus/interface-cli/actions/workflows/build.yml)
 
 # What is this?
 
 This project provides a command-line interface to [Source++](https://github.com/sourceplusplus/live-platform), the open-source live coding platform.
+
+# Install
+
+## Quick install
+
+### Linux or macOS
+
+Install the latest version with the following command:
+
+```shell
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/sourceplusplus/interface-cli/master/scripts/install.sh)"
+```
+
+### Windows
+
+Note: you need to start cmd or PowerShell in administrator mode.
+
+```shell
+curl -LO "https://raw.githubusercontent.com/sourceplusplus/interface-cli/master/scripts/install.bat" && .\install.bat
+```
+
+## Install by available binaries
+
+Go to the [releases page](https://github.com/sourceplusplus/interface-cli/releases) to download all available binaries,
+including macOS, Linux, Windows.
 
 # Usage
 

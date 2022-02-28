@@ -31,8 +31,8 @@ import spp.cli.PlatformCLI
 import spp.cli.PlatformCLI.echoError
 import spp.cli.protocol.access.AddAccessPermissionMutation
 import spp.cli.protocol.access.adapter.AddAccessPermissionMutation_ResponseAdapter.AddAccessPermission
-import spp.cli.protocol.type.AccessType
 import spp.cli.util.JsonCleaner
+import spp.protocol.platform.auth.AccessType
 import kotlin.system.exitProcess
 
 class AddAccessPermission : CliktCommand(printHelpOnEmptyArgs = true) {
@@ -43,7 +43,10 @@ class AddAccessPermission : CliktCommand(printHelpOnEmptyArgs = true) {
     override fun run() = runBlocking {
         val response = try {
             PlatformCLI.apolloClient.mutation(
-                AddAccessPermissionMutation(Optional.Present(locationPatterns), type)
+                AddAccessPermissionMutation(
+                    Optional.Present(locationPatterns),
+                    spp.cli.protocol.type.AccessType.valueOf(type.toString())
+                )
             ).execute()
         } catch (e: Exception) {
             echoError(e)

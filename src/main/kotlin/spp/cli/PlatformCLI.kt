@@ -22,17 +22,14 @@ import com.apollographql.apollo3.exception.ApolloException
 import com.apollographql.apollo3.network.okHttpClient
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
-import com.fasterxml.jackson.databind.module.SimpleModule
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.file
 import eu.geekplace.javapinning.JavaPinning
-import io.vertx.core.json.jackson.DatabindCodec
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
-import kotlinx.datetime.Instant
 import kotlinx.datetime.plus
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -44,7 +41,6 @@ import org.bouncycastle.openssl.PEMParser
 import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter
 import org.bouncycastle.util.encoders.Hex
 import spp.protocol.platform.developer.Developer
-import spp.protocol.util.KSerializers
 import java.io.File
 import java.io.StringReader
 import java.security.SecureRandom
@@ -82,14 +78,9 @@ object PlatformCLI : CliktCommand(name = "spp-cli", allowMultipleSubcommands = t
     }
     var developer: Developer = Developer("system")
 
-    override fun run() {
-        val module = SimpleModule()
-        module.addSerializer(Instant::class.java, KSerializers.KotlinInstantSerializer())
-        module.addDeserializer(Instant::class.java, KSerializers.KotlinInstantDeserializer())
-        DatabindCodec.mapper().registerModule(module)
-    }
+    override fun run() = Unit
 
-    private fun connectToPlatform(): ApolloClient {
+    fun connectToPlatform(): ApolloClient {
         val serverUrl = if (platformHost.startsWith("http")) {
             platformHost
         } else {
@@ -142,7 +133,7 @@ object PlatformCLI : CliktCommand(name = "spp-cli", allowMultipleSubcommands = t
 
                 if (resp.code != 202) {
                     val decoded = JWT.decode(jwtToken)
-                    developer = Developer(decoded.getClaim("developer_id").asString())
+                    developer = Developer(decoded.getClaim("developer_id").asString(), jwtToken)
                 }
             } else if (resp.code == 401 && accessToken.isNullOrEmpty()) {
                 throw IllegalStateException("Connection failed. Reason: Missing access token")

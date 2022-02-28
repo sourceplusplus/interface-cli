@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package spp.cli.commands.instrument
+package spp.cli.commands.developer.instrument
 
 import com.apollographql.apollo3.api.CustomScalarAdapters
 import com.apollographql.apollo3.api.json.MapJsonWriter
@@ -29,7 +29,7 @@ import spp.cli.protocol.instrument.adapter.GetLiveMetersQuery_ResponseAdapter.Ge
 import spp.cli.util.JsonCleaner
 import kotlin.system.exitProcess
 
-class GetMeters : CliktCommand() {
+class GetMeters : CliktCommand(name = "meters", help = "Get live meter instruments") {
 
     override fun run() = runBlocking {
         val response = try {

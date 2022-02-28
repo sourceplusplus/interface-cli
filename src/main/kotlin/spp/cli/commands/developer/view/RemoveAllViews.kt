@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package spp.cli.commands.view
+package spp.cli.commands.developer.view
 
 import com.github.ajalt.clikt.core.CliktCommand
 import kotlinx.coroutines.runBlocking
@@ -25,7 +25,7 @@ import spp.cli.PlatformCLI.echoError
 import spp.cli.protocol.view.ClearLiveViewSubscriptionsMutation
 import kotlin.system.exitProcess
 
-class ClearViewSubscriptions : CliktCommand() {
+class RemoveAllViews : CliktCommand(name = "all-views", help = "Remove all live view subscriptions") {
 
     override fun run() = runBlocking {
         val response = try {

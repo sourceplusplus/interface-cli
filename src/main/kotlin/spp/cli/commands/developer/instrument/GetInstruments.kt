@@ -15,21 +15,25 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package spp.cli.commands.view
+package spp.cli.commands.developer.instrument
 
+import com.apollographql.apollo3.api.CustomScalarAdapters
+import com.apollographql.apollo3.api.json.MapJsonWriter
 import com.github.ajalt.clikt.core.CliktCommand
 import kotlinx.coroutines.runBlocking
 import spp.cli.Main
 import spp.cli.PlatformCLI.apolloClient
 import spp.cli.PlatformCLI.echoError
-import spp.cli.protocol.view.ClearLiveViewSubscriptionsMutation
+import spp.cli.protocol.instrument.GetLiveInstrumentsQuery
+import spp.cli.protocol.instrument.adapter.GetLiveInstrumentsQuery_ResponseAdapter.GetLiveInstrument
+import spp.cli.util.JsonCleaner
 import kotlin.system.exitProcess
 
-class ClearViewSubscriptions : CliktCommand() {
+class GetInstruments : CliktCommand(name = "instruments", help = "Get all live instruments") {
 
     override fun run() = runBlocking {
         val response = try {
-            apolloClient.mutation(ClearLiveViewSubscriptionsMutation()).execute()
+            apolloClient.query(GetLiveInstrumentsQuery()).execute()
         } catch (e: Exception) {
             echoError(e)
             if (Main.standalone) exitProcess(-1) else return@runBlocking
@@ -39,7 +43,16 @@ class ClearViewSubscriptions : CliktCommand() {
             if (Main.standalone) exitProcess(-1) else return@runBlocking
         }
 
-        echo(response.data!!.clearLiveViewSubscriptions)
+        echo(JsonCleaner.cleanJson(MapJsonWriter().let {
+            it.beginArray()
+            response.data!!.getLiveInstruments.forEach { ob ->
+                it.beginObject()
+                GetLiveInstrument.toJson(it, CustomScalarAdapters.Empty, ob)
+                it.endObject()
+            }
+            it.endArray()
+            (it.root() as ArrayList<*>)
+        }).encodePrettily())
         if (Main.standalone) exitProcess(0)
     }
 }

@@ -15,17 +15,10 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package spp.cli.commands
+package spp.cli.commands.developer
 
 import com.github.ajalt.clikt.core.CliktCommand
-import java.util.*
 
-class Version : CliktCommand(help = "Display version information") {
-    private val BUILD = ResourceBundle.getBundle("build")
-
-    override fun run() {
-        echo("spp-cli: " + BUILD.getString("build_version"))
-        echo("Build id: " + BUILD.getString("build_id"))
-        echo("Build date: " + BUILD.getString("build_date"))
-    }
+class Subscribe : CliktCommand(help = "Subscribe to live instrument/view streams") {
+    override fun run() = Unit
 }

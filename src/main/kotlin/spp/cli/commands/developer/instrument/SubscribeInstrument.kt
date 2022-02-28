@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package spp.cli.commands.instrument
+package spp.cli.commands.developer.instrument
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
@@ -35,16 +35,17 @@ import io.vertx.ext.eventbus.bridge.tcp.impl.protocol.FrameParser
 import io.vertx.kotlin.coroutines.await
 import kotlinx.coroutines.runBlocking
 import spp.cli.PlatformCLI
-import spp.protocol.ProtocolMarshaller.deserializeLiveInstrumentRemoved
 import spp.protocol.SourceServices.Provide.toLiveInstrumentSubscriberAddress
 import spp.protocol.extend.TCPServiceFrameParser
-import spp.protocol.instrument.event.LiveBreakpointHit
 import spp.protocol.instrument.event.LiveInstrumentEvent
 import spp.protocol.instrument.event.LiveInstrumentEventType
 import spp.protocol.instrument.event.LiveLogHit
+import spp.protocol.marshall.ProtocolMarshaller
+import spp.protocol.marshall.ProtocolMarshaller.deserializeLiveInstrumentRemoved
 
-class SubscribeEvents : CliktCommand(
-    help = "Listens for and outputs live events. Subscribes to all events by default"
+class SubscribeInstrument : CliktCommand(
+    name = "instrument",
+    help = "Listen to live instruments. Subscribes to all events by default"
 ) {
 
     val instrumentIds by argument(
@@ -62,7 +63,8 @@ class SubscribeEvents : CliktCommand(
         .flag(default = false)
 
     override fun run() {
-        var eventCount = 1
+        PlatformCLI.connectToPlatform()
+
         runBlocking {
             val vertx = Vertx.vertx()
             val client = if (PlatformCLI.certFingerprint != null) {
@@ -77,6 +79,7 @@ class SubscribeEvents : CliktCommand(
                 vertx.createNetClient(options)
             } else {
                 val options = NetClientOptions()
+                    .setTrustAll(true)
                     .setReconnectAttempts(Int.MAX_VALUE).setReconnectInterval(5000)
                     .setSsl(PlatformCLI.platformHost.startsWith("https"))
                 vertx.createNetClient(options)
@@ -101,7 +104,7 @@ class SubscribeEvents : CliktCommand(
                             }
                         }
                         LiveInstrumentEventType.BREAKPOINT_HIT -> {
-                            val breakpointHit = Json.decodeValue(liveEvent.data, LiveBreakpointHit::class.java)
+                            val breakpointHit = ProtocolMarshaller.deserializeLiveBreakpointHit(JsonObject(liveEvent.data))
                             if (breakpointHit.breakpointId !in instrumentIds) {
                                 return@consumer
                             }
@@ -118,38 +121,18 @@ class SubscribeEvents : CliktCommand(
 
                 if (!includeBreakpoints && !includeLogs && !includeMeters && !includeTraces) {
                     //listen for all events
-                    println(
-                        "\nEvent (${eventCount++}):\n" +
-                                "\tType: ${liveEvent.eventType}\n" +
-                                "\tData: ${liveEvent.data}"
-                    )
+                    println("\nType: ${liveEvent.eventType}\nData: ${liveEvent.data}")
                 } else {
                     //todo: impl filtering on platform
                     //listen for specific events
                     if (includeBreakpoints && liveEvent.eventType.name.startsWith("breakpoint", true)) {
-                        println(
-                            "\nEvent (${eventCount++}):\n" +
-                                    "\tType: ${liveEvent.eventType}\n" +
-                                    "\tData: ${liveEvent.data}"
-                        )
+                        println("\nType: ${liveEvent.eventType}\nData: ${liveEvent.data}")
                     } else if (includeLogs && liveEvent.eventType.name.startsWith("log", true)) {
-                        println(
-                            "\nEvent (${eventCount++}):\n" +
-                                    "\tType: ${liveEvent.eventType}\n" +
-                                    "\tData: ${liveEvent.data}"
-                        )
+                        println("\nType: ${liveEvent.eventType}\nData: ${liveEvent.data}")
                     } else if (includeMeters && liveEvent.eventType.name.startsWith("meter", true)) {
-                        println(
-                            "\nEvent (${eventCount++}):\n" +
-                                    "\tType: ${liveEvent.eventType}\n" +
-                                    "\tData: ${liveEvent.data}"
-                        )
+                        println("\nType: ${liveEvent.eventType}\nData: ${liveEvent.data}")
                     } else if (includeTraces && liveEvent.eventType.name.startsWith("trace", true)) {
-                        println(
-                            "\nEvent (${eventCount++}):\n" +
-                                    "\tType: ${liveEvent.eventType}\n" +
-                                    "\tData: ${liveEvent.data}"
-                        )
+                        println("\nType: ${liveEvent.eventType}\nData: ${liveEvent.data}")
                     }
                 }
             }

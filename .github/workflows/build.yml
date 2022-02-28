@@ -158,17 +158,17 @@ jobs:
       - name: "[CLI] Remove developer"
         run: ./build/graal/spp-cli -v admin remove-developer test
       - name: "[CLI] Add live breakpoint"
-        run: ./build/graal/spp-cli -v add-breakpoint -h 100 spp.example.webapp.model.User 48
+        run: ./build/graal/spp-cli -v add breakpoint -h 100 spp.example.webapp.model.User 48
       - name: "[CLI] Add live log"
-        run: ./build/graal/spp-cli -v add-log -h 100 spp.example.webapp.model.User 48 test-message
+        run: ./build/graal/spp-cli -v add log -h 100 spp.example.webapp.model.User 48 test-message
       - name: "[CLI] Get live instruments"
-        run: ./build/graal/spp-cli -v get-instruments
+        run: ./build/graal/spp-cli -v get instruments
       - name: "[CLI] Get live breakpoints"
-        run: ./build/graal/spp-cli -v get-breakpoints
+        run: ./build/graal/spp-cli -v get breakpoints
       - name: "[CLI] Get live logs"
-        run: ./build/graal/spp-cli -v get-logs
+        run: ./build/graal/spp-cli -v get logs
       - name: "[CLI] Remove live instruments"
-        run: ./build/graal/spp-cli -v remove-instruments spp.example.webapp.model.User 48
+        run: ./build/graal/spp-cli -v remove instruments spp.example.webapp.model.User 48
       - name: "[CLI] Reset"
         run: ./build/graal/spp-cli -v admin reset
 

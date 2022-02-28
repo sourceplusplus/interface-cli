@@ -25,7 +25,7 @@ import spp.cli.PlatformCLI.echoError
 import spp.cli.protocol.view.ClearLiveViewSubscriptionsMutation
 import kotlin.system.exitProcess
 
-class RemoveAllViews : CliktCommand(name = "all-views", help = "Remove all live views") {
+class RemoveAllViews : CliktCommand(name = "all-views", help = "Remove all live view subscriptions") {
 
     override fun run() = runBlocking {
         val response = try {

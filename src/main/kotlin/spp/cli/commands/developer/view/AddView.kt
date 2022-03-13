@@ -32,7 +32,7 @@ import spp.cli.protocol.view.adapter.AddLiveViewSubscriptionMutation_ResponseAda
 import spp.cli.util.JsonCleaner
 import kotlin.system.exitProcess
 
-class AddView : CliktCommand(name = "view", help = "Add a live view") {
+class AddView : CliktCommand(name = "view", help = "Add a live view subscription") {
 
     val entityIds by argument(name = "Entity IDs").multiple(required = true)
 

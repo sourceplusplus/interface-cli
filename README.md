@@ -49,55 +49,31 @@ Options:
   -h, --help               Show this message and exit
 
 Commands:
-  admin
-  add-breakpoint
-  add-log
-  add-meter
-  add-span
-  get-breakpoints
-  get-instruments
-  get-logs
-  get-meters
-  get-spans
-  remove-instrument
-  remove-instruments
-  clear-instruments
-  subscribe-events    Listens for and outputs live events. Subscribes to all events by default
-  get-self
-  version
+  admin      Administrator commands
+  developer  Developer commands
+  add        Add live instruments/views
+  get        Get live instruments/views
+  remove     Remove live instruments/views
+  subscribe  Subscribe to live instrument/view streams
+  version    Display version information
 ```
 
 To get information about a sub-command, try `spp-cli <command> --help`:
 
 ```
-Usage: spp-cli admin [OPTIONS] COMMAND [ARGS]...
+Usage: spp-cli add [OPTIONS] COMMAND [ARGS]...
+
+  Add live instruments/views
 
 Options:
   -h, --help  Show this message and exit
 
 Commands:
-  add-role
-  get-developer-roles
-  get-roles
-  remove-role
-  add-developer-role
-  remove-developer-role
-  add-role-permission
-  get-developer-permissions
-  get-role-permissions
-  remove-role-permission
-  add-developer
-  get-developers
-  remove-developer
-  refresh-developer-token
-  add-access-permission
-  add-role-access-permission
-  get-access-permissions
-  get-developer-access-permissions
-  get-role-access-permissions
-  remove-access-permission
-  remove-role-access-permission
-  reset
+  breakpoint  Add a live breakpoint instrument
+  log         Add a live log instrument
+  meter       Add a live meter instrument
+  span        Add a live span instrument
+  view        Add a live view subscription
 ```
 
 # Documentation

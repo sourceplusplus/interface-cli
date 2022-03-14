@@ -54,7 +54,7 @@ Commands:
   add        Add live instruments/views
   get        Get live instruments/views
   remove     Remove live instruments/views
-  subscribe  Subscribe to live instrument/view streams
+  subscribe  Subscribe to live instrument/view events
   version    Display version information
 ```
 

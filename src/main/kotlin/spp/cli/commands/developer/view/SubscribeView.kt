@@ -130,7 +130,7 @@ class SubscribeView : CliktCommand(
             if (value == null) value = metric.getNumber("value").toString()
 
             val metricType = metric.getJsonObject("meta").getString("metricsName")
-            println("$eventTime ${metric.getString("entityId")} ($metricType): $value")
+            println("$eventTime ${metric.getString("entityName")} ($metricType): $value")
         }
     }
 

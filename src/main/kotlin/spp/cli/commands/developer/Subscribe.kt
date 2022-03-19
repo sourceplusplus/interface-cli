@@ -19,6 +19,6 @@ package spp.cli.commands.developer
 
 import com.github.ajalt.clikt.core.CliktCommand
 
-class Subscribe : CliktCommand(help = "Subscribe to live instrument/view streams") {
+class Subscribe : CliktCommand(help = "Subscribe to live instrument/view events") {
     override fun run() = Unit
 }

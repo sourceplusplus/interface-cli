@@ -22,7 +22,7 @@ Install the latest version with the following command:
 
 ### Windows
 
-Note: you need to start cmd or PowerShell in administrator mode.
+Note: You will need to start cmd in administrator mode.
 
 ```shell
 curl -LO "https://raw.githubusercontent.com/sourceplusplus/interface-cli/master/scripts/install.bat" && .\install.bat

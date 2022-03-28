@@ -553,6 +553,18 @@
               "deprecationReason": null
             },
             {
+              "name": "applyImmediately",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "applied",
               "description": null,
               "args": [],
@@ -679,6 +691,16 @@
               "defaultValue": null
             },
             {
+              "name": "applyImmediately",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
               "name": "throttle",
               "description": null,
               "type": {
@@ -775,6 +797,18 @@
               "type": {
                 "kind": "SCALAR",
                 "name": "Int",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "applyImmediately",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -1020,6 +1054,18 @@
               "deprecationReason": null
             },
             {
+              "name": "applyImmediately",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "applied",
               "description": null,
               "args": [],
@@ -1178,6 +1224,16 @@
               "defaultValue": null
             },
             {
+              "name": "applyImmediately",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
               "name": "throttle",
               "description": null,
               "type": {
@@ -1322,6 +1378,18 @@
               "type": {
                 "kind": "SCALAR",
                 "name": "Int",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "applyImmediately",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -1491,6 +1559,16 @@
               "type": {
                 "kind": "SCALAR",
                 "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "applyImmediately",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
                 "ofType": null
               },
               "defaultValue": null
@@ -1696,6 +1774,18 @@
               "deprecationReason": null
             },
             {
+              "name": "applyImmediately",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "applied",
               "description": null,
               "args": [],
@@ -1806,8 +1896,18 @@
               "defaultValue": null
             },
             {
+              "name": "applyImmediately",
+              "description": "condition: String #todo: impl\nexpiresAt: Long #todo: impl\nhitLimit: Int #todo: impl",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
               "name": "meta",
-              "description": "condition: String #todo: impl\nexpiresAt: Long #todo: impl\nhitLimit: Int #todo: impl\nthrottle: InstrumentThrottleInput #todo: impl",
+              "description": "throttle: InstrumentThrottleInput #todo: impl",
               "type": {
                 "kind": "LIST",
                 "name": null,
@@ -1899,22 +1999,6 @@
                 "ofType": {
                   "kind": "SCALAR",
                   "name": "String",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "userDefined",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Boolean",
                   "ofType": null
                 }
               },

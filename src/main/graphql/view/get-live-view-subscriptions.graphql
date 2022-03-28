@@ -15,7 +15,6 @@ query getLiveViewSubscriptions {
         }
         liveViewConfig {
             viewName
-            userDefined
             viewMetrics
             refreshRateLimit
         }

@@ -15,7 +15,6 @@ mutation addLiveViewSubscription($input: LiveViewSubscriptionInput!) {
         }
         liveViewConfig {
             viewName
-            userDefined
             viewMetrics
             refreshRateLimit
         }

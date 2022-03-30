@@ -18,7 +18,7 @@ jobs:
     runs-on: macos-latest
     timeout-minutes: 20
     concurrency:
-      group: ${{ github.workflow }}-${{ github.ref }}
+      group: ${{ github.workflow }}-${{ github.ref }}-buildOnMac
       cancel-in-progress: true
 
     steps:
@@ -52,7 +52,7 @@ jobs:
     runs-on: windows-2019
     timeout-minutes: 20
     concurrency:
-      group: ${{ github.workflow }}-${{ github.ref }}
+      group: ${{ github.workflow }}-${{ github.ref }}-buildOnWindows
       cancel-in-progress: true
 
     steps:
@@ -93,7 +93,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     concurrency:
-      group: ${{ github.workflow }}-${{ github.ref }}
+      group: ${{ github.workflow }}-${{ github.ref }}-buildOnLinux
       cancel-in-progress: true
 
     outputs:

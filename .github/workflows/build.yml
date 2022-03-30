@@ -17,6 +17,9 @@ jobs:
   buildOnMac:
     runs-on: macos-latest
     timeout-minutes: 20
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
 
     steps:
       - uses: actions/checkout@v2
@@ -48,6 +51,9 @@ jobs:
   buildOnWindows:
     runs-on: windows-2019
     timeout-minutes: 20
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
 
     steps:
       - uses: actions/checkout@v2
@@ -86,6 +92,9 @@ jobs:
   buildOnLinux:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
 
     outputs:
       version: ${{ steps.properties.outputs.version }}

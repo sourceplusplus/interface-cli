@@ -4122,13 +4122,7 @@
               "deprecationReason": null
             },
             {
-              "name": "ADD_DATA_REDACTION",
-              "description": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "REMOVE_DATA_REDACTION",
+              "name": "UPDATE_DATA_REDACTION",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null

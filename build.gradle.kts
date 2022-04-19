@@ -33,7 +33,7 @@ dependencies {
     implementation("com.apollographql.apollo3:apollo-runtime:$apolloVersion")
     api("com.apollographql.apollo3:apollo-api:$apolloVersion")
 
-    implementation("com.github.sourceplusplus.protocol:protocol:$projectVersion")
+    implementation("com.github.sourceplusplus.protocol:protocol:05b144c6ba")
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")

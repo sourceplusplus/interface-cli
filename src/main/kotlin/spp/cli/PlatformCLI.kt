@@ -57,7 +57,7 @@ object PlatformCLI : CliktCommand(name = "spp-cli", allowMultipleSubcommands = t
     val platformHost: String by option("-p", "--platform", help = "Source++ platform host")
         .default(
             (if (System.getenv("SPP_DISABLE_TLS") != "true") "https://" else "http://")
-                    + (System.getenv("SPP_PLATFORM_HOST") ?: "localhost") + ":5445"
+                    + (System.getenv("SPP_PLATFORM_HOST") ?: "localhost") + ":12800"
         )
     private val platformCertificate by option("-c", "--certificate", help = "Source++ platform certificate").file()
         .default(File("config/spp-platform.crt"))
@@ -154,7 +154,7 @@ object PlatformCLI : CliktCommand(name = "spp-cli", allowMultipleSubcommands = t
                     )
                 }.build()
             )
-            .serverUrl("$serverUrl/graphql")
+            .serverUrl("$serverUrl/graphql/spp")
             .build()
     }
 

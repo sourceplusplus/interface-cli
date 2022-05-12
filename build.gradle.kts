@@ -35,7 +35,7 @@ dependencies {
 
     implementation("com.github.sourceplusplus.protocol:protocol:$projectVersion")
 
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1")
     implementation("org.slf4j:slf4j-api:$slf4jVersion")
     implementation("org.slf4j:slf4j-nop:$slf4jVersion")

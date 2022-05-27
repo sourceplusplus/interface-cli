@@ -29,8 +29,18 @@ jobs:
           graalvm-version: 21.3.0
           native-image: true
 
+      - name: Export Properties
+        id: properties
+        shell: bash
+        run: |
+          PROPERTIES="$(./gradlew properties --console=plain -q)"
+          VERSION="$(echo "$PROPERTIES" | grep "^version:" | cut -f2- -d ' ')"
+          echo "::set-output name=version::$VERSION"
+          echo "SPP_CLI_VERSION=$VERSION" >> $GITHUB_ENV
+          echo "SPP_RELEASE_VERSION=${VERSION/-SNAPSHOT/}" >> $GITHUB_ENV
+
       - name: Build native spp-cli
-        run: gradle assemble nativeImage -Dbuild.profile=release
+        run: gradle assemble nativeImage -Dbuild.profile=release -PprojectVersion=$SPP_RELEASE_VERSION
 
       - name: "[CLI] Get version"
         run: ./build/graal/spp-cli -v version
@@ -65,8 +75,18 @@ jobs:
           graalvm-version: 21.3.0
           native-image: true
 
+      - name: Export Properties
+        id: properties
+        shell: bash
+        run: |
+          PROPERTIES="$(./gradlew properties --console=plain -q)"
+          VERSION="$(echo "$PROPERTIES" | grep "^version:" | cut -f2- -d ' ')"
+          echo "::set-output name=version::$VERSION"
+          echo "SPP_CLI_VERSION=$VERSION" >> $GITHUB_ENV
+          echo "SPP_RELEASE_VERSION=${VERSION/-SNAPSHOT/}" >> $GITHUB_ENV
+
       - name: Build native spp-cli.exe
-        run: ./gradlew assemble nativeImage '-Dbuild.profile=release'
+        run: ./gradlew assemble nativeImage '-Dbuild.profile=release' '-PprojectVersion=$SPP_RELEASE_VERSION'
         shell: powershell
 
       - name: "[CLI] Get version"
@@ -114,8 +134,9 @@ jobs:
           VERSION="$(echo "$PROPERTIES" | grep "^version:" | cut -f2- -d ' ')"
           echo "::set-output name=version::$VERSION"
           echo "SPP_CLI_VERSION=$VERSION" >> $GITHUB_ENV
+          echo "SPP_RELEASE_VERSION=${VERSION/-SNAPSHOT/}" >> $GITHUB_ENV
 
-      - run: ./gradlew assembleUp nativeImage -Dbuild.profile=release
+      - run: ./gradlew assembleUp nativeImage -Dbuild.profile=release -PprojectVersion=$SPP_RELEASE_VERSION
 
       - name: Docker IPs
         run: docker inspect --format='{{.Name}} - {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps -aq)

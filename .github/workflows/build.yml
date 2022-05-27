@@ -29,7 +29,21 @@ jobs:
           graalvm-version: 21.3.0
           native-image: true
 
-      - name: Build native spp-cli
+      - name: Export Properties
+        id: properties
+        shell: bash
+        run: |
+          PROPERTIES="$(./gradlew properties --console=plain -q)"
+          VERSION="$(echo "$PROPERTIES" | grep "^version:" | cut -f2- -d ' ')"
+          echo "::set-output name=version::$VERSION"
+          echo "SPP_CLI_VERSION=$VERSION" >> $GITHUB_ENV
+          echo "SPP_RELEASE_VERSION=${VERSION/-SNAPSHOT/}" >> $GITHUB_ENV
+
+      - name: Build native spp-cli (Release)
+        if: github.ref == 'refs/heads/master'
+        run: gradle assemble nativeImage -Dbuild.profile=release -PcliVersion=$SPP_RELEASE_VERSION
+
+      - name: Build native spp-cli (Snapshot)
         run: gradle assemble nativeImage -Dbuild.profile=release
 
       - name: "[CLI] Get version"
@@ -65,7 +79,22 @@ jobs:
           graalvm-version: 21.3.0
           native-image: true
 
-      - name: Build native spp-cli.exe
+      - name: Export Properties
+        id: properties
+        shell: bash
+        run: |
+          PROPERTIES="$(./gradlew properties --console=plain -q)"
+          VERSION="$(echo "$PROPERTIES" | grep "^version:" | cut -f2- -d ' ')"
+          echo "::set-output name=version::$VERSION"
+          echo "SPP_CLI_VERSION=$VERSION" >> $GITHUB_ENV
+          echo "SPP_RELEASE_VERSION=${VERSION/-SNAPSHOT/}" >> $GITHUB_ENV
+
+      - name: Build native spp-cli.exe (Release)
+        if: github.ref == 'refs/heads/master'
+        run: ./gradlew assemble nativeImage '-Dbuild.profile=release' '-PcliVersion=$SPP_RELEASE_VERSION'
+        shell: powershell
+
+      - name: Build native spp-cli.exe (Snapshot)
         run: ./gradlew assemble nativeImage '-Dbuild.profile=release'
         shell: powershell
 
@@ -114,8 +143,14 @@ jobs:
           VERSION="$(echo "$PROPERTIES" | grep "^version:" | cut -f2- -d ' ')"
           echo "::set-output name=version::$VERSION"
           echo "SPP_CLI_VERSION=$VERSION" >> $GITHUB_ENV
+          echo "SPP_RELEASE_VERSION=${VERSION/-SNAPSHOT/}" >> $GITHUB_ENV
 
-      - run: ./gradlew assembleUp nativeImage -Dbuild.profile=release
+      - name: Build native spp-cli (Release)
+        if: github.ref == 'refs/heads/master'
+        run: ./gradlew assembleUp nativeImage -Dbuild.profile=release -PcliVersion=$SPP_RELEASE_VERSION
+
+      - name: Build native spp-cli (Snapshot)
+        run: ./gradlew assembleUp nativeImage -Dbuild.profile=release
 
       - name: Docker IPs
         run: docker inspect --format='{{.Name}} - {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps -aq)

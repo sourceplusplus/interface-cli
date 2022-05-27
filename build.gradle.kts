@@ -20,9 +20,10 @@ val commonsIoVersion: String by project
 val auth0JwtVersion: String by project
 val vertxVersion: String by project
 val slf4jVersion: String by project
+val cliVersion: String = project.properties["cliVersion"] as String? ?: projectVersion
 
 group = cliGroup
-version = projectVersion
+version = cliVersion
 
 repositories {
     mavenCentral()

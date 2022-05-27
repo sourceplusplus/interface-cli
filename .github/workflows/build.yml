@@ -44,6 +44,7 @@ jobs:
         run: gradle assemble nativeImage -Dbuild.profile=release -PcliVersion=$SPP_RELEASE_VERSION
 
       - name: Build native spp-cli (Snapshot)
+        if: github.ref != 'refs/heads/master'
         run: gradle assemble nativeImage -Dbuild.profile=release
 
       - name: "[CLI] Get version"
@@ -95,6 +96,7 @@ jobs:
         shell: powershell
 
       - name: Build native spp-cli.exe (Snapshot)
+        if: github.ref != 'refs/heads/master'
         run: ./gradlew assemble nativeImage '-Dbuild.profile=release'
         shell: powershell
 
@@ -150,6 +152,7 @@ jobs:
         run: ./gradlew assembleUp nativeImage -Dbuild.profile=release -PcliVersion=$SPP_RELEASE_VERSION
 
       - name: Build native spp-cli (Snapshot)
+        if: github.ref != 'refs/heads/master'
         run: ./gradlew assembleUp nativeImage -Dbuild.profile=release
 
       - name: Docker IPs

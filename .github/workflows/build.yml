@@ -94,7 +94,7 @@ jobs:
         run: ./gradlew assemble nativeImage '-Dbuild.profile=release' '-PcliVersion=$SPP_RELEASE_VERSION'
         shell: powershell
 
-      - name: Build native spp-cli.exe (Release)
+      - name: Build native spp-cli.exe (Snapshot)
         if: github.ref == 'refs/heads/master'
         run: ./gradlew assemble nativeImage '-Dbuild.profile=release'
         shell: powershell

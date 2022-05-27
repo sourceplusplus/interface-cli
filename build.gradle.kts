@@ -20,10 +20,9 @@ val commonsIoVersion: String by project
 val auth0JwtVersion: String by project
 val vertxVersion: String by project
 val slf4jVersion: String by project
-val cliVersion: String = project.properties["cliVersion"] as String? ?: projectVersion
 
 group = cliGroup
-version = cliVersion
+version = project.properties["cliVersion"] as String? ?: projectVersion
 
 repositories {
     mavenCentral()
@@ -84,7 +83,7 @@ configurations {
 
 nativeImage {
     dependsOn("shadowJar")
-    setClasspath(File(project.buildDir, "libs/spp-cli-$projectVersion.jar"))
+    setClasspath(File(project.buildDir, "libs/spp-cli-${project.version}.jar"))
     runtimeClasspath = configurations.getByName("empty")
     if (System.getenv("GRAALVM_HOME") != null) {
         graalVmHome = System.getenv("GRAALVM_HOME")

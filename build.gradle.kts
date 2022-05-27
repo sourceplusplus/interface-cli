@@ -26,14 +26,15 @@ version = projectVersion
 
 repositories {
     mavenCentral()
-    maven(url = "https://jitpack.io") { name = "jitpack" }
+    maven(url = "https://jitpack.io")
+    maven(url = "https://pkg.sourceplus.plus/sourceplusplus/protocol")
 }
 
 dependencies {
     implementation("com.apollographql.apollo3:apollo-runtime:$apolloVersion")
     api("com.apollographql.apollo3:apollo-api:$apolloVersion")
 
-    implementation("com.github.sourceplusplus.protocol:protocol:$projectVersion")
+    implementation("plus.sourceplusplus:protocol:$projectVersion")
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1")

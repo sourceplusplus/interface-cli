@@ -38,6 +38,8 @@ jobs:
           echo "::set-output name=version::$VERSION"
           echo "SPP_CLI_VERSION=$VERSION" >> $GITHUB_ENV
           echo "SPP_RELEASE_VERSION=${VERSION/-SNAPSHOT/}" >> $GITHUB_ENV
+          SPP_RELEASE_VERSION=${VERSION/-SNAPSHOT/}
+          echo "::set-output name=release_version::$SPP_RELEASE_VERSION"
 
       - name: Build native spp-cli (Release)
         if: github.ref == 'refs/heads/master'
@@ -89,6 +91,8 @@ jobs:
           echo "::set-output name=version::$VERSION"
           echo "SPP_CLI_VERSION=$VERSION" >> $GITHUB_ENV
           echo "SPP_RELEASE_VERSION=${VERSION/-SNAPSHOT/}" >> $GITHUB_ENV
+          SPP_RELEASE_VERSION=${VERSION/-SNAPSHOT/}
+          echo "::set-output name=release_version::$SPP_RELEASE_VERSION"
 
       - name: Build native spp-cli.exe (Release)
         if: github.ref == 'refs/heads/master'
@@ -129,6 +133,7 @@ jobs:
 
     outputs:
       version: ${{ steps.properties.outputs.version }}
+      release_version: ${{ steps.properties.outputs.release_version }}
     steps:
       - uses: actions/checkout@v2
       - uses: ayltai/setup-graalvm@v1
@@ -146,6 +151,8 @@ jobs:
           echo "::set-output name=version::$VERSION"
           echo "SPP_CLI_VERSION=$VERSION" >> $GITHUB_ENV
           echo "SPP_RELEASE_VERSION=${VERSION/-SNAPSHOT/}" >> $GITHUB_ENV
+          SPP_RELEASE_VERSION=${VERSION/-SNAPSHOT/}
+          echo "::set-output name=release_version::$SPP_RELEASE_VERSION"
 
       - name: Build native spp-cli (Release)
         if: github.ref == 'refs/heads/master'
@@ -257,8 +264,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ needs.buildOnLinux.outputs.version }}
-          release_name: v${{ needs.buildOnLinux.outputs.version }}
+          tag_name: ${{ needs.buildOnLinux.outputs.release_version }}
+          release_name: v${{ needs.buildOnLinux.outputs.release_version }}
           body: ${{ needs.build.outputs.changelog }}
           draft: true
 
@@ -274,7 +281,7 @@ jobs:
         with:
           upload_url: ${{ steps.createDraft.outputs.upload_url }}
           asset_path: ./spp-cli-macOS.zip
-          asset_name: spp-cli-${{ needs.buildOnLinux.outputs.version }}-macOS.zip
+          asset_name: spp-cli-${{ needs.buildOnLinux.outputs.release_version }}-macOS.zip
           asset_content_type: application/zip
 
       - name: Download spp-cli-win64 artifact
@@ -289,7 +296,7 @@ jobs:
         with:
           upload_url: ${{ steps.createDraft.outputs.upload_url }}
           asset_path: ./spp-cli-win64.zip
-          asset_name: spp-cli-${{ needs.buildOnLinux.outputs.version }}-win64.zip
+          asset_name: spp-cli-${{ needs.buildOnLinux.outputs.release_version }}-win64.zip
           asset_content_type: application/zip
 
       - name: Download spp-cli-linux64 artifact
@@ -304,5 +311,5 @@ jobs:
         with:
           upload_url: ${{ steps.createDraft.outputs.upload_url }}
           asset_path: ./spp-cli-linux64.zip
-          asset_name: spp-cli-${{ needs.buildOnLinux.outputs.version }}-linux64.zip
+          asset_name: spp-cli-${{ needs.buildOnLinux.outputs.release_version }}-linux64.zip
           asset_content_type: application/zip

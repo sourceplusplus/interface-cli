@@ -133,6 +133,7 @@ jobs:
 
     outputs:
       version: ${{ steps.properties.outputs.version }}
+      release_version: ${{ steps.properties.outputs.release_version }}
     steps:
       - uses: actions/checkout@v2
       - uses: ayltai/setup-graalvm@v1

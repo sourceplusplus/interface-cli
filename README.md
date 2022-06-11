@@ -77,4 +77,4 @@ Commands:
 ```
 
 # Documentation
-- [Developer Commands](https://docs.sourceplusplus.com/implementation/tools/clients/cli/developer/) / [Admin Commands](https://docs.sourceplusplus.com/implementation/tools/clients/cli/admin/)
+- [Developer Commands](https://docs.sourceplus.plus/implementation/tools/clients/cli/developer/) / [Admin Commands](https://docs.sourceplus.plus/implementation/tools/clients/cli/admin/)

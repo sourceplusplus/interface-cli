@@ -241,6 +241,16 @@ jobs:
           name: spp-cli-linux64.zip
           path: ./spp-cli-linux64.zip
 
+      - run: ./gradlew composeLogs
+        if: ${{ always() }}
+
+      - name: Upload docker logs artifact
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: docker-logs
+          path: ./build/containers-logs
+
   releaseDraft:
     name: Release Draft
     needs: [ buildOnMac, buildOnWindows, buildOnLinux ]

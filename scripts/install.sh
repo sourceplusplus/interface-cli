@@ -33,7 +33,7 @@ for cmd in curl unzip awk; do
 done
 
 get_latest_release_number() {
-  curl --silent "https://github.com/sourceplusplus/interface-cli/releases/latest" | sed 's#.*tag/\(.*\)\".*#\1#'
+  curl -Ls -o /dev/null -w %{url_effective} https://github.com/sourceplusplus/interface-cli/releases/latest | grep -Po "(?<=tag/)(.+)"
 }
 
 # Convert the string to lower case.

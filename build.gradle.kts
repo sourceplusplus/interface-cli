@@ -1,5 +1,16 @@
 import java.util.*
 
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("app.cash.licensee:licensee-gradle-plugin:1.4.1")
+    }
+}
+
+apply(plugin = "app.cash.licensee")
+
 plugins {
     id("com.diffplug.spotless")
     id("org.mikeneck.graalvm-native-image")
@@ -54,6 +65,16 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
 
     testImplementation("org.junit.jupiter:junit-jupiter-engine:$jupiterVersion")
+}
+
+configure<app.cash.licensee.LicenseeExtension> {
+    ignoreDependencies("plus.sourceplus", "protocol")
+    ignoreDependencies("plus.sourceplus", "protocol-jvm")
+    allow("Apache-2.0")
+    allow("MIT")
+    allowUrl("https://raw.githubusercontent.com/apollographql/apollo-kotlin/main/LICENSE") //MIT
+    allowUrl("https://raw.githubusercontent.com/auth0/java-jwt/master/LICENSE") //MIT
+    allowUrl("https://www.bouncycastle.org/licence.html") //MIT
 }
 
 //todo: shouldn't need to put in src (github actions needs for some reason)

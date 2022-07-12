@@ -9,7 +9,7 @@ services:
       - "5455:5455"
       - "12800:12800"
     environment:
-      - SPP_DISABLE_JWT=true
+      - SPP_JWT_ENABLED=false
   skywalking-oap:
     image: sourceplusplus/spp-oap-server:latest
     container_name: skywalking-oap

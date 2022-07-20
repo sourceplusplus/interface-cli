@@ -10,11 +10,3 @@ services:
       - "12800:12800"
     environment:
       - SPP_JWT_ENABLED=false
-  skywalking-oap:
-    image: sourceplusplus/spp-oap-server:latest
-    container_name: skywalking-oap
-    hostname: skywalking-oap
-    environment:
-      - SPP_PLATFORM_HOST=spp-platform
-      - SPP_PLATFORM_PORT=5460
-      - SPP_PLATFORM_SSL_TRUST_ALL=true

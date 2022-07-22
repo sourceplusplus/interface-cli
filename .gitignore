@@ -1,0 +1,8 @@
+# Ignore artifacts
+build/
+
+# Ignore IDE files
+.idea/
+
+# Ignore .gradle directory
+.gradle/

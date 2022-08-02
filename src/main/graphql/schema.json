@@ -4317,6 +4317,30 @@
               "deprecationReason": null
             },
             {
+              "name": "ADD_CLIENT_ACCESS",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "REMOVE_CLIENT_ACCESS",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "GET_CLIENT_ACCESSORS",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "UPDATE_CLIENT_ACCESS",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "ADD_DEVELOPER",
               "description": null,
               "isDeprecated": false,

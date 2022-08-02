@@ -4540,7 +4540,7 @@
             },
             {
               "name": "VIEW_ACTIVITY",
-              "description": "    VIEW_OVERVIEW,",
+              "description": "    null",
               "isDeprecated": false,
               "deprecationReason": null
             },

@@ -156,11 +156,11 @@ jobs:
 
       - name: Build native spp-cli (Release)
         if: github.ref == 'refs/heads/master'
-        run: ./gradlew assembleUp nativeImage -Dbuild.profile=release -PcliVersion=$SPP_RELEASE_VERSION
+        run: ./gradlew assembleUp nativeImage -Dbuild.profile=release -PcliVersion=$SPP_RELEASE_VERSION --refresh-dependencies
 
       - name: Build native spp-cli (Snapshot)
         if: github.ref != 'refs/heads/master'
-        run: ./gradlew assembleUp nativeImage -Dbuild.profile=release
+        run: ./gradlew assembleUp nativeImage -Dbuild.profile=release --refresh-dependencies
 
       - name: Docker IPs
         run: docker inspect --format='{{.Name}} - {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps -aq)

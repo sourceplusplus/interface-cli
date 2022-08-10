@@ -4,13 +4,11 @@
 ![GitHub release](https://img.shields.io/github/v/release/sourceplusplus/interface-cli?include_prereleases)
 [![Build](https://github.com/sourceplusplus/interface-cli/actions/workflows/build.yml/badge.svg)](https://github.com/sourceplusplus/interface-cli/actions/workflows/build.yml)
 
-# What is this?
+## What is this?
 
 This project provides a command-line interface to [Source++](https://github.com/sourceplusplus/live-platform), the open-source live coding platform.
 
-# Install
-
-## Quick install
+## Install
 
 ### Linux or macOS
 
@@ -28,12 +26,12 @@ Note: You will need to start cmd in administrator mode.
 curl -LO "https://raw.githubusercontent.com/sourceplusplus/interface-cli/master/scripts/install.bat" && .\install.bat
 ```
 
-## Install by available binaries
+### Install by available binaries
 
 Go to the [releases page](https://github.com/sourceplusplus/interface-cli/releases) to download all available binaries,
 including macOS, Linux, Windows.
 
-# Usage
+## How to use?
 
 Try executing `spp-cli --help` to output the usage instructions like so:
 
@@ -76,5 +74,9 @@ Commands:
   view        Add a live view subscription
 ```
 
-# Documentation
+## Documentation
 - [Developer Commands](https://docs.sourceplus.plus/implementation/tools/clients/cli/developer/) / [Admin Commands](https://docs.sourceplus.plus/implementation/tools/clients/cli/admin/)
+
+## Bugs & Features
+
+Bug reports and feature requests can be created [here](https://github.com/sourceplusplus/live-platform/issues).

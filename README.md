@@ -56,24 +56,6 @@ Commands:
   version    Display version information
 ```
 
-To get information about a sub-command, try `spp-cli <command> --help`:
-
-```
-Usage: spp-cli add [OPTIONS] COMMAND [ARGS]...
-
-  Add live instruments/views
-
-Options:
-  -h, --help  Show this message and exit
-
-Commands:
-  breakpoint  Add a live breakpoint instrument
-  log         Add a live log instrument
-  meter       Add a live meter instrument
-  span        Add a live span instrument
-  view        Add a live view subscription
-```
-
 ## Documentation
 - [Developer Commands](https://docs.sourceplus.plus/implementation/tools/clients/cli/developer/) / [Admin Commands](https://docs.sourceplus.plus/implementation/tools/clients/cli/admin/)
 

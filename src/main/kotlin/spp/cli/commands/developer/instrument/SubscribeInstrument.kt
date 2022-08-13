@@ -84,7 +84,7 @@ class SubscribeInstrument : CliktCommand(
                 vertx.createNetClient(options)
             }
             val socket = client.connect(
-                5455,
+                12800,
                 PlatformCLI.platformHost.substringAfter("https://").substringAfter("http://")
                     .substringBefore(":")
             ).await()

@@ -22,6 +22,7 @@ import com.apollographql.apollo3.api.json.MapJsonWriter
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.options.default
+import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.int
@@ -49,6 +50,7 @@ class AddBreakpoint : CliktCommand(name = "breakpoint", help = "Add a live break
     val throttleLimit by option("-throttleLimit", "-t", help = "Trigger throttle limit").int().default(1)
     val throttleStep by option("-throttleStep", "-s", help = "Trigger throttle step").enum<ThrottleStep>()
         .default(ThrottleStep.SECOND)
+    val applyImmediately by option("-applyImmediately", "-a", help = "Apply immediately").flag()
 
     override fun run() = runBlocking {
         val input = LiveBreakpointInput(
@@ -60,7 +62,8 @@ class AddBreakpoint : CliktCommand(name = "breakpoint", help = "Add a live break
                 InstrumentThrottleInput(
                     throttleLimit, spp.cli.protocol.type.ThrottleStep.valueOf(throttleStep.toString())
                 )
-            )
+            ),
+            applyImmediately = Optional.Present(applyImmediately)
         )
         val response = try {
             apolloClient.mutation(AddLiveBreakpointMutation(input)).execute()

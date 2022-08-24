@@ -20,6 +20,7 @@ import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import kotlinx.coroutines.runBlocking
 import spp.cli.Main
+import spp.cli.PlatformCLI
 import spp.cli.PlatformCLI.apolloClient
 import spp.cli.PlatformCLI.echoError
 import spp.cli.protocol.role.RemoveDeveloperRoleMutation
@@ -42,6 +43,15 @@ class RemoveDeveloperRole : CliktCommand(printHelpOnEmptyArgs = true) {
             if (Main.standalone) exitProcess(-1) else return@runBlocking
         }
 
+        if (PlatformCLI.verbose) {
+            if (response.data!!.removeDeveloperRole) {
+                echo("Removed role $role from developer $id")
+            } else {
+                echo("Failed to remove role $role from developer $id, do they have it?", err = true)
+            }
+        } else {
+            echo(response.data!!.removeDeveloperRole)
+        }
         if (response.data!!.removeDeveloperRole) {
             if (Main.standalone) exitProcess(0)
         } else {

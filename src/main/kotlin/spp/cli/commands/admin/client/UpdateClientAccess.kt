@@ -20,6 +20,7 @@ import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import kotlinx.coroutines.runBlocking
 import spp.cli.Main
+import spp.cli.PlatformCLI
 import spp.cli.PlatformCLI.apolloClient
 import spp.cli.PlatformCLI.echoError
 import spp.cli.protocol.client.UpdateClientAccessMutation
@@ -41,7 +42,12 @@ class UpdateClientAccess : CliktCommand(printHelpOnEmptyArgs = true) {
             if (Main.standalone) exitProcess(-1) else return@runBlocking
         }
 
-        echo(response.data!!.updateClientAccess.secret!!)
+        if (PlatformCLI.verbose) {
+            echo("Update client access for id $id")
+            echo("New secret: ${response.data!!.updateClientAccess.secret!!}")
+        } else {
+            echo(response.data!!.updateClientAccess.secret!!)
+        }
         if (Main.standalone) exitProcess(0)
     }
 }

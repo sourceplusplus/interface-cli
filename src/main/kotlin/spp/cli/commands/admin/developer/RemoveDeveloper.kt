@@ -20,6 +20,7 @@ import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import kotlinx.coroutines.runBlocking
 import spp.cli.Main
+import spp.cli.PlatformCLI
 import spp.cli.PlatformCLI.apolloClient
 import spp.cli.PlatformCLI.echoError
 import spp.cli.protocol.developer.RemoveDeveloperMutation
@@ -41,7 +42,19 @@ class RemoveDeveloper : CliktCommand(printHelpOnEmptyArgs = true) {
             if (Main.standalone) exitProcess(-1) else return@runBlocking
         }
 
-        echo(response.data!!.removeDeveloper)
-        if (Main.standalone) exitProcess(0)
+        if (PlatformCLI.verbose) {
+            if (response.data!!.removeDeveloper) {
+                echo("Removed developer $id")
+            } else {
+                echo("Failed to remove developer $id, does it exist?", err = true)
+            }
+        } else {
+            echo(response.data!!.removeDeveloper)
+        }
+        if (response.data!!.removeDeveloper) {
+            if (Main.standalone) exitProcess(0)
+        } else {
+            if (Main.standalone) exitProcess(-1) else return@runBlocking
+        }
     }
 }

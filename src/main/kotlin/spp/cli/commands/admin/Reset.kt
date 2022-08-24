@@ -19,6 +19,7 @@ package spp.cli.commands.admin
 import com.github.ajalt.clikt.core.CliktCommand
 import kotlinx.coroutines.runBlocking
 import spp.cli.Main
+import spp.cli.PlatformCLI
 import spp.cli.PlatformCLI.apolloClient
 import spp.cli.PlatformCLI.echoError
 import spp.cli.protocol.system.ResetMutation
@@ -38,7 +39,19 @@ class Reset : CliktCommand() {
             if (Main.standalone) exitProcess(-1) else return@runBlocking
         }
 
-        echo(response.data!!.reset)
-        if (Main.standalone) exitProcess(0)
+        if (PlatformCLI.verbose) {
+            if (response.data!!.reset) {
+                echo("Successfully reset the platform.")
+            } else {
+                echo("Failed to reset the platform.", err = true)
+            }
+        } else {
+            echo(response.data!!.reset)
+        }
+        if (response.data!!.reset) {
+            if (Main.standalone) exitProcess(0)
+        } else {
+            if (Main.standalone) exitProcess(-1) else return@runBlocking
+        }
     }
 }

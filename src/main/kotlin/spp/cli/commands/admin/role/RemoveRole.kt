@@ -20,6 +20,7 @@ import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import kotlinx.coroutines.runBlocking
 import spp.cli.Main
+import spp.cli.PlatformCLI
 import spp.cli.PlatformCLI.apolloClient
 import spp.cli.PlatformCLI.echoError
 import spp.cli.protocol.role.RemoveRoleMutation
@@ -41,6 +42,15 @@ class RemoveRole : CliktCommand(printHelpOnEmptyArgs = true) {
             if (Main.standalone) exitProcess(-1) else return@runBlocking
         }
 
+        if (PlatformCLI.verbose) {
+            if (response.data!!.removeRole) {
+                echo("Removed role $role")
+            } else {
+                echo("Failed to remove role $role, does it exist?", err = true)
+            }
+        } else {
+            echo(response.data!!.removeRole)
+        }
         if (response.data!!.removeRole) {
             if (Main.standalone) exitProcess(0)
         } else {

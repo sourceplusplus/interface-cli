@@ -20,6 +20,7 @@ import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import kotlinx.coroutines.runBlocking
 import spp.cli.Main
+import spp.cli.PlatformCLI
 import spp.cli.PlatformCLI.apolloClient
 import spp.cli.PlatformCLI.echoError
 import spp.cli.protocol.developer.AddDeveloperMutation
@@ -41,7 +42,11 @@ class AddDeveloper : CliktCommand(printHelpOnEmptyArgs = true) {
             if (Main.standalone) exitProcess(-1) else return@runBlocking
         }
 
-        echo(response.data!!.addDeveloper.accessToken!!)
+        if (PlatformCLI.verbose) {
+            echo("Added developer $id with token ${response.data!!.addDeveloper.accessToken!!}")
+        } else {
+            echo(response.data!!.addDeveloper.accessToken!!)
+        }
         if (Main.standalone) exitProcess(0)
     }
 }

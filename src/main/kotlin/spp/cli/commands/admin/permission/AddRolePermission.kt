@@ -21,6 +21,7 @@ import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.types.enum
 import kotlinx.coroutines.runBlocking
 import spp.cli.Main
+import spp.cli.PlatformCLI
 import spp.cli.PlatformCLI.apolloClient
 import spp.cli.PlatformCLI.echoError
 import spp.cli.protocol.permission.AddRolePermissionMutation
@@ -44,6 +45,18 @@ class AddRolePermission : CliktCommand(printHelpOnEmptyArgs = true) {
             if (Main.standalone) exitProcess(-1) else return@runBlocking
         }
 
+        if (PlatformCLI.verbose) {
+            if (response.data!!.addRolePermission) {
+                echo("Added permission ${permission.name} to role ${role}")
+            } else {
+                echo(
+                    "Failed to add permission ${permission.name} to role ${role}, does the role already have it?",
+                    err = true
+                )
+            }
+        } else {
+            echo(response.data!!.addRolePermission)
+        }
         if (response.data!!.addRolePermission) {
             if (Main.standalone) exitProcess(0)
         } else {

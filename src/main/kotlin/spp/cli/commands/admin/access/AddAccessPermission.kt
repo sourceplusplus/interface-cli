@@ -57,16 +57,16 @@ class AddAccessPermission : CliktCommand(printHelpOnEmptyArgs = true) {
         }
 
         if (PlatformCLI.verbose) {
-            echo("Added access permission with id ${response.data!!.addAccessPermission.id}")
-            echo("Location patterns: ${response.data!!.addAccessPermission.locationPatterns!!}")
-            echo("Type: ${response.data!!.addAccessPermission.type}")
-        } else {
             echo(JsonCleaner.cleanJson(MapJsonWriter().let {
                 it.beginObject()
                 AddAccessPermission.toJson(it, CustomScalarAdapters.Empty, response.data!!.addAccessPermission)
                 it.endObject()
                 (it.root() as LinkedHashMap<*, *>)
             }).encodePrettily())
+        } else {
+            echo("Added access permission with id ${response.data!!.addAccessPermission.id}")
+            echo("Location patterns: ${response.data!!.addAccessPermission.locationPatterns!!}")
+            echo("Type: ${response.data!!.addAccessPermission.type}")
         }
         if (Main.standalone) exitProcess(0)
     }

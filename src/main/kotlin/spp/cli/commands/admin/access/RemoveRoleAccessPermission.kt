@@ -44,7 +44,19 @@ class RemoveRoleAccessPermission : CliktCommand(printHelpOnEmptyArgs = true) {
             if (Main.standalone) exitProcess(-1) else return@runBlocking
         }
 
-        echo(response.data!!.removeRoleAccessPermission)
-        if (Main.standalone) exitProcess(0)
+        if (PlatformCLI.verbose) {
+            if (response.data!!.removeRoleAccessPermission) {
+                echo("Removed access permission $id from role $role")
+            } else {
+                echo("Failed to remove access permission $id from role $role, does the role have it?")
+            }
+        } else {
+            echo(response.data!!.removeRoleAccessPermission)
+        }
+        if (response.data!!.removeRoleAccessPermission) {
+            if (Main.standalone) exitProcess(0)
+        } else {
+            if (Main.standalone) exitProcess(-1) else return@runBlocking
+        }
     }
 }

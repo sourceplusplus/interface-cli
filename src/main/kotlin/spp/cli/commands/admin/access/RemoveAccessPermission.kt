@@ -43,7 +43,19 @@ class RemoveAccessPermission : CliktCommand(printHelpOnEmptyArgs = true) {
             if (Main.standalone) exitProcess(-1) else return@runBlocking
         }
 
-        echo(response.data!!.removeAccessPermission)
-        if (Main.standalone) exitProcess(0)
+        if (PlatformCLI.verbose) {
+            if (response.data!!.removeAccessPermission) {
+                echo("Removed access permission $id")
+            } else {
+                echo("Failed to remove access permission $id, does it exist?", err = true)
+            }
+        } else {
+            echo(response.data!!.removeAccessPermission)
+        }
+        if (response.data!!.removeAccessPermission) {
+            if (Main.standalone) exitProcess(0)
+        } else {
+            if (Main.standalone) exitProcess(-1) else return@runBlocking
+        }
     }
 }

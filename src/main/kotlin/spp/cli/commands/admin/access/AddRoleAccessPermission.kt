@@ -44,7 +44,19 @@ class AddRoleAccessPermission : CliktCommand(printHelpOnEmptyArgs = true) {
             if (Main.standalone) exitProcess(-1) else return@runBlocking
         }
 
-        echo(response.data!!.addRoleAccessPermission)
-        if (Main.standalone) exitProcess(0)
+        if (PlatformCLI.verbose) {
+            if (response.data!!.addRoleAccessPermission) {
+                echo("Added access permission $id to role $role")
+            } else {
+                echo("Could not add access permission $id to role $role, does the role already have it?", err = true)
+            }
+        } else {
+            echo(response.data!!.addRoleAccessPermission)
+        }
+        if (response.data!!.addRoleAccessPermission) {
+            if (Main.standalone) exitProcess(0)
+        } else {
+            if (Main.standalone) exitProcess(-1) else return@runBlocking
+        }
     }
 }

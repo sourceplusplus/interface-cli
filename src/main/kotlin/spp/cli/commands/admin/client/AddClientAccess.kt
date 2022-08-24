@@ -19,6 +19,7 @@ package spp.cli.commands.admin.client
 import com.github.ajalt.clikt.core.CliktCommand
 import kotlinx.coroutines.runBlocking
 import spp.cli.Main
+import spp.cli.PlatformCLI
 import spp.cli.PlatformCLI.apolloClient
 import spp.cli.PlatformCLI.echoError
 import spp.cli.protocol.client.AddClientAccessMutation
@@ -38,8 +39,14 @@ class AddClientAccess : CliktCommand() {
             if (Main.standalone) exitProcess(-1) else return@runBlocking
         }
 
-        echo(response.data!!.addClientAccess.id!!)
-        echo(response.data!!.addClientAccess.secret!!)
+        if (PlatformCLI.verbose) {
+            echo("Added client access");
+            echo("id: ${response.data!!.addClientAccess.id!!}")
+            echo("secret: ${response.data!!.addClientAccess.secret!!}")
+        } else {
+            echo(response.data!!.addClientAccess.id!!)
+            echo(response.data!!.addClientAccess.secret!!)
+        }
         if (Main.standalone) exitProcess(0)
     }
 }

@@ -20,6 +20,7 @@ import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import kotlinx.coroutines.runBlocking
 import spp.cli.Main
+import spp.cli.PlatformCLI
 import spp.cli.PlatformCLI.apolloClient
 import spp.cli.PlatformCLI.echoError
 import spp.cli.protocol.role.AddRoleMutation
@@ -41,6 +42,15 @@ class AddRole : CliktCommand(printHelpOnEmptyArgs = true) {
             if (Main.standalone) exitProcess(-1) else return@runBlocking
         }
 
+        if (PlatformCLI.verbose) {
+            if (response.data!!.addRole) {
+                echo("Added role $role")
+            } else {
+                echo("Failed to add role $role, does it already exist?", err = true)
+            }
+        } else {
+            echo(response.data!!.addRole)
+        }
         if (response.data!!.addRole) {
             if (Main.standalone) exitProcess(0)
         } else {

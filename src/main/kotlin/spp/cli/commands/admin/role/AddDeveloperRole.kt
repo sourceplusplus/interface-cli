@@ -20,6 +20,7 @@ import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import kotlinx.coroutines.runBlocking
 import spp.cli.Main
+import spp.cli.PlatformCLI
 import spp.cli.PlatformCLI.apolloClient
 import spp.cli.PlatformCLI.echoError
 import spp.cli.protocol.role.AddDeveloperRoleMutation
@@ -42,6 +43,13 @@ class AddDeveloperRole : CliktCommand(printHelpOnEmptyArgs = true) {
             if (Main.standalone) exitProcess(-1) else return@runBlocking
         }
 
+        if (PlatformCLI.verbose) {
+            if (response.data!!.addDeveloperRole) {
+                echo("Added role $role to developer $id")
+            } else {
+                echo("Failed to add role $role to developer $id, do they already have it?", err = true)
+            }
+        }
         if (response.data!!.addDeveloperRole) {
             if (Main.standalone) exitProcess(0)
         } else {

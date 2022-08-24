@@ -20,6 +20,7 @@ import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import kotlinx.coroutines.runBlocking
 import spp.cli.Main
+import spp.cli.PlatformCLI
 import spp.cli.PlatformCLI.apolloClient
 import spp.cli.PlatformCLI.echoError
 import spp.cli.protocol.permission.RemoveRolePermissionMutation
@@ -42,6 +43,18 @@ class RemoveRolePermission : CliktCommand(printHelpOnEmptyArgs = true) {
             if (Main.standalone) exitProcess(-1) else return@runBlocking
         }
 
+        if (PlatformCLI.verbose) {
+            if (response.data!!.removeRolePermission) {
+                echo("Removed permission $permission from role $role")
+            } else {
+                echo(
+                    "Failed to remove permission $permission from role $role, does the role have it?",
+                    err = true
+                )
+            }
+        } else {
+            echo(response.data!!.removeRolePermission)
+        }
         if (response.data!!.removeRolePermission) {
             if (Main.standalone) exitProcess(0)
         } else {

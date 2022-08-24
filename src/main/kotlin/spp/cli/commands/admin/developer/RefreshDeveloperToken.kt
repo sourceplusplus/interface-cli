@@ -44,7 +44,7 @@ class RefreshDeveloperToken : CliktCommand(printHelpOnEmptyArgs = true) {
 
         if (PlatformCLI.verbose) {
             echo("Refreshed developer token for id $id")
-            echo("new access token: ${response.data!!.refreshDeveloperToken.accessToken!!}")
+            echo("New access token: ${response.data!!.refreshDeveloperToken.accessToken!!}")
         } else {
             echo(response.data!!.refreshDeveloperToken.accessToken!!)
         }

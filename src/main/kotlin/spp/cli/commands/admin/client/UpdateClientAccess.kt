@@ -44,7 +44,7 @@ class UpdateClientAccess : CliktCommand(printHelpOnEmptyArgs = true) {
 
         if (PlatformCLI.verbose) {
             echo("Update client access for id $id")
-            echo("new secret: ${response.data!!.updateClientAccess.secret!!}")
+            echo("New secret: ${response.data!!.updateClientAccess.secret!!}")
         } else {
             echo(response.data!!.updateClientAccess.secret!!)
         }

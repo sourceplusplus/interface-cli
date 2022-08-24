@@ -1,0 +1,6 @@
+mutation updateClientAccess($id: String!) {
+    updateClientAccess(id: $id) {
+        id
+        secret
+    }
+}

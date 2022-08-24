@@ -1,0 +1,3 @@
+mutation removeClientAccess($id: String!) {
+    removeClientAccess(id: $id)
+}

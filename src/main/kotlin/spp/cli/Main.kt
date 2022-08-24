@@ -22,6 +22,10 @@ import spp.cli.commands.Developer
 import spp.cli.commands.Version
 import spp.cli.commands.admin.Reset
 import spp.cli.commands.admin.access.*
+import spp.cli.commands.admin.client.AddClientAccess
+import spp.cli.commands.admin.client.GetClientAccessors
+import spp.cli.commands.admin.client.RemoveClientAccess
+import spp.cli.commands.admin.client.UpdateClientAccess
 import spp.cli.commands.admin.developer.AddDeveloper
 import spp.cli.commands.admin.developer.GetDevelopers
 import spp.cli.commands.admin.developer.RefreshDeveloperToken
@@ -66,6 +70,11 @@ object Main {
                 GetDevelopers(),
                 RemoveDeveloper(),
                 RefreshDeveloperToken(),
+                //client access
+                AddClientAccess(),
+                GetClientAccessors(),
+                RemoveClientAccess(),
+                UpdateClientAccess(),
                 //instrument access
                 AddAccessPermission(),
                 AddRoleAccessPermission(),

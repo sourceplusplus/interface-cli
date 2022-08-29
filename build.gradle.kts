@@ -170,6 +170,39 @@ apollo {
 spotless {
     kotlin {
         targetExclude("**/generated/**")
-        licenseHeaderFile(file("LICENSE-HEADER.txt"))
+
+        val startYear = 2022
+        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+        val copyrightYears = if (startYear == currentYear) {
+            "$startYear"
+        } else {
+            "$startYear-$currentYear"
+        }
+
+        val jetbrainsProject = findProject(":protocol") ?: rootProject
+        val licenseHeader = Regex("( . Copyright [\\S\\s]+)")
+            .find(File(jetbrainsProject.projectDir, "LICENSE").readText())!!
+            .value.lines().joinToString("\n") {
+                if (it.trim().isEmpty()) {
+                    " *"
+                } else {
+                    " * " + it.trim()
+                }
+            }
+        val formattedLicenseHeader = buildString {
+            append("/*\n")
+            append(
+                licenseHeader.replace(
+                    "Copyright [yyyy] [name of copyright owner]",
+                    "Source++, the open-source live coding platform.\n" +
+                            " * Copyright (C) $copyrightYears CodeBrig, Inc."
+                ).replace(
+                    "http://www.apache.org/licenses/LICENSE-2.0",
+                    "    http://www.apache.org/licenses/LICENSE-2.0"
+                )
+            )
+            append("/")
+        }
+        licenseHeader(formattedLicenseHeader)
     }
 }

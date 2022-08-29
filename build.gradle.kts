@@ -17,6 +17,7 @@ plugins {
     id("com.github.johnrengelman.shadow")
     id("com.apollographql.apollo3")
     id("com.avast.gradle.docker-compose")
+    id("io.gitlab.arturbosch.detekt")
     kotlin("jvm")
 }
 
@@ -64,6 +65,8 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
 
     testImplementation("org.junit.jupiter:junit-jupiter-engine:$jupiterVersion")
+
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.21.0")
 }
 
 configure<app.cash.licensee.LicenseeExtension> {
@@ -205,4 +208,10 @@ spotless {
         }
         licenseHeader(formattedLicenseHeader)
     }
+}
+
+detekt {
+    parallel = true
+    buildUponDefaultConfig = true
+    config.setFrom(arrayOf(File(project.rootDir, "detekt.yml")))
 }

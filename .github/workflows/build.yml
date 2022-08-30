@@ -226,7 +226,8 @@ jobs:
       - name: "[CLI] Reset"
         run: ./build/graal/spp-cli -v admin reset
 
-      - run: ./gradlew test -Dtest.profile=integration
+      - name: Check CLI
+        run: ./gradlew check -Dtest.profile=integration
 
       - name: Compress CLI
         uses: svenstaro/upx-action@v2

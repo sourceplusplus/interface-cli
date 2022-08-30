@@ -17,6 +17,7 @@ plugins {
     id("com.github.johnrengelman.shadow")
     id("com.apollographql.apollo3")
     id("com.avast.gradle.docker-compose")
+    id("io.gitlab.arturbosch.detekt")
     kotlin("jvm")
 }
 
@@ -64,6 +65,8 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
 
     testImplementation("org.junit.jupiter:junit-jupiter-engine:$jupiterVersion")
+
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.21.0")
 }
 
 configure<app.cash.licensee.LicenseeExtension> {
@@ -170,6 +173,45 @@ apollo {
 spotless {
     kotlin {
         targetExclude("**/generated/**")
-        licenseHeaderFile(file("LICENSE-HEADER.txt"))
+
+        val startYear = 2022
+        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+        val copyrightYears = if (startYear == currentYear) {
+            "$startYear"
+        } else {
+            "$startYear-$currentYear"
+        }
+
+        val jetbrainsProject = findProject(":protocol") ?: rootProject
+        val licenseHeader = Regex("( . Copyright [\\S\\s]+)")
+            .find(File(jetbrainsProject.projectDir, "LICENSE").readText())!!
+            .value.lines().joinToString("\n") {
+                if (it.trim().isEmpty()) {
+                    " *"
+                } else {
+                    " * " + it.trim()
+                }
+            }
+        val formattedLicenseHeader = buildString {
+            append("/*\n")
+            append(
+                licenseHeader.replace(
+                    "Copyright [yyyy] [name of copyright owner]",
+                    "Source++, the open-source live coding platform.\n" +
+                            " * Copyright (C) $copyrightYears CodeBrig, Inc."
+                ).replace(
+                    "http://www.apache.org/licenses/LICENSE-2.0",
+                    "    http://www.apache.org/licenses/LICENSE-2.0"
+                )
+            )
+            append("/")
+        }
+        licenseHeader(formattedLicenseHeader)
     }
+}
+
+detekt {
+    parallel = true
+    buildUponDefaultConfig = true
+    config.setFrom(arrayOf(File(project.rootDir, "detekt.yml")))
 }

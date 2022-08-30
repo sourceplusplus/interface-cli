@@ -1,6 +1,0 @@
-query getClientAccessors {
-    getClientAccessors {
-        id
-        secret
-    }
-}

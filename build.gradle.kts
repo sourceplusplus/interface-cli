@@ -41,11 +41,14 @@ repositories {
     maven(url = "https://pkg.sourceplus.plus/sourceplusplus/protocol")
 }
 
+val graphqlLibs = configurations.create("graphqlLibs")
+
 dependencies {
     implementation("com.apollographql.apollo3:apollo-runtime:$apolloVersion")
     api("com.apollographql.apollo3:apollo-api:$apolloVersion")
 
     implementation("plus.sourceplus:protocol:$projectVersion")
+    graphqlLibs("plus.sourceplus:protocol:$projectVersion")
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
@@ -169,6 +172,19 @@ dockerCompose {
 apollo {
     packageNamesFromFilePaths("spp.cli.protocol")
 }
+
+tasks.create<Copy>("importProtocolFiles") {
+    configurations.getByName("graphqlLibs").asFileTree.forEach {
+        if (it.name.contains("protocol-jvm")) {
+            from(zipTree(it)) {
+                exclude("META-INF/**")
+                exclude("spp/**")
+            }
+        }
+    }
+    into(file("src/main"))
+}
+tasks.getByName("checkApolloVersions").dependsOn("importProtocolFiles")
 
 spotless {
     kotlin {

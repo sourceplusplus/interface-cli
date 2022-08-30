@@ -184,11 +184,7 @@ tasks.create<Copy>("importProtocolFiles") {
     }
     into(file("src/main"))
 }
-tasks.forEach {
-    if (!it.name.contains("importProtocolFiles")) {
-        it.dependsOn("importProtocolFiles")
-    }
-}
+tasks.getByName("checkApolloVersions").dependsOn("importProtocolFiles")
 
 spotless {
     kotlin {

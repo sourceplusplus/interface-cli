@@ -6,3 +6,6 @@ build/
 
 # Ignore .gradle directory
 .gradle/
+
+# Ignore protocol GraphQL files
+src/main/graphql/

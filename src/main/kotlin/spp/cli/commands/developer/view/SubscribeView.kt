@@ -22,6 +22,7 @@ import com.github.ajalt.clikt.parameters.options.option
 import eu.geekplace.javapinning.JavaPinning
 import eu.geekplace.javapinning.pin.Pin
 import io.vertx.core.Vertx
+import io.vertx.core.eventbus.MessageConsumer
 import io.vertx.core.json.Json
 import io.vertx.core.json.JsonArray
 import io.vertx.core.json.JsonObject
@@ -38,10 +39,13 @@ import spp.protocol.artifact.log.Log
 import spp.protocol.artifact.log.LogOrderType
 import spp.protocol.artifact.log.LogResult
 import spp.protocol.extend.TCPServiceFrameParser
+import spp.protocol.platform.PlatformAddress
+import spp.protocol.platform.status.InstanceConnection
 import spp.protocol.view.LiveViewEvent
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatterBuilder
+import java.util.*
 
 class SubscribeView : CliktCommand(
     name = "view",
@@ -93,27 +97,44 @@ class SubscribeView : CliktCommand(
             ).await()
             socket!!.handler(FrameParser(TCPServiceFrameParser(vertx, socket)))
 
-            vertx.eventBus().consumer<JsonObject>(toLiveViewSubscriberAddress(PlatformCLI.developer.id)) {
-                val event = Json.decodeValue(it.body().toString(), LiveViewEvent::class.java)
-                if (outputFullEvent) {
-                    println(event.metricsData)
-                } else {
-                    when (event.viewConfig.viewName) {
-                        "LOG" -> outputLogEvent(event)
-                        "ACTIVITY" -> outputActivityEvent(event)
-                        else -> println(JsonObject(event.metricsData).encodePrettily())
+            //setup connection
+            val replyAddress = UUID.randomUUID().toString()
+            val pc = InstanceConnection(UUID.randomUUID().toString(), System.currentTimeMillis())
+            val consumer: MessageConsumer<Boolean> = vertx.eventBus().localConsumer(replyAddress)
+            val headers = JsonObject().apply { PlatformCLI.developer.accessToken?.let { put("auth-token", it) } }
+
+            consumer.handler {
+                //todo: handle false
+                if (it.body() == true) {
+                    consumer.unregister()
+
+                    vertx.eventBus().consumer<JsonObject>(toLiveViewSubscriberAddress(PlatformCLI.developer.id)) {
+                        val event = Json.decodeValue(it.body().toString(), LiveViewEvent::class.java)
+                        if (outputFullEvent) {
+                            println(event.metricsData)
+                        } else {
+                            when (event.viewConfig.viewName) {
+                                "LOG" -> outputLogEvent(event)
+                                "ACTIVITY" -> outputActivityEvent(event)
+                                else -> println(JsonObject(event.metricsData).encodePrettily())
+                            }
+                        }
                     }
+
+                    //register listener
+                    FrameHelper.sendFrame(
+                        BridgeEventType.REGISTER.name.lowercase(),
+                        toLiveViewSubscriberAddress(PlatformCLI.developer.id), null,
+                        headers, null, null, socket
+                    )
+                    println("Listening for events...")
                 }
             }
-
-            //register listener
             FrameHelper.sendFrame(
-                BridgeEventType.REGISTER.name.lowercase(),
-                toLiveViewSubscriberAddress(PlatformCLI.developer.id), null,
-                JsonObject().apply { PlatformCLI.developer.accessToken?.let { put("auth-token", it) } },
-                null, null, socket
+                BridgeEventType.SEND.name.toLowerCase(),
+                PlatformAddress.MARKER_CONNECTED,
+                replyAddress, headers, true, JsonObject.mapFrom(pc), socket
             )
-            println("Listening for events...")
         }
     }
 

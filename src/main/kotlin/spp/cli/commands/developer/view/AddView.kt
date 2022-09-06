@@ -39,7 +39,7 @@ class AddView : CliktCommand(name = "view", help = "Add a live view subscription
     val entityIds by argument(name = "Entity IDs").multiple(required = true)
     val viewName by argument(name = "View Name")
     val viewMetrics by argument(name = "View Metrics").multiple(required = true)
-    val refreshRateLimit by option("-r", "--refresh-rate-limit", help = "Refresh rate limit (in seconds)").int()
+    val refreshRateLimit by option("-r", "--refresh-rate-limit", help = "Refresh rate limit (ms)").int()
 
     override fun run() = runBlocking {
         val input = LiveViewSubscriptionInput(

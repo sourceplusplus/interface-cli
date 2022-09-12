@@ -22,7 +22,6 @@ import spp.cli.Main
 import spp.cli.PlatformCLI.apolloClient
 import spp.cli.PlatformCLI.echoError
 import spp.cli.protocol.client.GetClientAccessorsQuery
-import spp.cli.protocol.developer.GetDevelopersQuery
 import kotlin.system.exitProcess
 
 class GetClientAccessors : CliktCommand() {

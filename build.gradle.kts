@@ -50,7 +50,6 @@ dependencies {
     implementation("plus.sourceplus:protocol:$projectVersion")
     graphqlLibs("plus.sourceplus:protocol:$projectVersion")
 
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
     implementation("org.slf4j:slf4j-api:$slf4jVersion")
     implementation("org.slf4j:slf4j-nop:$slf4jVersion")
@@ -64,8 +63,6 @@ dependencies {
     implementation("commons-io:commons-io:$commonsIoVersion")
     implementation("com.auth0:java-jwt:$auth0JwtVersion")
     implementation("eu.geekplace.javapinning:java-pinning-core:1.2.0")
-
-    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
 
     testImplementation("org.junit.jupiter:junit-jupiter-engine:$jupiterVersion")
 

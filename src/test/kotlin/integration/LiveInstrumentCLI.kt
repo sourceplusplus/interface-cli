@@ -16,7 +16,7 @@
  */
 package integration
 
-import io.vertx.core.json.Json
+import io.vertx.core.json.JsonObject
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import spp.cli.Main
@@ -43,7 +43,7 @@ class LiveInstrumentCLI : CLIIntegrationTest() {
                 "addRemoveLiveLog"
             )
         )
-        val addedLiveLog = Json.decodeValue(interceptor.output.toString(), LiveLog::class.java)
+        val addedLiveLog = LiveLog(JsonObject(interceptor.output.toString()))
         assertNotNull(addedLiveLog.id)
         assertEquals("addRemoveLiveLog", addedLiveLog.logFormat)
         assertEquals("integration.LiveInstrumentCLI", addedLiveLog.location.source)
@@ -60,7 +60,7 @@ class LiveInstrumentCLI : CLIIntegrationTest() {
                 addedLiveLog.id!!
             )
         )
-        val removedLiveLog = Json.decodeValue(interceptor.output.toString(), LiveLog::class.java)
+        val removedLiveLog = LiveLog(JsonObject(interceptor.output.toString()))
         assertEquals(addedLiveLog.id, removedLiveLog.id)
         assertEquals(addedLiveLog.logFormat, removedLiveLog.logFormat)
         assertEquals(addedLiveLog.location.source, removedLiveLog.location.source)
@@ -82,7 +82,7 @@ class LiveInstrumentCLI : CLIIntegrationTest() {
                 "integration.LiveInstrumentCLI", "2",
             )
         )
-        val removedLiveBp = Json.decodeValue(interceptor.output.toString(), LiveBreakpoint::class.java)
+        val removedLiveBp = LiveBreakpoint(JsonObject(interceptor.output.toString()))
         assertNotNull(removedLiveBp.id)
         assertEquals("integration.LiveInstrumentCLI", removedLiveBp.location.source)
         assertEquals(2, removedLiveBp.location.line)
@@ -98,7 +98,7 @@ class LiveInstrumentCLI : CLIIntegrationTest() {
                 removedLiveBp.id!!
             )
         )
-        val removedLiveBreakpoint = Json.decodeValue(interceptor.output.toString(), LiveBreakpoint::class.java)
+        val removedLiveBreakpoint = LiveBreakpoint(JsonObject(interceptor.output.toString()))
         assertEquals(removedLiveBp.id, removedLiveBreakpoint.id)
         assertEquals(removedLiveBp.location.source, removedLiveBreakpoint.location.source)
         assertEquals(removedLiveBp.location.line, removedLiveBreakpoint.location.line)
@@ -120,7 +120,7 @@ class LiveInstrumentCLI : CLIIntegrationTest() {
                 "getMultipleLiveInstruments"
             )
         )
-        val addedLiveLog = Json.decodeValue(interceptor.output.toString(), LiveLog::class.java)
+        val addedLiveLog = LiveLog(JsonObject(interceptor.output.toString()))
         assertNotNull(addedLiveLog.id)
         assertEquals("getMultipleLiveInstruments", addedLiveLog.logFormat)
         assertEquals("integration.LiveInstrumentCLI", addedLiveLog.location.source)
@@ -135,7 +135,7 @@ class LiveInstrumentCLI : CLIIntegrationTest() {
                 "integration.LiveInstrumentCLI", "4",
             )
         )
-        val addedLiveBp = Json.decodeValue(interceptor.output.toString(), LiveBreakpoint::class.java)
+        val addedLiveBp = LiveBreakpoint(JsonObject(interceptor.output.toString()))
         assertNotNull(addedLiveBp.id)
         assertEquals("integration.LiveInstrumentCLI", addedLiveBp.location.source)
         assertEquals(4, addedLiveBp.location.line)
@@ -162,7 +162,7 @@ class LiveInstrumentCLI : CLIIntegrationTest() {
                 addedLiveLog.id!!
             )
         )
-        val removedLiveLog = Json.decodeValue(interceptor.output.toString(), LiveLog::class.java)
+        val removedLiveLog = LiveLog(JsonObject(interceptor.output.toString()))
         assertEquals(addedLiveLog.id, removedLiveLog.id)
         assertEquals(addedLiveLog.location.source, removedLiveLog.location.source)
         assertEquals(addedLiveLog.location.line, removedLiveLog.location.line)
@@ -176,7 +176,7 @@ class LiveInstrumentCLI : CLIIntegrationTest() {
                 addedLiveBp.id!!
             )
         )
-        val removedLiveBp = Json.decodeValue(interceptor.output.toString(), LiveBreakpoint::class.java)
+        val removedLiveBp = LiveBreakpoint(JsonObject(interceptor.output.toString()))
         assertEquals(addedLiveBp.id, removedLiveBp.id)
         assertEquals(addedLiveBp.location.source, removedLiveBp.location.source)
         assertEquals(addedLiveBp.location.line, removedLiveBp.location.line)

@@ -16,7 +16,7 @@
  */
 package integration
 
-import io.vertx.core.json.Json
+import io.vertx.core.json.JsonObject
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
@@ -42,7 +42,7 @@ class BatchLiveInstrumentCLI : CLIIntegrationTest() {
                     "integration.BatchLiveInstrumentCLI", i.toString(),
                 )
             )
-            val addedLiveBp = Json.decodeValue(interceptor.output.toString(), LiveBreakpoint::class.java)
+            val addedLiveBp = LiveBreakpoint(JsonObject(interceptor.output.toString()))
             addedLiveBps.add(addedLiveBp)
             assertNotNull(addedLiveBp.id)
             interceptor.clear()
@@ -70,7 +70,7 @@ class BatchLiveInstrumentCLI : CLIIntegrationTest() {
                     it.id!!
                 )
             )
-            val removedLiveBp = Json.decodeValue(interceptor.output.toString(), LiveBreakpoint::class.java)
+            val removedLiveBp = LiveBreakpoint(JsonObject(interceptor.output.toString()))
             assertEquals(it.id, removedLiveBp.id)
             interceptor.clear()
         }

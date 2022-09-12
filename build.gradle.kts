@@ -50,7 +50,6 @@ dependencies {
     implementation("plus.sourceplus:protocol:$projectVersion")
     graphqlLibs("plus.sourceplus:protocol:$projectVersion")
 
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
     implementation("org.slf4j:slf4j-api:$slf4jVersion")
     implementation("org.slf4j:slf4j-nop:$slf4jVersion")
@@ -65,8 +64,6 @@ dependencies {
     implementation("com.auth0:java-jwt:$auth0JwtVersion")
     implementation("eu.geekplace.javapinning:java-pinning-core:1.2.0")
 
-    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
-
     testImplementation("org.junit.jupiter:junit-jupiter-engine:$jupiterVersion")
 
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.21.0")
@@ -74,7 +71,6 @@ dependencies {
 
 configure<app.cash.licensee.LicenseeExtension> {
     ignoreDependencies("plus.sourceplus", "protocol")
-    ignoreDependencies("plus.sourceplus", "protocol-jvm")
     allow("Apache-2.0")
     allow("MIT")
     allowUrl("https://raw.githubusercontent.com/apollographql/apollo-kotlin/main/LICENSE") //MIT
@@ -175,7 +171,7 @@ apollo {
 
 tasks.create<Copy>("importProtocolFiles") {
     configurations.getByName("graphqlLibs").asFileTree.forEach {
-        if (it.name.contains("protocol-jvm")) {
+        if (it.name.startsWith("protocol-")) {
             from(zipTree(it)) {
                 exclude("META-INF/**")
                 exclude("spp/**")

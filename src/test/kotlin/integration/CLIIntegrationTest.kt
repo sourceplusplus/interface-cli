@@ -60,13 +60,13 @@ abstract class CLIIntegrationTest {
         for (it in value.withIndex()) {
             val v = value.getJsonObject(it.index)
             if (v.getString("type") == "BREAKPOINT") {
-                list.add(v.mapTo(LiveBreakpoint::class.java) as T)
+                list.add(LiveBreakpoint(v) as T)
             } else if (v.getString("type") == "LOG") {
-                list.add(v.mapTo(LiveLog::class.java) as T)
+                list.add(LiveLog(v) as T)
             } else if (v.getString("type") == "METER") {
-                list.add(v.mapTo(LiveMeter::class.java) as T)
+                list.add(LiveMeter(v) as T)
             } else if (v.getString("type") == "SPAN") {
-                list.add(v.mapTo(LiveSpan::class.java) as T)
+                list.add(LiveSpan(v) as T)
             } else {
                 list.add(v.mapTo(clazz.java) as T)
             }

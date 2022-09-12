@@ -36,11 +36,7 @@ import kotlinx.coroutines.runBlocking
 import spp.cli.PlatformCLI
 import spp.protocol.SourceServices.Provide.toLiveInstrumentSubscriberAddress
 import spp.protocol.extend.TCPServiceFrameParser
-import spp.protocol.instrument.event.LiveInstrumentEvent
-import spp.protocol.instrument.event.LiveInstrumentEventType
-import spp.protocol.instrument.event.LiveLogHit
-import spp.protocol.marshall.ProtocolMarshaller
-import spp.protocol.marshall.ProtocolMarshaller.deserializeLiveInstrumentRemoved
+import spp.protocol.instrument.event.*
 
 class SubscribeInstrument : CliktCommand(
     name = "instrument",
@@ -103,13 +99,13 @@ class SubscribeInstrument : CliktCommand(
                             }
                         }
                         LiveInstrumentEventType.BREAKPOINT_HIT -> {
-                            val breakpointHit = ProtocolMarshaller.deserializeLiveBreakpointHit(JsonObject(liveEvent.data))
+                            val breakpointHit = LiveBreakpointHit(JsonObject(liveEvent.data))
                             if (breakpointHit.breakpointId !in instrumentIds) {
                                 return@consumer
                             }
                         }
                         LiveInstrumentEventType.BREAKPOINT_REMOVED, LiveInstrumentEventType.LOG_REMOVED -> {
-                            val logRemoved = deserializeLiveInstrumentRemoved(JsonObject(liveEvent.data))
+                            val logRemoved = LiveInstrumentRemoved(JsonObject(liveEvent.data))
                             if (logRemoved.liveInstrument.id !in instrumentIds) {
                                 return@consumer
                             }

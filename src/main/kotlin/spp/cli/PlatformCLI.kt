@@ -27,9 +27,6 @@ import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.file
 import eu.geekplace.javapinning.JavaPinning
-import kotlinx.datetime.Clock
-import kotlinx.datetime.DateTimeUnit
-import kotlinx.datetime.plus
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.bouncycastle.cert.X509CertificateHolder
@@ -46,6 +43,8 @@ import java.security.SecureRandom
 import java.security.cert.X509Certificate
 import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
+import java.time.Instant
+import java.time.temporal.ChronoUnit
 import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
@@ -120,8 +119,8 @@ object PlatformCLI : CliktCommand(name = "spp-cli", allowMultipleSubcommands = t
             jwtToken = JWT.create()
                 .withIssuer("cli")
                 .withClaim("developer_id", "system") //users with key are automatically considered system
-                .withClaim("created_at", Clock.System.now().toEpochMilliseconds())
-                .withClaim("expires_at", Clock.System.now().plus(8760, DateTimeUnit.HOUR).toEpochMilliseconds())
+                .withClaim("created_at", Instant.now().toEpochMilli())
+                .withClaim("expires_at", Instant.now().plus(8760, ChronoUnit.HOURS).toEpochMilli())
                 .sign(algorithm)
             developer = Developer("system")
         } else {
@@ -165,6 +164,7 @@ object PlatformCLI : CliktCommand(name = "spp-cli", allowMultipleSubcommands = t
                     echo(e.cause!!.stackTraceToString(), err = true)
                 }
             }
+
             else -> {
                 echo(e.message, err = true)
                 if (verbose) {

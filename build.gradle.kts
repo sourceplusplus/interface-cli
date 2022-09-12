@@ -71,7 +71,6 @@ dependencies {
 
 configure<app.cash.licensee.LicenseeExtension> {
     ignoreDependencies("plus.sourceplus", "protocol")
-    ignoreDependencies("plus.sourceplus", "protocol-jvm")
     allow("Apache-2.0")
     allow("MIT")
     allowUrl("https://raw.githubusercontent.com/apollographql/apollo-kotlin/main/LICENSE") //MIT
@@ -172,7 +171,7 @@ apollo {
 
 tasks.create<Copy>("importProtocolFiles") {
     configurations.getByName("graphqlLibs").asFileTree.forEach {
-        if (it.name.contains("protocol-jvm")) {
+        if (it.name.startsWith("protocol-")) {
             from(zipTree(it)) {
                 exclude("META-INF/**")
                 exclude("spp/**")

@@ -24,7 +24,6 @@ import com.github.ajalt.clikt.parameters.options.option
 import eu.geekplace.javapinning.JavaPinning
 import eu.geekplace.javapinning.pin.Pin
 import io.vertx.core.Vertx
-import io.vertx.core.json.Json
 import io.vertx.core.json.JsonObject
 import io.vertx.core.net.NetClientOptions
 import io.vertx.core.net.TrustOptions
@@ -87,13 +86,13 @@ class SubscribeInstrument : CliktCommand(
             socket!!.handler(FrameParser(TCPServiceFrameParser(vertx, socket)))
 
             vertx.eventBus().consumer<JsonObject>(toLiveInstrumentSubscriberAddress(PlatformCLI.developer.id)) {
-                val liveEvent = Json.decodeValue(it.body().toString(), LiveInstrumentEvent::class.java)
+                val liveEvent = LiveInstrumentEvent(it.body())
 
                 //todo: impl filter on platform
                 if (instrumentIds.isNotEmpty()) {
                     when (liveEvent.eventType) {
                         LiveInstrumentEventType.LOG_HIT -> {
-                            val logHit = Json.decodeValue(liveEvent.data, LiveLogHit::class.java)
+                            val logHit = LiveLogHit(JsonObject(liveEvent.data))
                             if (logHit.logId !in instrumentIds) {
                                 return@consumer
                             }

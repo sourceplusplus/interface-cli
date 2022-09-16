@@ -22,7 +22,6 @@ import com.github.ajalt.clikt.parameters.options.option
 import eu.geekplace.javapinning.JavaPinning
 import eu.geekplace.javapinning.pin.Pin
 import io.vertx.core.Vertx
-import io.vertx.core.json.Json
 import io.vertx.core.json.JsonArray
 import io.vertx.core.json.JsonObject
 import io.vertx.core.net.NetClientOptions
@@ -94,7 +93,7 @@ class SubscribeView : CliktCommand(
             socket!!.handler(FrameParser(TCPServiceFrameParser(vertx, socket)))
 
             vertx.eventBus().consumer<JsonObject>(toLiveViewSubscriberAddress(PlatformCLI.developer.id)) {
-                val event = Json.decodeValue(it.body().toString(), LiveViewEvent::class.java)
+                val event = LiveViewEvent(it.body())
                 if (outputFullEvent) {
                     println(event.metricsData)
                 } else {
@@ -135,7 +134,7 @@ class SubscribeView : CliktCommand(
 
     private fun outputLogEvent(event: LiveViewEvent) {
         val rawMetrics = JsonObject(event.metricsData)
-        val logData = Json.decodeValue(rawMetrics.getJsonObject("log").toString(), Log::class.java)
+        val logData = Log(rawMetrics.getJsonObject("log"))
         val logsResult = LogResult(
             event.artifactQualifiedName,
             LogOrderType.NEWEST_LOGS,

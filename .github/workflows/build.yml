@@ -108,7 +108,7 @@ jobs:
         run: ./build/graal/spp-cli -v version
 
       - name: Run UPX
-        uses: crazy-max/ghaction-upx@v1.3.3
+        uses: crazy-max/ghaction-upx@v1.5.0
         with:
           version: latest
           file: build/graal/spp-cli.exe

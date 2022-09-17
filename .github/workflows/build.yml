@@ -74,7 +74,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: microsoft/setup-msbuild@v1.0.2
+      - uses: microsoft/setup-msbuild@v1.0.3
       - uses: seanmiddleditch/gha-setup-vsdevenv@master
       - uses: ayltai/setup-graalvm@v1
         with:

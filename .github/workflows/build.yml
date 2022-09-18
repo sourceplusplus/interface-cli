@@ -22,7 +22,7 @@ jobs:
       cancel-in-progress: true
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: ayltai/setup-graalvm@v1
         with:
           java-version: 11
@@ -73,7 +73,7 @@ jobs:
       cancel-in-progress: true
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: microsoft/setup-msbuild@v1.0.3
       - uses: seanmiddleditch/gha-setup-vsdevenv@master
       - uses: ayltai/setup-graalvm@v1
@@ -135,7 +135,7 @@ jobs:
       version: ${{ steps.properties.outputs.version }}
       release_version: ${{ steps.properties.outputs.release_version }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: ayltai/setup-graalvm@v1
         with:
           java-version: 11

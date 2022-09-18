@@ -60,7 +60,7 @@ jobs:
       - name: Zip CLI
         run: zip spp-cli-macOS.zip -j build/graal/spp-cli
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: spp-cli-macOS.zip
           path: ./spp-cli-macOS.zip
@@ -118,7 +118,7 @@ jobs:
         run: Compress-Archive -LiteralPath build/graal/spp-cli.exe -DestinationPath spp-cli-win64.zip
         shell: powershell
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           if-no-files-found: warn
           name: spp-cli-win64.zip
@@ -237,7 +237,7 @@ jobs:
       - name: Zip spp-cli
         run: zip spp-cli-linux64.zip -j build/graal/spp-cli
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: spp-cli-linux64.zip
           path: ./spp-cli-linux64.zip
@@ -247,7 +247,7 @@ jobs:
 
       - name: Upload docker logs artifact
         if: ${{ always() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: docker-logs
           path: ./build/containers-logs

@@ -21,23 +21,34 @@ import com.apollographql.apollo3.api.json.MapJsonWriter
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.arguments.multiple
+import com.github.ajalt.clikt.parameters.options.default
+import com.github.ajalt.clikt.parameters.options.multiple
+import com.github.ajalt.clikt.parameters.options.option
 import kotlinx.coroutines.runBlocking
 import spp.cli.Main
 import spp.cli.PlatformCLI.apolloClient
 import spp.cli.PlatformCLI.echoError
+import spp.cli.protocol.type.LiveViewConfigInput
 import spp.cli.protocol.type.LiveViewInput
 import spp.cli.protocol.view.AddLiveViewMutation
 import spp.cli.protocol.view.adapter.AddLiveViewMutation_ResponseAdapter.AddLiveView
 import spp.cli.util.JsonCleaner
+import java.util.*
 import kotlin.system.exitProcess
 
 class AddView : CliktCommand(name = "view", help = "Add a live view") {
 
     val entityIds by argument(name = "Entity IDs").multiple(required = true)
+    val viewName by option("-name", "-n", help = "View name").default("cli-" + UUID.randomUUID().toString())
+    val viewMetrics by option("-metrics", "-m", help = "View metrics").multiple()
 
     override fun run() = runBlocking {
         val input = LiveViewInput(
             entityIds = entityIds.toList(),
+            viewConfig = LiveViewConfigInput(
+                viewName,
+                viewMetrics.ifEmpty { entityIds }
+            )
         )
         val response = try {
             apolloClient.mutation(AddLiveViewMutation(input)).execute()

@@ -45,7 +45,7 @@ abstract class CLIIntegrationTest {
     class Interceptor(out: OutputStream) : PrintStream(out, true) {
         val output = StringBuilder()
 
-        override fun print(s: String) {
+        override fun print(s: String?) {
             output.append(s)
         }
 

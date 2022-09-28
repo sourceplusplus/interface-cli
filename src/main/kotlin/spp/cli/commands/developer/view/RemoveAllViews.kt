@@ -21,14 +21,14 @@ import kotlinx.coroutines.runBlocking
 import spp.cli.Main
 import spp.cli.PlatformCLI.apolloClient
 import spp.cli.PlatformCLI.echoError
-import spp.cli.protocol.view.ClearLiveViewSubscriptionsMutation
+import spp.cli.protocol.view.ClearLiveViewsMutation
 import kotlin.system.exitProcess
 
 class RemoveAllViews : CliktCommand(name = "all-views", help = "Remove all live view subscriptions") {
 
     override fun run() = runBlocking {
         val response = try {
-            apolloClient.mutation(ClearLiveViewSubscriptionsMutation()).execute()
+            apolloClient.mutation(ClearLiveViewsMutation()).execute()
         } catch (e: Exception) {
             echoError(e)
             if (Main.standalone) exitProcess(-1) else return@runBlocking
@@ -38,7 +38,7 @@ class RemoveAllViews : CliktCommand(name = "all-views", help = "Remove all live 
             if (Main.standalone) exitProcess(-1) else return@runBlocking
         }
 
-        echo(response.data!!.clearLiveViewSubscriptions)
+        echo(response.data!!.clearLiveViews)
         if (Main.standalone) exitProcess(0)
     }
 }

@@ -23,8 +23,8 @@ import kotlinx.coroutines.runBlocking
 import spp.cli.Main
 import spp.cli.PlatformCLI.apolloClient
 import spp.cli.PlatformCLI.echoError
-import spp.cli.protocol.view.GetLiveViewSubscriptionsQuery
-import spp.cli.protocol.view.adapter.GetLiveViewSubscriptionsQuery_ResponseAdapter.GetLiveViewSubscription
+import spp.cli.protocol.view.GetLiveViewsQuery
+import spp.cli.protocol.view.adapter.GetLiveViewsQuery_ResponseAdapter.GetLiveView
 import spp.cli.util.JsonCleaner
 import kotlin.system.exitProcess
 
@@ -32,7 +32,7 @@ class GetViews : CliktCommand(name = "views", help = "Get live view subscription
 
     override fun run() = runBlocking {
         val response = try {
-            apolloClient.query(GetLiveViewSubscriptionsQuery()).execute()
+            apolloClient.query(GetLiveViewsQuery()).execute()
         } catch (e: Exception) {
             echoError(e)
             if (Main.standalone) exitProcess(-1) else return@runBlocking
@@ -44,9 +44,9 @@ class GetViews : CliktCommand(name = "views", help = "Get live view subscription
 
         echo(JsonCleaner.cleanJson(MapJsonWriter().let {
             it.beginArray()
-            response.data!!.getLiveViewSubscriptions.forEach { ob ->
+            response.data!!.getLiveViews.forEach { ob ->
                 it.beginObject()
-                GetLiveViewSubscription.toJson(it, CustomScalarAdapters.Empty, ob)
+                GetLiveView.toJson(it, CustomScalarAdapters.Empty, ob)
                 it.endObject()
             }
             it.endArray()

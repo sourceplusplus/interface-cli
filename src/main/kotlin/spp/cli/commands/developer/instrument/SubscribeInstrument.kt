@@ -33,7 +33,7 @@ import io.vertx.ext.eventbus.bridge.tcp.impl.protocol.FrameParser
 import io.vertx.kotlin.coroutines.await
 import kotlinx.coroutines.runBlocking
 import spp.cli.PlatformCLI
-import spp.protocol.SourceServices.Provide.toLiveInstrumentSubscriberAddress
+import spp.protocol.SourceServices.Subscribe.toLiveInstrumentSubscriberAddress
 import spp.protocol.extend.TCPServiceFrameParser
 import spp.protocol.instrument.event.*
 
@@ -97,18 +97,21 @@ class SubscribeInstrument : CliktCommand(
                                 return@consumer
                             }
                         }
+
                         LiveInstrumentEventType.BREAKPOINT_HIT -> {
                             val breakpointHit = LiveBreakpointHit(JsonObject(liveEvent.data))
                             if (breakpointHit.breakpointId !in instrumentIds) {
                                 return@consumer
                             }
                         }
+
                         LiveInstrumentEventType.BREAKPOINT_REMOVED, LiveInstrumentEventType.LOG_REMOVED -> {
                             val logRemoved = LiveInstrumentRemoved(JsonObject(liveEvent.data))
                             if (logRemoved.liveInstrument.id !in instrumentIds) {
                                 return@consumer
                             }
                         }
+
                         else -> TODO("Unhandled event type: ${liveEvent.eventType}")
                     }
                 }

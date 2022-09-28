@@ -25,9 +25,9 @@ import kotlinx.coroutines.runBlocking
 import spp.cli.Main
 import spp.cli.PlatformCLI.apolloClient
 import spp.cli.PlatformCLI.echoError
-import spp.cli.protocol.type.LiveViewSubscriptionInput
-import spp.cli.protocol.view.AddLiveViewSubscriptionMutation
-import spp.cli.protocol.view.adapter.AddLiveViewSubscriptionMutation_ResponseAdapter.AddLiveViewSubscription
+import spp.cli.protocol.type.LiveViewInput
+import spp.cli.protocol.view.AddLiveViewMutation
+import spp.cli.protocol.view.adapter.AddLiveViewMutation_ResponseAdapter.AddLiveView
 import spp.cli.util.JsonCleaner
 import kotlin.system.exitProcess
 
@@ -36,11 +36,11 @@ class AddView : CliktCommand(name = "view", help = "Add a live view subscription
     val entityIds by argument(name = "Entity IDs").multiple(required = true)
 
     override fun run() = runBlocking {
-        val input = LiveViewSubscriptionInput(
+        val input = LiveViewInput(
             entityIds = entityIds.toList(),
         )
         val response = try {
-            apolloClient.mutation(AddLiveViewSubscriptionMutation(input)).execute()
+            apolloClient.mutation(AddLiveViewMutation(input)).execute()
         } catch (e: Exception) {
             echoError(e)
             if (Main.standalone) exitProcess(-1) else return@runBlocking
@@ -52,7 +52,7 @@ class AddView : CliktCommand(name = "view", help = "Add a live view subscription
 
         echo(JsonCleaner.cleanJson(MapJsonWriter().let {
             it.beginObject()
-            AddLiveViewSubscription.toJson(it, CustomScalarAdapters.Empty, response.data!!.addLiveViewSubscription)
+            AddLiveView.toJson(it, CustomScalarAdapters.Empty, response.data!!.addLiveView)
             it.endObject()
             (it.root() as LinkedHashMap<*, *>)
         }).encodePrettily())

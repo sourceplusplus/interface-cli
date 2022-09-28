@@ -23,16 +23,16 @@ import spp.cli.Main
 import spp.cli.PlatformCLI
 import spp.cli.PlatformCLI.apolloClient
 import spp.cli.PlatformCLI.echoError
-import spp.cli.protocol.client.UpdateClientAccessMutation
+import spp.cli.protocol.client.RefreshClientAccessMutation
 import kotlin.system.exitProcess
 
-class UpdateClientAccess : CliktCommand(printHelpOnEmptyArgs = true) {
+class RefreshClientAccess : CliktCommand(printHelpOnEmptyArgs = true) {
 
     val id by argument(help = "Client Access ID")
 
     override fun run() = runBlocking {
         val response = try {
-            apolloClient.mutation(UpdateClientAccessMutation(id)).execute()
+            apolloClient.mutation(RefreshClientAccessMutation(id)).execute()
         } catch (e: Exception) {
             echoError(e)
             if (Main.standalone) exitProcess(-1) else return@runBlocking
@@ -43,10 +43,10 @@ class UpdateClientAccess : CliktCommand(printHelpOnEmptyArgs = true) {
         }
 
         if (PlatformCLI.verbose) {
-            echo("Update client access for id $id")
-            echo("New secret: ${response.data!!.updateClientAccess.secret!!}")
+            echo("Refresh client access for id $id")
+            echo("New secret: ${response.data!!.refreshClientAccess.secret!!}")
         } else {
-            echo(response.data!!.updateClientAccess.secret!!)
+            echo(response.data!!.refreshClientAccess.secret!!)
         }
         if (Main.standalone) exitProcess(0)
     }

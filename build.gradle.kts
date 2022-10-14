@@ -209,7 +209,7 @@ spotless {
             append(
                 licenseHeader.replace(
                     "Copyright [yyyy] [name of copyright owner]",
-                    "Source++, the open-source live coding platform.\n" +
+                    "Source++, the continuous feedback platform for developers.\n" +
                             " * Copyright (C) $copyrightYears CodeBrig, Inc."
                 ).replace(
                     "http://www.apache.org/licenses/LICENSE-2.0",

@@ -134,11 +134,11 @@ object PlatformCLI : CliktCommand(name = "spp-cli", allowMultipleSubcommands = t
                     developer = Developer(decoded.getClaim("developer_id").asString(), jwtToken)
                 }
             } else if (resp.code == 401 && accessToken.isNullOrEmpty()) {
-                throw IllegalStateException("Connection failed. Reason: Missing access token")
+                error("Connection failed. Reason: Missing access token")
             } else if (resp.code == 401) {
-                throw IllegalStateException("Connection failed. Reason: Invalid access token")
+                error("Connection failed. Reason: Invalid access token")
             } else {
-                throw IllegalStateException("Connection failed. Reason: " + resp.message)
+                error("Connection failed. Reason: " + resp.message)
             }
         }
 

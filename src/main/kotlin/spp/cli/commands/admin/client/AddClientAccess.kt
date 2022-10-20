@@ -40,7 +40,7 @@ class AddClientAccess : CliktCommand() {
         }
 
         if (PlatformCLI.verbose) {
-            echo("Added client access");
+            echo("Added client access")
             echo("Id: ${response.data!!.addClientAccess.id!!}")
             echo("Secret: ${response.data!!.addClientAccess.secret!!}")
         } else {

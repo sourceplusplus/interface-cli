@@ -27,17 +27,15 @@ import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.int
 import com.github.ajalt.clikt.parameters.types.long
 import kotlinx.coroutines.runBlocking
-import spp.cli.Main
 import spp.cli.PlatformCLI.apolloClient
-import spp.cli.PlatformCLI.echoError
 import spp.cli.protocol.instrument.AddLiveBreakpointMutation
 import spp.cli.protocol.instrument.adapter.AddLiveBreakpointMutation_ResponseAdapter.AddLiveBreakpoint
 import spp.cli.protocol.type.InstrumentThrottleInput
 import spp.cli.protocol.type.LiveBreakpointInput
 import spp.cli.protocol.type.LiveSourceLocationInput
+import spp.cli.util.ExitManager.exitProcess
 import spp.cli.util.JsonCleaner
 import spp.protocol.instrument.throttle.ThrottleStep
-import kotlin.system.exitProcess
 
 class AddBreakpoint : CliktCommand(name = "breakpoint", help = "Add a live breakpoint instrument") {
 
@@ -65,12 +63,10 @@ class AddBreakpoint : CliktCommand(name = "breakpoint", help = "Add a live break
         val response = try {
             apolloClient.mutation(AddLiveBreakpointMutation(input)).execute()
         } catch (e: Exception) {
-            echoError(e)
-            if (Main.standalone) exitProcess(-1) else return@runBlocking
+            exitProcess(-1, e)
         }
         if (response.hasErrors()) {
-            echo(response.errors?.get(0)?.message, err = true)
-            if (Main.standalone) exitProcess(-1) else return@runBlocking
+            exitProcess(response.errors!!)
         }
 
         echo(JsonCleaner.cleanJson(MapJsonWriter().let {
@@ -79,6 +75,6 @@ class AddBreakpoint : CliktCommand(name = "breakpoint", help = "Add a live break
             it.endObject()
             (it.root() as LinkedHashMap<*, *>)
         }).encodePrettily())
-        if (Main.standalone) exitProcess(0)
+        exitProcess(0)
     }
 }

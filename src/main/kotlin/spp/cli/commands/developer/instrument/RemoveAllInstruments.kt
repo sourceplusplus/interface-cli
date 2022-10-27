@@ -18,11 +18,9 @@ package spp.cli.commands.developer.instrument
 
 import com.github.ajalt.clikt.core.CliktCommand
 import kotlinx.coroutines.runBlocking
-import spp.cli.Main
 import spp.cli.PlatformCLI.apolloClient
-import spp.cli.PlatformCLI.echoError
 import spp.cli.protocol.instrument.ClearLiveInstrumentsMutation
-import kotlin.system.exitProcess
+import spp.cli.util.ExitManager.exitProcess
 
 class RemoveAllInstruments : CliktCommand(name = "all-instruments", help = "Remove all live instruments") {
 
@@ -30,15 +28,13 @@ class RemoveAllInstruments : CliktCommand(name = "all-instruments", help = "Remo
         val response = try {
             apolloClient.mutation(ClearLiveInstrumentsMutation()).execute()
         } catch (e: Exception) {
-            echoError(e)
-            if (Main.standalone) exitProcess(-1) else return@runBlocking
+            exitProcess(-1, e)
         }
         if (response.hasErrors()) {
-            echo(response.errors?.get(0)?.message, err = true)
-            if (Main.standalone) exitProcess(-1) else return@runBlocking
+            exitProcess(response.errors!!)
         }
 
         echo(response.data!!.clearLiveInstruments)
-        if (Main.standalone) exitProcess(0)
+        exitProcess(0)
     }
 }

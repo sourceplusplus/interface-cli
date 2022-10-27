@@ -18,11 +18,9 @@ package spp.cli.commands.developer.view
 
 import com.github.ajalt.clikt.core.CliktCommand
 import kotlinx.coroutines.runBlocking
-import spp.cli.Main
 import spp.cli.PlatformCLI.apolloClient
-import spp.cli.PlatformCLI.echoError
 import spp.cli.protocol.view.ClearLiveViewsMutation
-import kotlin.system.exitProcess
+import spp.cli.util.ExitManager.exitProcess
 
 class RemoveAllViews : CliktCommand(name = "all-views", help = "Remove all live views") {
 
@@ -30,15 +28,13 @@ class RemoveAllViews : CliktCommand(name = "all-views", help = "Remove all live 
         val response = try {
             apolloClient.mutation(ClearLiveViewsMutation()).execute()
         } catch (e: Exception) {
-            echoError(e)
-            if (Main.standalone) exitProcess(-1) else return@runBlocking
+            exitProcess(-1, e)
         }
         if (response.hasErrors()) {
-            echo(response.errors?.get(0)?.message, err = true)
-            if (Main.standalone) exitProcess(-1) else return@runBlocking
+            exitProcess(response.errors!!)
         }
 
         echo(response.data!!.clearLiveViews)
-        if (Main.standalone) exitProcess(0)
+        exitProcess(0)
     }
 }

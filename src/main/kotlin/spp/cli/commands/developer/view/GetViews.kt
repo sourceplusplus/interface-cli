@@ -20,13 +20,11 @@ import com.apollographql.apollo3.api.CustomScalarAdapters
 import com.apollographql.apollo3.api.json.MapJsonWriter
 import com.github.ajalt.clikt.core.CliktCommand
 import kotlinx.coroutines.runBlocking
-import spp.cli.Main
 import spp.cli.PlatformCLI.apolloClient
-import spp.cli.PlatformCLI.echoError
 import spp.cli.protocol.view.GetLiveViewsQuery
 import spp.cli.protocol.view.adapter.GetLiveViewsQuery_ResponseAdapter.GetLiveView
+import spp.cli.util.ExitManager.exitProcess
 import spp.cli.util.JsonCleaner
-import kotlin.system.exitProcess
 
 class GetViews : CliktCommand(name = "views", help = "Get live views") {
 
@@ -34,12 +32,10 @@ class GetViews : CliktCommand(name = "views", help = "Get live views") {
         val response = try {
             apolloClient.query(GetLiveViewsQuery()).execute()
         } catch (e: Exception) {
-            echoError(e)
-            if (Main.standalone) exitProcess(-1) else return@runBlocking
+            exitProcess(-1, e)
         }
         if (response.hasErrors()) {
-            echo(response.errors?.get(0)?.message, err = true)
-            if (Main.standalone) exitProcess(-1) else return@runBlocking
+            exitProcess(response.errors!!)
         }
 
         echo(JsonCleaner.cleanJson(MapJsonWriter().let {
@@ -52,6 +48,6 @@ class GetViews : CliktCommand(name = "views", help = "Get live views") {
             it.endArray()
             (it.root() as ArrayList<*>)
         }).encodePrettily())
-        if (Main.standalone) exitProcess(0)
+        exitProcess(0)
     }
 }

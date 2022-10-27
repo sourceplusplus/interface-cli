@@ -44,7 +44,6 @@ import spp.cli.commands.developer.view.SubscribeView
 
 object Main {
 
-    var standalone = true
     lateinit var args: Array<String>
 
     @JvmStatic

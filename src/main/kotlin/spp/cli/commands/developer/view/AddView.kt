@@ -25,16 +25,14 @@ import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.multiple
 import com.github.ajalt.clikt.parameters.options.option
 import kotlinx.coroutines.runBlocking
-import spp.cli.Main
 import spp.cli.PlatformCLI.apolloClient
-import spp.cli.PlatformCLI.echoError
 import spp.cli.protocol.type.LiveViewConfigInput
 import spp.cli.protocol.type.LiveViewInput
 import spp.cli.protocol.view.AddLiveViewMutation
 import spp.cli.protocol.view.adapter.AddLiveViewMutation_ResponseAdapter.AddLiveView
+import spp.cli.util.ExitManager.exitProcess
 import spp.cli.util.JsonCleaner
 import java.util.*
-import kotlin.system.exitProcess
 
 class AddView : CliktCommand(name = "view", help = "Add a live view") {
 
@@ -53,12 +51,10 @@ class AddView : CliktCommand(name = "view", help = "Add a live view") {
         val response = try {
             apolloClient.mutation(AddLiveViewMutation(input)).execute()
         } catch (e: Exception) {
-            echoError(e)
-            if (Main.standalone) exitProcess(-1) else return@runBlocking
+            exitProcess(-1, e)
         }
         if (response.hasErrors()) {
-            echo(response.errors?.get(0)?.message, err = true)
-            if (Main.standalone) exitProcess(-1) else return@runBlocking
+            exitProcess(response.errors!!)
         }
 
         echo(JsonCleaner.cleanJson(MapJsonWriter().let {
@@ -67,6 +63,6 @@ class AddView : CliktCommand(name = "view", help = "Add a live view") {
             it.endObject()
             (it.root() as LinkedHashMap<*, *>)
         }).encodePrettily())
-        if (Main.standalone) exitProcess(0)
+        exitProcess(0)
     }
 }

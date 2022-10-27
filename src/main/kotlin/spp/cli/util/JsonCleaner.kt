@@ -19,7 +19,6 @@ package spp.cli.util
 import io.vertx.core.json.JsonArray
 import io.vertx.core.json.JsonObject
 
-@Suppress("UNCHECKED_CAST")
 object JsonCleaner {
 
     fun cleanJson(any: Any?): JsonObject {

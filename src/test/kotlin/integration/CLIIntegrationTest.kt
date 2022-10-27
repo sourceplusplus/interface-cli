@@ -19,6 +19,7 @@ package integration
 import io.vertx.core.json.Json
 import io.vertx.core.json.JsonArray
 import spp.cli.Main
+import spp.cli.util.ExitManager
 import spp.protocol.instrument.LiveBreakpoint
 import spp.protocol.instrument.LiveLog
 import spp.protocol.instrument.LiveMeter
@@ -30,7 +31,7 @@ import kotlin.reflect.KClass
 abstract class CLIIntegrationTest {
     companion object {
         init {
-            Main.standalone = false
+            ExitManager.standalone = false
             Main.main(
                 arrayOf(
                     "-v",

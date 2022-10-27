@@ -43,10 +43,10 @@ class AddRolePermission : CliktCommand(printHelpOnEmptyArgs = true) {
 
         if (PlatformCLI.verbose) {
             if (response.data!!.addRolePermission) {
-                echo("Added permission ${permission.name} to role ${role}")
+                echo("Added permission ${permission.name} to role $role")
             } else {
                 echo(
-                    "Failed to add permission ${permission.name} to role ${role}, does the role already have it?",
+                    "Failed to add permission ${permission.name} to role $role, does the role already have it?",
                     err = true
                 )
             }

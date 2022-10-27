@@ -20,7 +20,9 @@ import com.github.ajalt.clikt.core.CliktCommand
 import java.util.*
 
 class Version : CliktCommand(help = "Display version information") {
-    private val BUILD = ResourceBundle.getBundle("build")
+    companion object {
+        private val BUILD = ResourceBundle.getBundle("build")
+    }
 
     override fun run() {
         echo("spp-cli: " + BUILD.getString("build_version"))

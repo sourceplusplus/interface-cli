@@ -19,13 +19,17 @@ package spp.cli.util
 import com.apollographql.apollo3.api.Error
 import com.github.ajalt.clikt.output.TermUi
 import spp.cli.PlatformCLI.currentContext
+import spp.cli.PlatformCLI.echoError
 
 object ExitManager {
 
     var standalone = true
 
     fun exitProcess(status: Int, e: Exception): Nothing {
-        if (standalone) kotlin.system.exitProcess(status)
+        if (standalone) {
+            echoError(e)
+            kotlin.system.exitProcess(status)
+        }
         throw e
     }
 

@@ -64,5 +64,6 @@ class AddAccessPermission : CliktCommand(printHelpOnEmptyArgs = true) {
             echo("Location patterns: ${response.data!!.addAccessPermission.locationPatterns!!}")
             echo("Type: ${response.data!!.addAccessPermission.type}")
         }
+        exitProcess(0)
     }
 }

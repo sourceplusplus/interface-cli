@@ -27,20 +27,18 @@ import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.int
 import com.github.ajalt.clikt.parameters.types.long
 import kotlinx.coroutines.runBlocking
-import spp.cli.Main
 import spp.cli.PlatformCLI.apolloClient
-import spp.cli.PlatformCLI.echoError
 import spp.cli.protocol.instrument.AddLiveMeterMutation
 import spp.cli.protocol.instrument.adapter.AddLiveMeterMutation_ResponseAdapter.AddLiveMeter
 import spp.cli.protocol.type.InstrumentThrottleInput
 import spp.cli.protocol.type.LiveMeterInput
 import spp.cli.protocol.type.LiveSourceLocationInput
 import spp.cli.protocol.type.MetricValueInput
+import spp.cli.util.ExitManager.exitProcess
 import spp.cli.util.JsonCleaner
 import spp.protocol.instrument.meter.MeterType
 import spp.protocol.instrument.meter.MetricValueType
 import spp.protocol.instrument.throttle.ThrottleStep
-import kotlin.system.exitProcess
 
 class AddMeter : CliktCommand(name = "meter", help = "Add a live meter instrument") {
 
@@ -80,12 +78,10 @@ class AddMeter : CliktCommand(name = "meter", help = "Add a live meter instrumen
         val response = try {
             apolloClient.mutation(AddLiveMeterMutation(input)).execute()
         } catch (e: Exception) {
-            echoError(e)
-            if (Main.standalone) exitProcess(-1) else return@runBlocking
+            exitProcess(-1, e)
         }
         if (response.hasErrors()) {
-            echo(response.errors?.get(0)?.message, err = true)
-            if (Main.standalone) exitProcess(-1) else return@runBlocking
+            exitProcess(response.errors!!)
         }
 
         echo(JsonCleaner.cleanJson(MapJsonWriter().let {
@@ -94,6 +90,6 @@ class AddMeter : CliktCommand(name = "meter", help = "Add a live meter instrumen
             it.endObject()
             (it.root() as LinkedHashMap<*, *>)
         }).encodePrettily())
-        if (Main.standalone) exitProcess(0)
+        exitProcess(0)
     }
 }

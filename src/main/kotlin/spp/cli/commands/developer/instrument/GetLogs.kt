@@ -20,13 +20,11 @@ import com.apollographql.apollo3.api.CustomScalarAdapters
 import com.apollographql.apollo3.api.json.MapJsonWriter
 import com.github.ajalt.clikt.core.CliktCommand
 import kotlinx.coroutines.runBlocking
-import spp.cli.Main
 import spp.cli.PlatformCLI.apolloClient
-import spp.cli.PlatformCLI.echoError
 import spp.cli.protocol.instrument.GetLiveLogsQuery
 import spp.cli.protocol.instrument.adapter.GetLiveLogsQuery_ResponseAdapter.GetLiveLog
+import spp.cli.util.ExitManager.exitProcess
 import spp.cli.util.JsonCleaner
-import kotlin.system.exitProcess
 
 class GetLogs : CliktCommand(name = "logs", help = "Get live log instruments") {
 
@@ -34,12 +32,10 @@ class GetLogs : CliktCommand(name = "logs", help = "Get live log instruments") {
         val response = try {
             apolloClient.query(GetLiveLogsQuery()).execute()
         } catch (e: Exception) {
-            echoError(e)
-            if (Main.standalone) exitProcess(-1) else return@runBlocking
+            exitProcess(-1, e)
         }
         if (response.hasErrors()) {
-            echo(response.errors?.get(0)?.message, err = true)
-            if (Main.standalone) exitProcess(-1) else return@runBlocking
+            exitProcess(response.errors!!)
         }
 
         echo(JsonCleaner.cleanJson(MapJsonWriter().let {
@@ -52,6 +48,6 @@ class GetLogs : CliktCommand(name = "logs", help = "Get live log instruments") {
             it.endArray()
             (it.root() as ArrayList<*>)
         }).encodePrettily())
-        if (Main.standalone) exitProcess(0)
+        exitProcess(0)
     }
 }

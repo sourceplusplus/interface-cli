@@ -26,10 +26,8 @@ object ExitManager {
     var standalone = true
 
     fun exitProcess(status: Int, e: Exception): Nothing {
-        if (standalone) {
-            echoError(e)
-            kotlin.system.exitProcess(status)
-        }
+        echoError(e)
+        if (standalone) kotlin.system.exitProcess(status)
         throw e
     }
 

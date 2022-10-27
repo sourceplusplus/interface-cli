@@ -21,15 +21,13 @@ import com.apollographql.apollo3.api.json.MapJsonWriter
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import kotlinx.coroutines.runBlocking
-import spp.cli.Main
 import spp.cli.PlatformCLI.apolloClient
-import spp.cli.PlatformCLI.echoError
 import spp.cli.protocol.instrument.AddLiveSpanMutation
 import spp.cli.protocol.instrument.adapter.AddLiveSpanMutation_ResponseAdapter.AddLiveSpan
 import spp.cli.protocol.type.LiveSpanInput
 import spp.cli.protocol.type.LiveSpanLocationInput
+import spp.cli.util.ExitManager.exitProcess
 import spp.cli.util.JsonCleaner
-import kotlin.system.exitProcess
 
 class AddSpan : CliktCommand(name = "span", help = "Add a live span instrument") {
 
@@ -54,12 +52,10 @@ class AddSpan : CliktCommand(name = "span", help = "Add a live span instrument")
         val response = try {
             apolloClient.mutation(AddLiveSpanMutation(input)).execute()
         } catch (e: Exception) {
-            echoError(e)
-            if (Main.standalone) exitProcess(-1) else return@runBlocking
+            exitProcess(-1, e)
         }
         if (response.hasErrors()) {
-            echo(response.errors?.get(0)?.message, err = true)
-            if (Main.standalone) exitProcess(-1) else return@runBlocking
+            exitProcess(response.errors!!)
         }
 
         echo(JsonCleaner.cleanJson(MapJsonWriter().let {
@@ -68,6 +64,6 @@ class AddSpan : CliktCommand(name = "span", help = "Add a live span instrument")
             it.endObject()
             (it.root() as LinkedHashMap<*, *>)
         }).encodePrettily())
-        if (Main.standalone) exitProcess(0)
+        exitProcess(0)
     }
 }

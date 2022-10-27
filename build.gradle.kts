@@ -139,8 +139,13 @@ configurations.runtimeClasspath {
 tasks.getByName<Test>("test") {
     failFast = true
     useJUnitPlatform()
-    if (System.getProperty("test.profile") != "integration") {
-        exclude("integration/**")
+
+    val isIntegrationProfile = System.getProperty("test.profile") == "integration"
+    val runningSpecificTests = gradle.startParameter.taskNames.contains("--tests")
+
+    //exclude integration tests unless requested
+    if (!isIntegrationProfile && !runningSpecificTests) {
+        exclude("integration/**", "**/*IntegrationTest.class", "**/*ITTest.class")
     }
 
     testLogging {
@@ -160,7 +165,6 @@ tasks {
 }
 
 dockerCompose {
-    dockerComposeWorkingDirectory.set(File("./e2e"))
     removeVolumes.set(true)
     waitForTcpPorts.set(false)
 }

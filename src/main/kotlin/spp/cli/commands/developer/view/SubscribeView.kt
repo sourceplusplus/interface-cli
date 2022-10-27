@@ -74,7 +74,9 @@ class SubscribeView : CliktCommand(
                     .setSsl(PlatformCLI.platformHost.startsWith("https"))
                     .setTrustOptions(
                         TrustOptions.wrap(
-                            JavaPinning.trustManagerForPins(listOf(Pin.fromString("CERTSHA256:${PlatformCLI.certFingerprint}")))
+                            JavaPinning.trustManagerForPins(
+                                listOf(Pin.fromString("CERTSHA256:${PlatformCLI.certFingerprint}"))
+                            )
                         )
                     )
                 vertx.createNetClient(options)

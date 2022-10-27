@@ -19,12 +19,10 @@ package spp.cli.commands.admin.client
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import kotlinx.coroutines.runBlocking
-import spp.cli.Main
 import spp.cli.PlatformCLI
 import spp.cli.PlatformCLI.apolloClient
-import spp.cli.PlatformCLI.echoError
 import spp.cli.protocol.client.RefreshClientAccessMutation
-import kotlin.system.exitProcess
+import spp.cli.util.ExitManager.exitProcess
 
 class RefreshClientAccess : CliktCommand(printHelpOnEmptyArgs = true) {
 
@@ -34,12 +32,10 @@ class RefreshClientAccess : CliktCommand(printHelpOnEmptyArgs = true) {
         val response = try {
             apolloClient.mutation(RefreshClientAccessMutation(id)).execute()
         } catch (e: Exception) {
-            echoError(e)
-            if (Main.standalone) exitProcess(-1) else return@runBlocking
+            exitProcess(-1, e)
         }
         if (response.hasErrors()) {
-            echo(response.errors?.get(0)?.message, err = true)
-            if (Main.standalone) exitProcess(-1) else return@runBlocking
+            exitProcess(response.errors!!)
         }
 
         if (PlatformCLI.verbose) {
@@ -48,6 +44,6 @@ class RefreshClientAccess : CliktCommand(printHelpOnEmptyArgs = true) {
         } else {
             echo(response.data!!.refreshClientAccess.secret!!)
         }
-        if (Main.standalone) exitProcess(0)
+        exitProcess(0)
     }
 }

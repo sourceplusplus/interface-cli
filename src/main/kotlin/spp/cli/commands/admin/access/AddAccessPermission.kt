@@ -25,14 +25,12 @@ import com.github.ajalt.clikt.parameters.options.multiple
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.enum
 import kotlinx.coroutines.runBlocking
-import spp.cli.Main
 import spp.cli.PlatformCLI
-import spp.cli.PlatformCLI.echoError
 import spp.cli.protocol.access.AddAccessPermissionMutation
 import spp.cli.protocol.access.adapter.AddAccessPermissionMutation_ResponseAdapter.AddAccessPermission
+import spp.cli.util.ExitManager.exitProcess
 import spp.cli.util.JsonCleaner
 import spp.protocol.platform.auth.AccessType
-import kotlin.system.exitProcess
 
 class AddAccessPermission : CliktCommand(printHelpOnEmptyArgs = true) {
 
@@ -48,12 +46,10 @@ class AddAccessPermission : CliktCommand(printHelpOnEmptyArgs = true) {
                 )
             ).execute()
         } catch (e: Exception) {
-            echoError(e)
-            if (Main.standalone) exitProcess(-1) else return@runBlocking
+            exitProcess(-1, e)
         }
         if (response.hasErrors()) {
-            echo(response.errors?.get(0)?.message, err = true)
-            if (Main.standalone) exitProcess(-1) else return@runBlocking
+            exitProcess(response.errors!!)
         }
 
         if (PlatformCLI.verbose) {
@@ -68,6 +64,6 @@ class AddAccessPermission : CliktCommand(printHelpOnEmptyArgs = true) {
             echo("Location patterns: ${response.data!!.addAccessPermission.locationPatterns!!}")
             echo("Type: ${response.data!!.addAccessPermission.type}")
         }
-        if (Main.standalone) exitProcess(0)
+        exitProcess(0)
     }
 }

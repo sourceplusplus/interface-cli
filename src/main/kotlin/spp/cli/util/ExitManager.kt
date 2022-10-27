@@ -33,7 +33,7 @@ object ExitManager {
         if (e != null) {
             echo(e[0].message, err = true)
         }
-        if (standalone) exitProcess(status)
+        if (standalone) kotlin.system.exitProcess(status)
     }
 
     fun exitProcess(e: List<Error>): Nothing {

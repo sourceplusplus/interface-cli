@@ -48,7 +48,6 @@ class AddMeter : CliktCommand(name = "meter", help = "Add a live meter instrumen
     val valueType by argument(help = "Metric value type").enum<MetricValueType>()
     val value by option("-value", "-v", help = "Metric value")
     val meterId by option("-id", help = "Meter identifier")
-    val meterDescription by option("-desc", help = "Meter description")
     val condition by option("-condition", "-c", help = "Trigger condition")
     val expiresAt by option("-expiresAt", "-e", help = "Expiration time (epoch time [ms])").long()
     val hitLimit by option("-hitLimit", "-h", help = "Trigger hit limit").int()
@@ -64,7 +63,6 @@ class AddMeter : CliktCommand(name = "meter", help = "Add a live meter instrumen
                 value = Optional.presentIfNotNull(value)
             ),
             id = Optional.presentIfNotNull(meterId),
-            meterDescription = Optional.presentIfNotNull(meterDescription),
             location = LiveSourceLocationInput(source, line),
             condition = Optional.Present(condition),
             expiresAt = Optional.Present(expiresAt),

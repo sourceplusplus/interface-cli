@@ -15,6 +15,12 @@ formatting:
     active: false
   Wrapping:
     active: false
+  ArgumentListWrapping:
+    active: false
+  MultiLineIfElse:
+    active: false
+  AnnotationOnSeparateLine:
+    active: false
 
 style:
   MagicNumber:

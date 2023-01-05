@@ -170,7 +170,9 @@ dockerCompose {
 }
 
 apollo {
-    packageNamesFromFilePaths("spp.cli.protocol")
+    service("service") {
+        packageNamesFromFilePaths("spp.cli.protocol")
+    }
 }
 
 tasks.create<Copy>("importProtocolFiles") {

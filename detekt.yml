@@ -32,16 +32,16 @@ style:
   WildcardImport:
     active: false
   MaxLineLength:
-    excludes: ['**/test/**']
+    excludes: [ '**/test/**' ]
 
 exceptions:
   TooGenericExceptionCaught:
     active: false
   TooGenericExceptionThrown:
-    excludes: ['**/test/**']
+    excludes: [ '**/test/**' ]
 
 complexity:
   LongParameterList:
     functionThreshold: 8
   LongMethod:
-    excludes: ['**/test/**']
+    excludes: [ '**/test/**' ]

@@ -175,11 +175,14 @@ apollo {
     }
 }
 
-tasks.create<Copy>("importProtocolFiles") {
+//ensure graphqlLibs() dependency is available
+tasks.all {
     if (findProject(":protocol") != null) {
         dependsOn(":protocol:jar")
     }
+}
 
+tasks.create<Copy>("importProtocolFiles") {
     configurations.getByName("graphqlLibs").asFileTree.forEach {
         if (it.name.startsWith("protocol-")) {
             from(zipTree(it)) {

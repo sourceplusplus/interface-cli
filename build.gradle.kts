@@ -175,6 +175,7 @@ apollo {
     }
 }
 
+//todo: find specific task to add dependsOn() to
 //ensure graphqlLibs() dependency is available
 tasks.all {
     if (findProject(":protocol") != null) {

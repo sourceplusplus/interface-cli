@@ -88,27 +88,27 @@ class SubscribeInstrument : CliktCommand(
             socket!!.handler(FrameParser(TCPServiceFrameParser(vertx, socket)))
 
             vertx.eventBus().consumer<JsonObject>(toLiveInstrumentSubscriberAddress(PlatformCLI.developer.id)) {
-                val liveEvent = LiveInstrumentEvent(it.body())
+                val liveEvent = LiveInstrumentEvent.fromJson(it.body())
 
                 //todo: impl filter on platform
                 if (instrumentIds.isNotEmpty()) {
                     when (liveEvent.eventType) {
                         LiveInstrumentEventType.LOG_HIT -> {
-                            val logHit = LiveLogHit(JsonObject(liveEvent.data))
+                            val logHit = liveEvent as LiveLogHit
                             if (logHit.logId !in instrumentIds) {
                                 return@consumer
                             }
                         }
 
                         LiveInstrumentEventType.BREAKPOINT_HIT -> {
-                            val breakpointHit = LiveBreakpointHit(JsonObject(liveEvent.data))
+                            val breakpointHit = liveEvent as LiveBreakpointHit
                             if (breakpointHit.breakpointId !in instrumentIds) {
                                 return@consumer
                             }
                         }
 
                         LiveInstrumentEventType.BREAKPOINT_REMOVED, LiveInstrumentEventType.LOG_REMOVED -> {
-                            val logRemoved = LiveInstrumentRemoved(JsonObject(liveEvent.data))
+                            val logRemoved = liveEvent as LiveInstrumentRemoved
                             if (logRemoved.liveInstrument.id !in instrumentIds) {
                                 return@consumer
                             }
@@ -120,18 +120,18 @@ class SubscribeInstrument : CliktCommand(
 
                 if (!includeBreakpoints && !includeLogs && !includeMeters && !includeTraces) {
                     //listen for all events
-                    println("\nType: ${liveEvent.eventType}\nData: ${liveEvent.data}")
+                    println("\nType: ${liveEvent.eventType}\nData: ${liveEvent.toJson()}")
                 } else {
                     //todo: impl filtering on platform
                     //listen for specific events
                     if (includeBreakpoints && liveEvent.eventType.name.startsWith("breakpoint", true)) {
-                        println("\nType: ${liveEvent.eventType}\nData: ${liveEvent.data}")
+                        println("\nType: ${liveEvent.eventType}\nData: ${liveEvent.toJson()}")
                     } else if (includeLogs && liveEvent.eventType.name.startsWith("log", true)) {
-                        println("\nType: ${liveEvent.eventType}\nData: ${liveEvent.data}")
+                        println("\nType: ${liveEvent.eventType}\nData: ${liveEvent.toJson()}")
                     } else if (includeMeters && liveEvent.eventType.name.startsWith("meter", true)) {
-                        println("\nType: ${liveEvent.eventType}\nData: ${liveEvent.data}")
+                        println("\nType: ${liveEvent.eventType}\nData: ${liveEvent.toJson()}")
                     } else if (includeTraces && liveEvent.eventType.name.startsWith("trace", true)) {
-                        println("\nType: ${liveEvent.eventType}\nData: ${liveEvent.data}")
+                        println("\nType: ${liveEvent.eventType}\nData: ${liveEvent.toJson()}")
                     }
                 }
             }

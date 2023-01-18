@@ -194,6 +194,7 @@ tasks.create<Copy>("importProtocolFiles") {
     into(file("src/main"))
 }
 tasks.getByName("checkApolloVersions").dependsOn("importProtocolFiles")
+tasks.getByName("test").dependsOn("importProtocolFiles")
 
 spotless {
     kotlin {

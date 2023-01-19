@@ -95,21 +95,21 @@ class SubscribeInstrument : CliktCommand(
                     when (liveEvent.eventType) {
                         LiveInstrumentEventType.LOG_HIT -> {
                             val logHit = liveEvent as LiveLogHit
-                            if (logHit.logId !in instrumentIds) {
+                            if (logHit.instrument.id !in instrumentIds) {
                                 return@consumer
                             }
                         }
 
                         LiveInstrumentEventType.BREAKPOINT_HIT -> {
                             val breakpointHit = liveEvent as LiveBreakpointHit
-                            if (breakpointHit.breakpointId !in instrumentIds) {
+                            if (breakpointHit.instrument.id !in instrumentIds) {
                                 return@consumer
                             }
                         }
 
                         LiveInstrumentEventType.BREAKPOINT_REMOVED, LiveInstrumentEventType.LOG_REMOVED -> {
                             val logRemoved = liveEvent as LiveInstrumentRemoved
-                            if (logRemoved.liveInstrument.id !in instrumentIds) {
+                            if (logRemoved.instrument.id !in instrumentIds) {
                                 return@consumer
                             }
                         }

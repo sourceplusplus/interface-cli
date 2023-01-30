@@ -28,7 +28,7 @@ import java.io.OutputStream
 import java.io.PrintStream
 import kotlin.reflect.KClass
 
-abstract class CLIIntegrationTest {
+open class CLIIntegrationTest {
     companion object {
         init {
             ExitManager.standalone = false

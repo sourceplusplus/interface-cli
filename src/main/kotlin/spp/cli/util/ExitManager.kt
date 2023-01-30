@@ -41,7 +41,7 @@ object ExitManager {
     fun exitProcess(e: List<Error>): Nothing {
         echo(e[0].message, err = true)
         if (standalone) exitProcess(-1)
-        throw Exception(e[0].message)
+        throw IllegalStateException(e[0].message)
     }
 
     private fun echo(

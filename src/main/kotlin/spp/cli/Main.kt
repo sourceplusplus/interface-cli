@@ -44,7 +44,7 @@ import spp.cli.commands.developer.view.SubscribeView
 
 object Main {
 
-    lateinit var args: Array<String>
+    private lateinit var args: Array<String>
 
     @JvmStatic
     fun main(args: Array<String>) {

@@ -6,7 +6,8 @@
 
 ## What is this?
 
-This project provides a command-line interface to [Source++](https://github.com/sourceplusplus/sourceplusplus), the open-source live coding platform.
+This project provides a command-line interface to [Source++](https://github.com/sourceplusplus/sourceplusplus), the
+continuous feedback platform for developers.
 
 ## Install
 
@@ -57,6 +58,7 @@ Commands:
 ```
 
 ## Documentation
+
 - [Developer Commands](https://docs.sourceplus.plus/implementation/tools/clients/cli/developer/)
 - [Admin Commands](https://docs.sourceplus.plus/implementation/tools/clients/cli/admin/)
 

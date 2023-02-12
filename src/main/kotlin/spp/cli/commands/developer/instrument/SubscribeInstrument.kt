@@ -29,13 +29,12 @@ import io.vertx.core.net.NetClientOptions
 import io.vertx.core.net.TrustOptions
 import io.vertx.ext.bridge.BridgeEventType
 import io.vertx.ext.eventbus.bridge.tcp.impl.protocol.FrameHelper
-import io.vertx.ext.eventbus.bridge.tcp.impl.protocol.FrameParser
 import io.vertx.kotlin.coroutines.await
 import kotlinx.coroutines.runBlocking
 import spp.cli.PlatformCLI
 import spp.protocol.instrument.event.*
 import spp.protocol.service.SourceServices.Subscribe.toLiveInstrumentSubscriberAddress
-import spp.protocol.service.extend.TCPServiceFrameParser
+import spp.protocol.service.extend.TCPServiceSocket
 
 class SubscribeInstrument : CliktCommand(
     name = "instrument",
@@ -85,7 +84,7 @@ class SubscribeInstrument : CliktCommand(
                 PlatformCLI.platformHost.substringAfter("https://").substringAfter("http://")
                     .substringBefore(":")
             ).await()
-            socket!!.handler(FrameParser(TCPServiceFrameParser(vertx, socket)))
+            TCPServiceSocket(vertx, socket!!)
 
             vertx.eventBus().consumer<JsonObject>(toLiveInstrumentSubscriberAddress(PlatformCLI.developer.id)) {
                 val liveEvent = LiveInstrumentEvent.fromJson(it.body())

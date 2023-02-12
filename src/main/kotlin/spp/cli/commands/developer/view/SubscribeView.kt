@@ -28,7 +28,6 @@ import io.vertx.core.net.NetClientOptions
 import io.vertx.core.net.TrustOptions
 import io.vertx.ext.bridge.BridgeEventType
 import io.vertx.ext.eventbus.bridge.tcp.impl.protocol.FrameHelper
-import io.vertx.ext.eventbus.bridge.tcp.impl.protocol.FrameParser
 import io.vertx.kotlin.coroutines.await
 import kotlinx.coroutines.runBlocking
 import spp.cli.PlatformCLI
@@ -36,7 +35,7 @@ import spp.protocol.artifact.log.Log
 import spp.protocol.artifact.log.LogOrderType
 import spp.protocol.artifact.log.LogResult
 import spp.protocol.service.SourceServices.Subscribe.toLiveViewSubscriberAddress
-import spp.protocol.service.extend.TCPServiceFrameParser
+import spp.protocol.service.extend.TCPServiceSocket
 import spp.protocol.view.LiveViewEvent
 import java.time.LocalDateTime
 import java.time.ZoneOffset
@@ -92,7 +91,7 @@ class SubscribeView : CliktCommand(
                 PlatformCLI.platformHost.substringAfter("https://").substringAfter("http://")
                     .substringBefore(":")
             ).await()
-            socket!!.handler(FrameParser(TCPServiceFrameParser(vertx, socket)))
+            TCPServiceSocket(vertx, socket!!)
 
             vertx.eventBus().consumer<JsonObject>(toLiveViewSubscriberAddress(PlatformCLI.developer.id)) {
                 val event = LiveViewEvent(it.body())

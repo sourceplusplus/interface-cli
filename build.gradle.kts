@@ -245,3 +245,7 @@ detekt {
     buildUponDefaultConfig = true
     config.setFrom(arrayOf(File(project.rootDir, "detekt.yml")))
 }
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class) {
+    kotlinOptions.jvmTarget = "1.8"
+}

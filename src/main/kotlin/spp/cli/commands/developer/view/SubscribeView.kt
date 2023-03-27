@@ -110,7 +110,7 @@ class SubscribeView : CliktCommand(
             FrameHelper.sendFrame(
                 BridgeEventType.REGISTER.name.lowercase(),
                 toLiveViewSubscriberAddress(PlatformCLI.developerId), null,
-                JsonObject().apply { PlatformCLI.accessToken?.let { put("access-token", it) } },
+                JsonObject().apply { PlatformCLI.accessToken?.let { put("auth-token", it) } },
                 null, null, socket
             )
             println("Listening for events...")

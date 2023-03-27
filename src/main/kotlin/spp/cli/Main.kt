@@ -28,7 +28,7 @@ import spp.cli.commands.admin.client.RefreshClientAccess
 import spp.cli.commands.admin.client.RemoveClientAccess
 import spp.cli.commands.admin.developer.AddDeveloper
 import spp.cli.commands.admin.developer.GetDevelopers
-import spp.cli.commands.admin.developer.RefreshDeveloperToken
+import spp.cli.commands.admin.developer.RefreshAuthorizationCode
 import spp.cli.commands.admin.developer.RemoveDeveloper
 import spp.cli.commands.admin.permission.AddRolePermission
 import spp.cli.commands.admin.permission.GetDeveloperPermissions
@@ -68,7 +68,7 @@ object Main {
                 AddDeveloper(),
                 GetDevelopers(),
                 RemoveDeveloper(),
-                RefreshDeveloperToken(),
+                RefreshAuthorizationCode(),
                 //client access
                 AddClientAccess(),
                 GetClientAccessors(),

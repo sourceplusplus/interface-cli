@@ -93,7 +93,7 @@ class SubscribeView : CliktCommand(
             ).await()
             TCPServiceSocket(vertx, socket!!)
 
-            vertx.eventBus().consumer<JsonObject>(toLiveViewSubscriberAddress(PlatformCLI.developer.id)) {
+            vertx.eventBus().consumer<JsonObject>(toLiveViewSubscriberAddress(PlatformCLI.developerId)) {
                 val event = LiveViewEvent(it.body())
                 if (outputFullEvent) {
                     println(event.metricsData)
@@ -109,8 +109,8 @@ class SubscribeView : CliktCommand(
             //register listener
             FrameHelper.sendFrame(
                 BridgeEventType.REGISTER.name.lowercase(),
-                toLiveViewSubscriberAddress(PlatformCLI.developer.id), null,
-                JsonObject().apply { PlatformCLI.developer.accessToken?.let { put("auth-token", it) } },
+                toLiveViewSubscriberAddress(PlatformCLI.developerId), null,
+                JsonObject().apply { PlatformCLI.accessToken?.let { put("access-token", it) } },
                 null, null, socket
             )
             println("Listening for events...")

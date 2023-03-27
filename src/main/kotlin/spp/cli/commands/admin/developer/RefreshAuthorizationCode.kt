@@ -21,16 +21,16 @@ import com.github.ajalt.clikt.parameters.arguments.argument
 import kotlinx.coroutines.runBlocking
 import spp.cli.PlatformCLI
 import spp.cli.PlatformCLI.apolloClient
-import spp.cli.protocol.developer.RefreshDeveloperTokenMutation
+import spp.cli.protocol.developer.RefreshAuthorizationCodeMutation
 import spp.cli.util.ExitManager.exitProcess
 
-class RefreshDeveloperToken : CliktCommand(printHelpOnEmptyArgs = true) {
+class RefreshAuthorizationCode : CliktCommand(printHelpOnEmptyArgs = true) {
 
     val id by argument(help = "Developer ID")
 
     override fun run() = runBlocking {
         val response = try {
-            apolloClient.mutation(RefreshDeveloperTokenMutation(id)).execute()
+            apolloClient.mutation(RefreshAuthorizationCodeMutation(id)).execute()
         } catch (e: Exception) {
             exitProcess(-1, e)
         }
@@ -39,10 +39,10 @@ class RefreshDeveloperToken : CliktCommand(printHelpOnEmptyArgs = true) {
         }
 
         if (PlatformCLI.verbose) {
-            echo("Refreshed developer token for id $id")
-            echo("New access token: ${response.data!!.refreshDeveloperToken.accessToken!!}")
+            echo("Refreshed developer authorization code for id $id")
+            echo("New access token: ${response.data!!.refreshAuthorizationCode.authorizationCode!!}")
         } else {
-            echo(response.data!!.refreshDeveloperToken.accessToken!!)
+            echo(response.data!!.refreshAuthorizationCode.authorizationCode!!)
         }
         exitProcess(0)
     }

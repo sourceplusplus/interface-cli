@@ -61,7 +61,7 @@ object PlatformCLI : CliktCommand(name = "spp-cli", allowMultipleSubcommands = t
         .default(File("config/spp-platform.crt"))
     private val platformKey by option("-k", "--key", help = "Source++ platform key").file()
         .default(File("config/spp-platform.key"))
-    private val accessToken by option("-a", "--access-token", help = "Developer access token")
+    private val authorizationCode by option("-a", "--authorization-code", help = "Developer authorization code")
     val apolloClient: ApolloClient by lazy { connectToPlatform() }
     val certFingerprint: String? by lazy {
         if (platformCertificate.exists()) {
@@ -74,7 +74,8 @@ object PlatformCLI : CliktCommand(name = "spp-cli", allowMultipleSubcommands = t
             null
         }
     }
-    var developer: Developer = Developer("system")
+    var developerId: String = "system"
+    var accessToken: String? = null
 
     override fun run() = Unit
 
@@ -122,18 +123,19 @@ object PlatformCLI : CliktCommand(name = "spp-cli", allowMultipleSubcommands = t
                 .withClaim("created_at", Instant.now().toEpochMilli())
                 .withClaim("expires_at", Instant.now().plus(8760, ChronoUnit.HOURS).toEpochMilli())
                 .sign(algorithm)
-            developer = Developer("system")
+            developerId = "system"
         } else {
-            val tokenUri = "$serverUrl/api/new-token?access_token=$accessToken"
+            val tokenUri = "$serverUrl/api/new-token?authorization_code=$authorizationCode"
             val resp = httpClient.newCall(Request.Builder().url(tokenUri).build()).execute()
             if (resp.code in 200..299) {
                 jwtToken = resp.body!!.string()
 
                 if (resp.code != 202) {
                     val decoded = JWT.decode(jwtToken)
-                    developer = Developer(decoded.getClaim("developer_id").asString(), jwtToken)
+                    developerId = decoded.getClaim("developer_id").asString()
+                    accessToken = jwtToken
                 }
-            } else if (resp.code == 401 && accessToken.isNullOrEmpty()) {
+            } else if (resp.code == 401 && authorizationCode.isNullOrEmpty()) {
                 error("Connection failed. Reason: Missing access token")
             } else if (resp.code == 401) {
                 error("Connection failed. Reason: Invalid access token")

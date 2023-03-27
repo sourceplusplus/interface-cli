@@ -34,7 +34,7 @@ class CommandParseTest : CLIIntegrationTest() {
             "-v admin add-developer test".split(" ").toTypedArray()
         )
         Main.main(
-            "-v admin refresh-developer-token test".split(" ").toTypedArray()
+            "-v admin refresh-authorization-code test".split(" ").toTypedArray()
         )
         Main.main(
             "-v admin get-roles".split(" ").toTypedArray()

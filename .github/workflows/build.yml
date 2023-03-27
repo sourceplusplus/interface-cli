@@ -173,8 +173,8 @@ jobs:
         run: ./build/graal/spp-cli -v admin get-developers
       - name: "[CLI] Add developer"
         run: ./build/graal/spp-cli -v admin add-developer test
-      - name: "[CLI] Refresh developer token"
-        run: ./build/graal/spp-cli -v admin refresh-developer-token test
+      - name: "[CLI] Refresh authorization code"
+        run: ./build/graal/spp-cli -v admin refresh-authorization-code test
       - name: "[CLI] Get roles"
         run: ./build/graal/spp-cli -v admin get-roles
       - name: "[CLI] Get role permissions"

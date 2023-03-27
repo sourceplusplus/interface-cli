@@ -39,9 +39,9 @@ class AddDeveloper : CliktCommand(printHelpOnEmptyArgs = true) {
         }
 
         if (PlatformCLI.verbose) {
-            echo("Added developer $id with token ${response.data!!.addDeveloper.accessToken!!}")
+            echo("Added developer $id with authorization code ${response.data!!.addDeveloper.authorizationCode!!}")
         } else {
-            echo(response.data!!.addDeveloper.accessToken!!)
+            echo(response.data!!.addDeveloper.authorizationCode!!)
         }
         exitProcess(0)
     }

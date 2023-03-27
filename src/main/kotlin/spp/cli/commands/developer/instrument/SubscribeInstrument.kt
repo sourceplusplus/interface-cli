@@ -86,7 +86,7 @@ class SubscribeInstrument : CliktCommand(
             ).await()
             TCPServiceSocket(vertx, socket!!)
 
-            vertx.eventBus().consumer<JsonObject>(toLiveInstrumentSubscriberAddress(PlatformCLI.developer.id)) {
+            vertx.eventBus().consumer<JsonObject>(toLiveInstrumentSubscriberAddress(PlatformCLI.developerId)) {
                 val liveEvent = LiveInstrumentEvent.fromJson(it.body())
 
                 //todo: impl filter on platform
@@ -138,8 +138,8 @@ class SubscribeInstrument : CliktCommand(
             //register listener
             FrameHelper.sendFrame(
                 BridgeEventType.REGISTER.name.lowercase(),
-                toLiveInstrumentSubscriberAddress(PlatformCLI.developer.id), null,
-                JsonObject().apply { PlatformCLI.developer.accessToken?.let { put("auth-token", it) } },
+                toLiveInstrumentSubscriberAddress(PlatformCLI.developerId), null,
+                JsonObject().apply { PlatformCLI.accessToken?.let { put("access-token", it) } },
                 null, null, socket
             )
             println("Listening for events...")

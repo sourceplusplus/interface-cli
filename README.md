@@ -40,12 +40,12 @@ Try executing `spp-cli --help` to output the usage instructions like so:
 Usage: spp-cli [OPTIONS] COMMAND [ARGS]...
 
 Options:
-  -v, --verbose            Enable verbose mode
-  -p, --platform TEXT      Source++ platform host
-  -c, --certificate PATH   Source++ platform certificate
-  -k, --key PATH           Source++ platform key
-  -a, --access-token TEXT  Developer access token
-  -h, --help               Show this message and exit
+  -v, --verbose                  Enable verbose mode
+  -p, --platform TEXT            Source++ platform host
+  -c, --certificate PATH         Source++ platform certificate
+  -k, --key PATH                 Source++ platform key
+  -a, --authorization-code TEXT  Developer authorization code
+  -h, --help                     Show this message and exit
 
 Commands:
   admin      Administrator commands

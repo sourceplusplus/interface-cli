@@ -66,7 +66,7 @@ dependencies {
 
     testImplementation("org.junit.jupiter:junit-jupiter-engine:$jupiterVersion")
 
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.22.0")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.0")
 }
 
 configure<app.cash.licensee.LicenseeExtension> {

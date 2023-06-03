@@ -179,7 +179,7 @@ object PlatformCLI : CliktCommand(name = "spp-cli", allowMultipleSubcommands = t
         val der = c.encoded
         val sha1 = sha256DigestOf(der)
         val hexBytes: ByteArray = Hex.encode(sha1)
-        val hex = String(hexBytes).toUpperCase()
+        val hex = String(hexBytes).uppercase()
         val fp = StringBuffer()
         var i = 0
         fp.append(hex.substring(i, i + 2))

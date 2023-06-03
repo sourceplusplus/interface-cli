@@ -55,6 +55,7 @@ open class CLIIntegrationTest {
         }
     }
 
+    @Suppress("UNCHECKED_CAST")
     fun <T : Any> toList(jsonString: String, clazz: KClass<T>): MutableList<T> {
         val value = Json.decodeValue(jsonString) as JsonArray
         val list = mutableListOf<T>()

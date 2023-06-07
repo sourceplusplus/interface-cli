@@ -137,7 +137,6 @@ configurations.runtimeClasspath {
 }
 
 tasks.getByName<Test>("test") {
-    failFast = true
     useJUnitPlatform()
 
     val isIntegrationProfile = System.getProperty("test.profile") == "integration"

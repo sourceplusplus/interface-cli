@@ -24,7 +24,7 @@ import spp.cli.util.ExitManager.exitProcess
 
 class GetAccessToken : CliktCommand() {
 
-    val authorizationCode by argument(help = "Authorization Code")
+    val authorizationCode by argument(help = "Authorization code")
 
     override fun run() = runBlocking {
         PlatformCLI.connectToPlatform(authorizationCode)

@@ -223,8 +223,6 @@ jobs:
         run: ./build/graal/spp-cli -v get logs
       - name: "[CLI] Remove live instruments"
         run: ./build/graal/spp-cli -v remove instruments spp.example.webapp.model.User 48
-      - name: "[CLI] Reset"
-        run: ./build/graal/spp-cli -v admin reset
 
       - name: Check CLI
         run: ./gradlew check -Dtest.profile=integration

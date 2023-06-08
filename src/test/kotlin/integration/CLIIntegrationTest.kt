@@ -19,6 +19,8 @@ package integration
 import io.vertx.core.json.Json
 import io.vertx.core.json.JsonArray
 import org.junit.jupiter.api.BeforeAll
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import spp.cli.Main
 import spp.cli.util.ExitManager
 import spp.protocol.instrument.LiveBreakpoint
@@ -39,6 +41,8 @@ open class CLIIntegrationTest {
             Main.main(arrayOf("-v", "get-access-token", "change-me"))
         }
     }
+
+    val log: Logger by lazy { LoggerFactory.getLogger(this::class.java.name) }
 
     class Interceptor(out: OutputStream) : PrintStream(out, true) {
         val output = StringBuilder()

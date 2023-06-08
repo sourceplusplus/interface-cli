@@ -47,6 +47,7 @@ class BatchLiveInstrumentCLI : CLIIntegrationTest() {
             addedLiveBps.add(addedLiveBp)
             assertNotNull(addedLiveBp.id)
             interceptor.clear()
+            log.info("Added live breakpoint: ${addedLiveBp.id}")
         }
 
         //get live bps

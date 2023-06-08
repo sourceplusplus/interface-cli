@@ -65,8 +65,15 @@ dependencies {
     implementation("eu.geekplace.javapinning:java-pinning-core:1.2.0")
 
     testImplementation("org.junit.jupiter:junit-jupiter-engine:$jupiterVersion")
+    testImplementation("org.slf4j:slf4j-simple:$slf4jVersion")
 
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.0")
+}
+
+//remove slf4j-nop from test classpath (use slf4j-simple instead)
+tasks.withType<Test> {
+    useJUnitPlatform()
+    classpath = classpath.filter { !it.toString().contains("slf4j-nop") }
 }
 
 configure<app.cash.licensee.LicenseeExtension> {

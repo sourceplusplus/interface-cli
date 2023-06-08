@@ -35,7 +35,7 @@ class AddSpan : CliktCommand(name = "span", help = "Add a live span instrument")
 
     val source by argument(help = "Qualified function name")
     val operationName by argument(help = "Operation name")
-    val id by option("-id", "-i", help = "Log identifier")
+    val id by option("-id", "-i", help = "Span identifier")
 //    val condition by option("-condition", "-c", help = "Trigger condition")
 //    val expiresAt by option("-expiresAt", "-e", help = "Expiration time (epoch time [ms])").long()
 //    val hitLimit by option("-hitLimit", "-h", help = "Trigger hit limit").int()

@@ -66,6 +66,7 @@ class LiveInstrumentCLI : CLIIntegrationTest() {
         assertEquals(addedLiveLog.location.source, removedLiveLog.location.source)
         assertEquals(addedLiveLog.location.line, removedLiveLog.location.line)
         assertEquals(addedLiveLog.hitLimit, removedLiveLog.hitLimit)
+        System.setOut(origOut)
     }
 
     @Test
@@ -103,6 +104,7 @@ class LiveInstrumentCLI : CLIIntegrationTest() {
         assertEquals(removedLiveBp.location.source, removedLiveBreakpoint.location.source)
         assertEquals(removedLiveBp.location.line, removedLiveBreakpoint.location.line)
         assertEquals(removedLiveBp.hitLimit, removedLiveBreakpoint.hitLimit)
+        System.setOut(origOut)
     }
 
     @Test
@@ -179,5 +181,6 @@ class LiveInstrumentCLI : CLIIntegrationTest() {
         assertEquals(addedLiveBp.id, removedLiveBp.id)
         assertEquals(addedLiveBp.location.source, removedLiveBp.location.source)
         assertEquals(addedLiveBp.location.line, removedLiveBp.location.line)
+        System.setOut(origOut)
     }
 }

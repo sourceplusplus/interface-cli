@@ -77,5 +77,6 @@ class BatchLiveInstrumentCLI : CLIIntegrationTest() {
             assertEquals(it.id, removedLiveBp.id)
             interceptor.clear()
         }
+        System.setOut(origOut)
     }
 }

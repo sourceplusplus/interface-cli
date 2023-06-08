@@ -18,6 +18,7 @@ package integration
 
 import io.vertx.core.json.Json
 import io.vertx.core.json.JsonArray
+import org.junit.jupiter.api.BeforeAll
 import spp.cli.Main
 import spp.cli.util.ExitManager
 import spp.protocol.instrument.LiveBreakpoint
@@ -29,17 +30,13 @@ import java.io.PrintStream
 import kotlin.reflect.KClass
 
 open class CLIIntegrationTest {
+
     companion object {
-        init {
+        @BeforeAll
+        @JvmStatic
+        fun setup() {
             ExitManager.standalone = false
-            Main.main(
-                arrayOf(
-                    "-v",
-                    "-a", "change-me",
-                    "admin",
-                    "reset"
-                )
-            )
+            Main.main(arrayOf("-v", "get-access-token", "change-me"))
         }
     }
 

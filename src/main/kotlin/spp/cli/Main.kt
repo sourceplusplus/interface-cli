@@ -20,6 +20,7 @@ import com.github.ajalt.clikt.core.subcommands
 import spp.cli.commands.Admin
 import spp.cli.commands.Developer
 import spp.cli.commands.Version
+import spp.cli.commands.admin.GetAccessToken
 import spp.cli.commands.admin.Reset
 import spp.cli.commands.admin.access.*
 import spp.cli.commands.admin.client.AddClientAccess
@@ -50,6 +51,8 @@ object Main {
     fun main(args: Array<String>) {
         Main.args = args
         PlatformCLI.subcommands(
+            GetAccessToken(),
+
             //admin
             Admin().subcommands(
                 //role

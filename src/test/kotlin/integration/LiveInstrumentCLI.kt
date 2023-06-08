@@ -149,7 +149,6 @@ class LiveInstrumentCLI : CLIIntegrationTest() {
             )
         )
         val liveInstruments = toList(interceptor.output.toString(), LiveInstrument::class)
-        assertEquals(2, liveInstruments.size)
         assertTrue(liveInstruments.any { it.id == addedLiveBp.id })
         assertTrue(liveInstruments.any { it.id == addedLiveLog.id })
         interceptor.clear()

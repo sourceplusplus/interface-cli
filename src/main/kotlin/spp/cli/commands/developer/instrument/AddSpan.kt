@@ -17,9 +17,11 @@
 package spp.cli.commands.developer.instrument
 
 import com.apollographql.apollo3.api.CustomScalarAdapters
+import com.apollographql.apollo3.api.Optional
 import com.apollographql.apollo3.api.json.MapJsonWriter
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
+import com.github.ajalt.clikt.parameters.options.option
 import kotlinx.coroutines.runBlocking
 import spp.cli.PlatformCLI.apolloClient
 import spp.cli.protocol.instrument.AddLiveSpanMutation
@@ -33,6 +35,7 @@ class AddSpan : CliktCommand(name = "span", help = "Add a live span instrument")
 
     val source by argument(help = "Qualified function name")
     val operationName by argument(help = "Operation name")
+    val id by option("-id", "-i", help = "Span identifier")
 //    val condition by option("-condition", "-c", help = "Trigger condition")
 //    val expiresAt by option("-expiresAt", "-e", help = "Expiration time (epoch time [ms])").long()
 //    val hitLimit by option("-hitLimit", "-h", help = "Trigger hit limit").int()
@@ -47,7 +50,8 @@ class AddSpan : CliktCommand(name = "span", help = "Add a live span instrument")
 //            condition = Optional.Present(condition),
 //            expiresAt = Optional.Present(expiresAt),
 //            hitLimit = Optional.Present(hitLimit),
-//            throttle = Optional.Present(InstrumentThrottleInput(throttleLimit, throttleStep))
+//            throttle = Optional.Present(InstrumentThrottleInput(throttleLimit, throttleStep)),
+            id = Optional.presentIfNotNull(id)
         )
         val response = try {
             apolloClient.mutation(AddLiveSpanMutation(input)).execute()

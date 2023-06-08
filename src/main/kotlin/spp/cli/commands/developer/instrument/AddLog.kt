@@ -44,6 +44,7 @@ class AddLog : CliktCommand(name = "log", help = "Add a live log instrument") {
     val line by argument(help = "Line number").int()
     val logFormat by argument(help = "Log format")
     val logArguments by option("-logArgument", "-l", help = "Log argument").multiple()
+    val id by option("-id", "-i", help = "Log identifier")
     val condition by option("-condition", "-c", help = "Trigger condition")
     val expiresAt by option("-expiresAt", "-e", help = "Expiration time (epoch time [ms])").long()
     val hitLimit by option("-hitLimit", "-h", help = "Trigger hit limit").int()
@@ -63,7 +64,8 @@ class AddLog : CliktCommand(name = "log", help = "Add a live log instrument") {
                 InstrumentThrottleInput(
                     throttleLimit, spp.cli.protocol.type.ThrottleStep.valueOf(throttleStep.toString())
                 )
-            )
+            ),
+            id = Optional.presentIfNotNull(id)
         )
         val response = try {
             apolloClient.mutation(AddLiveLogMutation(input)).execute()

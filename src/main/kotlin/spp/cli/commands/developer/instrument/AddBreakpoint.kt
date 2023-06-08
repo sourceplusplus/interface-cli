@@ -41,6 +41,7 @@ class AddBreakpoint : CliktCommand(name = "breakpoint", help = "Add a live break
 
     val source by argument(help = "Qualified class name")
     val line by argument(help = "Line number").int()
+    val id by option("-id", "-i", help = "Breakpoint identifier")
     val condition by option("-condition", "-c", help = "Trigger condition")
     val expiresAt by option("-expiresAt", "-e", help = "Expiration time (epoch time [ms])").long()
     val hitLimit by option("-hitLimit", "-h", help = "Trigger hit limit").int()
@@ -58,7 +59,8 @@ class AddBreakpoint : CliktCommand(name = "breakpoint", help = "Add a live break
                 InstrumentThrottleInput(
                     throttleLimit, spp.cli.protocol.type.ThrottleStep.valueOf(throttleStep.toString())
                 )
-            )
+            ),
+            id = Optional.presentIfNotNull(id)
         )
         val response = try {
             apolloClient.mutation(AddLiveBreakpointMutation(input)).execute()

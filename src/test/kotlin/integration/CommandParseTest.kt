@@ -115,8 +115,5 @@ class CommandParseTest : CLIIntegrationTest() {
         Main.main(
             "-v remove instruments spp.example.webapp.model.User 48".split(" ").toTypedArray()
         )
-        Main.main(
-            "-v admin reset".split(" ").toTypedArray()
-        )
     }
 }

@@ -78,7 +78,7 @@ object PlatformCLI : CliktCommand(name = "spp-cli", allowMultipleSubcommands = t
 
     override fun run() = Unit
 
-    fun connectToPlatform(): ApolloClient {
+    fun connectToPlatform(authorizationCode: String? = this.authorizationCode): ApolloClient {
         val serverUrl = if (platformHost.startsWith("http")) {
             platformHost
         } else {
@@ -110,25 +110,23 @@ object PlatformCLI : CliktCommand(name = "spp-cli", allowMultipleSubcommands = t
                 .build()
         }
 
-        val jwtToken: String?
         if (platformKey.exists()) {
             val keyPair = PEMParser(StringReader(platformKey.readText())).use {
                 JcaPEMKeyConverter().getKeyPair(it.readObject() as PEMKeyPair)
             }
             val algorithm = Algorithm.RSA256(keyPair.public as RSAPublicKey, keyPair.private as RSAPrivateKey)
-            jwtToken = JWT.create()
+            developerId = "system"
+            accessToken = JWT.create()
                 .withIssuer("cli")
                 .withClaim("developer_id", "system") //users with key are automatically considered system
                 .withClaim("created_at", Instant.now().toEpochMilli())
                 .withClaim("expires_at", Instant.now().plus(8760, ChronoUnit.HOURS).toEpochMilli())
                 .sign(algorithm)
-            developerId = "system"
-        } else {
+        } else if (accessToken == null) {
             val tokenUri = "$serverUrl/api/new-token?authorization_code=$authorizationCode"
             val resp = httpClient.newCall(Request.Builder().url(tokenUri).build()).execute()
             if (resp.code in 200..299) {
-                jwtToken = resp.body!!.string()
-
+                val jwtToken = resp.body!!.string()
                 if (resp.code != 202) {
                     val decoded = JWT.decode(jwtToken)
                     developerId = decoded.getClaim("developer_id").asString()
@@ -148,7 +146,7 @@ object PlatformCLI : CliktCommand(name = "spp-cli", allowMultipleSubcommands = t
                 httpClient.newBuilder().addInterceptor { chain ->
                     chain.proceed(
                         chain.request().newBuilder()
-                            .header("Authorization", "Bearer $jwtToken")
+                            .header("Authorization", "Bearer $accessToken")
                             .build()
                     )
                 }.build()

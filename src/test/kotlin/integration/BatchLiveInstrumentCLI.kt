@@ -39,6 +39,7 @@ class BatchLiveInstrumentCLI : CLIIntegrationTest() {
                 arrayOf(
                     "-v",
                     "add", "breakpoint",
+                    "-i", "bp-$i",
                     "integration.BatchLiveInstrumentCLI", i.toString(),
                 )
             )
@@ -48,7 +49,7 @@ class BatchLiveInstrumentCLI : CLIIntegrationTest() {
             interceptor.clear()
         }
 
-        //get live instruments
+        //get live bps
         Main.main(
             arrayOf(
                 "-v",
@@ -57,12 +58,13 @@ class BatchLiveInstrumentCLI : CLIIntegrationTest() {
         )
 
         val liveInstruments = toList(interceptor.output.toString(), LiveInstrument::class)
-        assertEquals(100, liveInstruments.size)
+        for (i in 0..99) {
+            assertNotNull(liveInstruments.find { it.id == "bp-$i" })
+        }
         interceptor.clear()
 
-        //todo: need clear-instruments method
+        //remove live bps
         addedLiveBps.forEach {
-            //remove live instrument
             Main.main(
                 arrayOf(
                     "-v",

@@ -35,6 +35,7 @@ class BatchLiveInstrumentCLI : CLIIntegrationTest() {
         //100 live bps
         val addedLiveBps = mutableListOf<LiveInstrument>()
         for (i in 0..99) {
+            log.info("Adding live breakpoint: bp-$i")
             Main.main(
                 arrayOf(
                     "-v",

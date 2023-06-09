@@ -27,6 +27,7 @@ import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.int
 import com.github.ajalt.clikt.parameters.types.long
 import kotlinx.coroutines.runBlocking
+import org.slf4j.LoggerFactory
 import spp.cli.PlatformCLI.apolloClient
 import spp.cli.protocol.instrument.AddLiveBreakpointMutation
 import spp.cli.protocol.instrument.adapter.AddLiveBreakpointMutation_ResponseAdapter.AddLiveBreakpoint
@@ -39,6 +40,7 @@ import spp.protocol.instrument.throttle.ThrottleStep
 
 class AddBreakpoint : CliktCommand(name = "breakpoint", help = "Add a live breakpoint instrument") {
 
+    private val log = LoggerFactory.getLogger(AddBreakpoint::class.java)
     val source by argument(help = "Qualified class name")
     val line by argument(help = "Line number").int()
     val id by option("-id", "-i", help = "Breakpoint identifier")
@@ -62,6 +64,8 @@ class AddBreakpoint : CliktCommand(name = "breakpoint", help = "Add a live break
             ),
             id = Optional.presentIfNotNull(id)
         )
+        log.info("Sending request: {}", input)
+
         val response = try {
             apolloClient.mutation(AddLiveBreakpointMutation(input)).execute()
         } catch (e: Exception) {

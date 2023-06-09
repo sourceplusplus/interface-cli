@@ -36,6 +36,7 @@ import org.bouncycastle.openssl.PEMKeyPair
 import org.bouncycastle.openssl.PEMParser
 import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter
 import org.bouncycastle.util.encoders.Hex
+import org.slf4j.LoggerFactory
 import java.io.File
 import java.io.StringReader
 import java.security.SecureRandom
@@ -50,6 +51,7 @@ import javax.net.ssl.X509TrustManager
 
 object PlatformCLI : CliktCommand(name = "spp-cli", allowMultipleSubcommands = true) {
 
+    private val log = LoggerFactory.getLogger(PlatformCLI::class.java)
     val verbose by option("-v", "--verbose", help = "Enable verbose mode").flag()
     val platformHost: String by option("-p", "--platform", help = "Source++ platform host")
         .default(
@@ -84,6 +86,7 @@ object PlatformCLI : CliktCommand(name = "spp-cli", allowMultipleSubcommands = t
         } else {
             "https://$platformHost"
         }
+        log.info("Connecting to Source++ platform at $serverUrl")
 
         val httpClient = if (certFingerprint != null) {
             OkHttpClient().newBuilder()

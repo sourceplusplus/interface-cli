@@ -19,6 +19,7 @@ package integration
 import io.vertx.core.json.JsonObject
 import org.junit.jupiter.api.Test
 import spp.cli.Main
+import java.util.*
 
 class CommandParseTest : CLIIntegrationTest() {
 
@@ -30,11 +31,12 @@ class CommandParseTest : CLIIntegrationTest() {
         Main.main(
             "-v admin get-developers".split(" ").toTypedArray()
         )
+        val newDev = UUID.randomUUID().toString().replace("-", "")
         Main.main(
-            "-v admin add-developer test".split(" ").toTypedArray()
+            "-v admin add-developer $newDev".split(" ").toTypedArray()
         )
         Main.main(
-            "-v admin refresh-authorization-code test".split(" ").toTypedArray()
+            "-v admin refresh-authorization-code $newDev".split(" ").toTypedArray()
         )
         Main.main(
             "-v admin get-roles".split(" ").toTypedArray()
@@ -42,20 +44,21 @@ class CommandParseTest : CLIIntegrationTest() {
         Main.main(
             "-v admin get-role-permissions role_manager".split(" ").toTypedArray()
         )
+        val newRole = UUID.randomUUID().toString().replace("-", "")
         Main.main(
-            "-v admin add-role tester".split(" ").toTypedArray()
+            "-v admin add-role $newRole".split(" ").toTypedArray()
         )
         Main.main(
-            "-v admin add-role-permission tester ADD_DEVELOPER".split(" ").toTypedArray()
+            "-v admin add-role-permission $newRole ADD_DEVELOPER".split(" ").toTypedArray()
         )
         Main.main(
-            "-v admin add-developer-role test tester".split(" ").toTypedArray()
+            "-v admin add-developer-role $newDev $newRole".split(" ").toTypedArray()
         )
         Main.main(
-            "-v admin get-developer-roles test".split(" ").toTypedArray()
+            "-v admin get-developer-roles $newDev".split(" ").toTypedArray()
         )
         Main.main(
-            "-v admin get-developer-permissions test".split(" ").toTypedArray()
+            "-v admin get-developer-permissions $newDev".split(" ").toTypedArray()
         )
 
         val origOut = System.out
@@ -74,28 +77,28 @@ class CommandParseTest : CLIIntegrationTest() {
             "-v admin get-access-permissions".split(" ").toTypedArray()
         )
         Main.main(
-            "-v admin get-developer-access-permissions test".split(" ").toTypedArray()
+            "-v admin get-developer-access-permissions $newDev".split(" ").toTypedArray()
         )
         Main.main(
-            "-v admin get-role-access-permissions tester".split(" ").toTypedArray()
+            "-v admin get-role-access-permissions $newRole".split(" ").toTypedArray()
         )
         Main.main(
-            "-v admin remove-role-access-permission tester $accessPermissionId".split(" ").toTypedArray()
+            "-v admin remove-role-access-permission $newRole $accessPermissionId".split(" ").toTypedArray()
         )
         Main.main(
             "-v admin remove-access-permission $accessPermissionId".split(" ").toTypedArray()
         )
         Main.main(
-            "-v admin remove-developer-role test tester".split(" ").toTypedArray()
+            "-v admin remove-developer-role $newDev $newRole".split(" ").toTypedArray()
         )
         Main.main(
-            "-v admin remove-role-permission tester ADD_DEVELOPER".split(" ").toTypedArray()
+            "-v admin remove-role-permission $newRole ADD_DEVELOPER".split(" ").toTypedArray()
         )
         Main.main(
-            "-v admin remove-role tester".split(" ").toTypedArray()
+            "-v admin remove-role $newRole".split(" ").toTypedArray()
         )
         Main.main(
-            "-v admin remove-developer test".split(" ").toTypedArray()
+            "-v admin remove-developer $newDev".split(" ").toTypedArray()
         )
         Main.main(
             "-v add breakpoint -h 100 spp.example.webapp.model.User 48".split(" ").toTypedArray()

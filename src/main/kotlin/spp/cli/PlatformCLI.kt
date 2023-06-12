@@ -27,6 +27,7 @@ import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.file
 import eu.geekplace.javapinning.JavaPinning
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.bouncycastle.cert.X509CertificateHolder
@@ -90,6 +91,7 @@ object PlatformCLI : CliktCommand(name = "spp-cli", allowMultipleSubcommands = t
 
         val httpClient = if (certFingerprint != null) {
             OkHttpClient().newBuilder()
+                .addInterceptor(loggingInterceptor())
                 .hostnameVerifier { _, _ -> true }
                 .sslSocketFactory(
                     JavaPinning.forPin("CERTSHA256:$certFingerprint").socketFactory,
@@ -108,6 +110,7 @@ object PlatformCLI : CliktCommand(name = "spp-cli", allowMultipleSubcommands = t
             }.socketFactory
 
             OkHttpClient().newBuilder()
+                .addInterceptor(loggingInterceptor())
                 .hostnameVerifier { _, _ -> true }
                 .sslSocketFactory(insecureSocketFactory, naiveTrustManager)
                 .build()
@@ -197,5 +200,21 @@ object PlatformCLI : CliktCommand(name = "spp-cli", allowMultipleSubcommands = t
         val result = ByteArray(d.digestSize)
         d.doFinal(result, 0)
         return result
+    }
+
+    private fun loggingInterceptor() = Interceptor {
+        val request = it.request()
+        val sendTime = System.nanoTime()
+        log.info(
+            "Sending request to {}\n{}",
+            request.url, request.headers
+        )
+        val response = it.proceed(request)
+        val responseTime = System.nanoTime()
+        log.info(
+            "Received response for {} in {}ms\n{}",
+            response.request.url, (responseTime - sendTime) / 1e6, response.headers
+        )
+        response
     }
 }

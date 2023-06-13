@@ -71,7 +71,7 @@ class CommandParseTest : CLIIntegrationTest() {
         interceptor.clear()
 
         Main.main(
-            "-v admin add-role-access-permission tester $accessPermissionId".split(" ").toTypedArray()
+            "-v admin add-role-access-permission $newRole $accessPermissionId".split(" ").toTypedArray()
         )
         Main.main(
             "-v admin get-access-permissions".split(" ").toTypedArray()

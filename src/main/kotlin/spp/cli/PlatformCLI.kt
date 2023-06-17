@@ -126,7 +126,8 @@ object PlatformCLI : CliktCommand(name = "spp-cli", allowMultipleSubcommands = t
                 .withIssuer("cli")
                 .withClaim("developer_id", "system") //users with key are automatically considered system
                 .withClaim("created_at", Instant.now().toEpochMilli())
-                .withClaim("expires_at", Instant.now().plus(8760, ChronoUnit.HOURS).toEpochMilli())
+                //todo: reasonable exp
+                .withClaim("exp", Instant.now().plus(30, ChronoUnit.DAYS).toEpochMilli())
                 .sign(algorithm)
         } else if (accessToken == null) {
             val tokenUri = "$serverUrl/api/new-token?authorization_code=$authorizationCode"

@@ -125,9 +125,9 @@ object PlatformCLI : CliktCommand(name = "spp-cli", allowMultipleSubcommands = t
             accessToken = JWT.create()
                 .withIssuer("cli")
                 .withClaim("developer_id", "system") //users with key are automatically considered system
-                .withClaim("created_at", Instant.now().toEpochMilli())
                 //todo: reasonable exp
-                .withClaim("exp", Instant.now().plus(30, ChronoUnit.DAYS).toEpochMilli())
+                .withClaim("exp", Instant.now().plus(30, ChronoUnit.DAYS).epochSecond)
+                .withClaim("iat", Instant.now().epochSecond)
                 .sign(algorithm)
         } else if (accessToken == null) {
             val tokenUri = "$serverUrl/api/new-token?authorization_code=$authorizationCode"

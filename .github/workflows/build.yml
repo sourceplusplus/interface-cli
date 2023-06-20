@@ -241,10 +241,10 @@ jobs:
           path: ./spp-cli-linux64.zip
 
       - run: ./gradlew composeLogs
-        if: ${{ always() }}
+        if: ${{ !cancelled() }}
 
       - name: Upload docker logs artifact
-        if: ${{ always() }}
+        if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v3
         with:
           name: docker-logs

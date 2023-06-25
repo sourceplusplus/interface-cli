@@ -43,7 +43,7 @@ class AddLog : CliktCommand(name = "log", help = "Add a live log instrument") {
     val source by argument(help = "Qualified class name")
     val logFormat by argument(help = "Log format")
     val line by option("-line", "-l", help = "Line number").int()
-    val logArguments by option("-logArgument", "-l", help = "Log argument").multiple()
+    val logArguments by option("-arguments", "-a", help = "Log arguments").multiple()
     val id by option("-id", "-i", help = "Log identifier")
     val condition by option("-condition", "-c", help = "Trigger condition")
     val expiresAt by option("-expiresAt", "-e", help = "Expiration time (epoch time [ms])").long()

@@ -42,7 +42,7 @@ class AddBreakpoint : CliktCommand(name = "breakpoint", help = "Add a live break
 
     private val log = LoggerFactory.getLogger(AddBreakpoint::class.java)
     val source by argument(help = "Qualified class name")
-    val line by argument(help = "Line number").int()
+    val line by option("-line", "-l", help = "Line number").int()
     val id by option("-id", "-i", help = "Breakpoint identifier")
     val condition by option("-condition", "-c", help = "Trigger condition")
     val expiresAt by option("-expiresAt", "-e", help = "Expiration time (epoch time [ms])").long()
@@ -53,7 +53,7 @@ class AddBreakpoint : CliktCommand(name = "breakpoint", help = "Add a live break
 
     override fun run() = runBlocking {
         val input = LiveBreakpointInput(
-            location = LiveSourceLocationInput(source, line),
+            location = LiveSourceLocationInput(source, Optional.presentIfNotNull(line)),
             condition = Optional.Present(condition),
             expiresAt = Optional.Present(expiresAt),
             hitLimit = Optional.Present(hitLimit),

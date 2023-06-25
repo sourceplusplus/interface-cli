@@ -43,9 +43,9 @@ import spp.protocol.instrument.throttle.ThrottleStep
 class AddMeter : CliktCommand(name = "meter", help = "Add a live meter instrument") {
 
     val source by argument(help = "Qualified class name")
-    val line by argument(help = "Line number").int()
     val meterType by argument(help = "Meter type").enum<MeterType>()
     val valueType by argument(help = "Metric value type").enum<MetricValueType>()
+    val line by option("-line", "-l", help = "Line number").int()
     val value by option("-value", "-v", help = "Metric value")
     val id by option("-id", "-i", help = "Meter identifier")
     val condition by option("-condition", "-c", help = "Trigger condition")
@@ -63,7 +63,7 @@ class AddMeter : CliktCommand(name = "meter", help = "Add a live meter instrumen
                 value = Optional.presentIfNotNull(value)
             ),
             id = Optional.presentIfNotNull(id),
-            location = LiveSourceLocationInput(source, line),
+            location = LiveSourceLocationInput(source, Optional.presentIfNotNull(line)),
             condition = Optional.Present(condition),
             expiresAt = Optional.Present(expiresAt),
             hitLimit = Optional.Present(hitLimit),

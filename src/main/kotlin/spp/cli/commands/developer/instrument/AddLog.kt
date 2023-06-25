@@ -41,8 +41,8 @@ import spp.protocol.instrument.throttle.ThrottleStep
 class AddLog : CliktCommand(name = "log", help = "Add a live log instrument") {
 
     val source by argument(help = "Qualified class name")
-    val line by argument(help = "Line number").int()
     val logFormat by argument(help = "Log format")
+    val line by option("-line", "-l", help = "Line number").int()
     val logArguments by option("-logArgument", "-l", help = "Log argument").multiple()
     val id by option("-id", "-i", help = "Log identifier")
     val condition by option("-condition", "-c", help = "Trigger condition")
@@ -56,7 +56,7 @@ class AddLog : CliktCommand(name = "log", help = "Add a live log instrument") {
         val input = LiveLogInput(
             logFormat = logFormat,
             logArguments = Optional.Present(logArguments),
-            location = LiveSourceLocationInput(source, line),
+            location = LiveSourceLocationInput(source, Optional.presentIfNotNull(line)),
             condition = Optional.Present(condition),
             expiresAt = Optional.Present(expiresAt),
             hitLimit = Optional.Present(hitLimit),

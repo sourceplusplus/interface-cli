@@ -101,10 +101,10 @@ class CommandParseTest : CLIIntegrationTest() {
             "-v admin remove-developer $newDev".split(" ").toTypedArray()
         )
         Main.main(
-            "-v add breakpoint -h 100 spp.example.webapp.model.User 48".split(" ").toTypedArray()
+            "-v add breakpoint -h 100 -l 48 spp.example.webapp.model.User".split(" ").toTypedArray()
         )
         Main.main(
-            "-v add log -h 100 spp.example.webapp.model.User 48 test-message".split(" ").toTypedArray()
+            "-v add log -h 100 -l 48 spp.example.webapp.model.User test-message".split(" ").toTypedArray()
         )
         Main.main(
             "-v get instruments".split(" ").toTypedArray()

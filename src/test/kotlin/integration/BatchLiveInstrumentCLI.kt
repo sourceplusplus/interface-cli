@@ -41,7 +41,8 @@ class BatchLiveInstrumentCLI : CLIIntegrationTest() {
                     "-v",
                     "add", "breakpoint",
                     "-i", "bp-$i",
-                    "integration.BatchLiveInstrumentCLI", i.toString(),
+                    "-l", i.toString(),
+                    "integration.BatchLiveInstrumentCLI",
                 )
             )
             val addedLiveBp = LiveBreakpoint(JsonObject(interceptor.output.toString()))

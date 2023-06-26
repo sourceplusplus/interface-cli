@@ -38,8 +38,8 @@ class LiveInstrumentCLI : CLIIntegrationTest() {
                 "-v",
                 "add", "log",
                 "-h", "100",
+                "-l", "1",
                 "integration.LiveInstrumentCLI",
-                "1",
                 "addRemoveLiveLog"
             )
         )
@@ -80,7 +80,8 @@ class LiveInstrumentCLI : CLIIntegrationTest() {
             arrayOf(
                 "-v",
                 "add", "breakpoint",
-                "integration.LiveInstrumentCLI", "2",
+                "-l", "2",
+                "integration.LiveInstrumentCLI",
             )
         )
         val removedLiveBp = LiveBreakpoint(JsonObject(interceptor.output.toString()))
@@ -118,7 +119,8 @@ class LiveInstrumentCLI : CLIIntegrationTest() {
             arrayOf(
                 "-v",
                 "add", "log",
-                "integration.LiveInstrumentCLI", "4",
+                "-l", "4",
+                "integration.LiveInstrumentCLI",
                 "getMultipleLiveInstruments"
             )
         )
@@ -134,7 +136,8 @@ class LiveInstrumentCLI : CLIIntegrationTest() {
             arrayOf(
                 "-v",
                 "add", "breakpoint",
-                "integration.LiveInstrumentCLI", "4",
+                "-l", "4",
+                "integration.LiveInstrumentCLI",
             )
         )
         val addedLiveBp = LiveBreakpoint(JsonObject(interceptor.output.toString()))

@@ -137,7 +137,7 @@ class SubscribeView : CliktCommand(
         val rawMetrics = JsonObject(event.metricsData)
         val logData = Log(rawMetrics.getJsonObject("log"))
         val logsResult = LogResult(
-            event.artifactQualifiedName,
+            null,
             LogOrderType.NEWEST_LOGS,
             logData.timestamp,
             listOf(logData),

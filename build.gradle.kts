@@ -50,7 +50,7 @@ dependencies {
     implementation("plus.sourceplus:protocol:$projectVersion")
     graphqlLibs("plus.sourceplus:protocol:$projectVersion")
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.2")
     implementation("org.slf4j:slf4j-api:$slf4jVersion")
     implementation("org.slf4j:slf4j-nop:$slf4jVersion")
     implementation("io.vertx:vertx-core:$vertxVersion")

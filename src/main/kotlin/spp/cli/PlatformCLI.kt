@@ -165,9 +165,9 @@ object PlatformCLI : CliktCommand(name = "spp-cli", allowMultipleSubcommands = t
     fun echoError(e: Exception) {
         when (e) {
             is ApolloException -> {
-                echo(e.cause!!.message, err = true)
+                echo(e.cause?.message ?: e.message, err = true)
                 if (verbose) {
-                    echo(e.cause!!.stackTraceToString(), err = true)
+                    echo(e.cause?.stackTraceToString() ?: e.stackTraceToString(), err = true)
                 }
             }
 

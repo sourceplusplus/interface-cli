@@ -158,7 +158,7 @@ object PlatformCLI : CliktCommand(name = "spp-cli", allowMultipleSubcommands = t
                     )
                 }.build()
             )
-            .serverUrl("$serverUrl/graphql/spp")
+            .serverUrl("$serverUrl/graphql")
             .build()
     }
 

@@ -147,7 +147,7 @@ tasks.getByName<Test>("test") {
     useJUnitPlatform()
 
     val isIntegrationProfile = System.getProperty("test.profile") == "integration"
-    val runningSpecificTests = gradle.startParameter.taskNames.contains("--tests")
+    val runningSpecificTests = gradle.startParameter.taskRequests.isNotEmpty()
 
     //exclude integration tests unless requested
     if (!isIntegrationProfile && !runningSpecificTests) {

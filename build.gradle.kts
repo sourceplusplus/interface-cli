@@ -67,7 +67,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-engine:$jupiterVersion")
     testImplementation("org.slf4j:slf4j-simple:$slf4jVersion")
 
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.1")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.7")
 }
 
 //remove slf4j-nop from test classpath (use slf4j-simple instead)
